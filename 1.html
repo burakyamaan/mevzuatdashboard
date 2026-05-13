@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Truvali — Uyum Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{--bg:#f8f9fc;--surface:#fff;--border:#e8eaf0;--text:#0e0e0e;--text2:#6b7280;--text3:#9ca3af;--blue:#1360EF;--blue-l:#eff4ff;--blue-m:#dbeafe;--red:#ef4444;--red-l:#fef2f2;--amber:#f59e0b;--amber-l:#fffbeb;--green:#22c55e;--green-l:#f0fdf4;--radius:12px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;}
+.logo-area{padding:20px;border-bottom:1px solid var(--border);}
+.logo-area svg{width:110px;height:auto;}
+.nav{padding:12px;flex:1;overflow-y:auto;}
+.nav-section{margin-bottom:20px;}
+.nav-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);padding:0 8px;margin-bottom:6px;display:block;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:all .15s;color:var(--text2);font-weight:500;font-size:13px;margin-bottom:2px;}
+.nav-item:hover{background:var(--bg);color:var(--text);}
+.nav-item.active{background:var(--blue-l);color:var(--blue);}
+.nav-item svg{width:17px;height:17px;flex-shrink:0;fill:currentColor;}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;}
+.sidebar-footer{padding:12px;border-top:1px solid var(--border);}
+.user-card{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--bg);}
+.user-av{width:32px;height:32px;background:var(--blue-l);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--blue);flex-shrink:0;}
+.main{margin-left:240px;min-height:100vh;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;transition:all .15s;}
+.btn-primary{background:var(--blue);color:#fff;}
+.btn-primary:hover{background:#0f50d4;}
+.btn-outline{background:#fff;color:var(--text);border:1px solid var(--border);}
+.btn-outline:hover{background:var(--bg);}
+.content{padding:20px 24px;}
+.page{display:none;}
+.page.active{display:block;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.stat-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px;}
+.stat-value{font-size:28px;font-weight:700;margin-bottom:2px;}
+.stat-label{font-size:12px;color:var(--text3);}
+.grid2{display:grid;grid-template-columns:1fr 300px;gap:16px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden;}
+.card-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:14px;font-weight:600;}
+.card-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;padding:9px 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);background:var(--bg);border-bottom:1px solid var(--border);}
+td{padding:0;border-bottom:1px solid var(--border);vertical-align:top;}
+tr.tr-m:last-of-type td{border-bottom:1px solid var(--border);}
+.tr-m{cursor:pointer;}
+.tr-m:hover .td-i{background:#f5f8ff;}
+.td-i{padding:11px 14px;font-size:13px;}
+.tr-d{display:none;}
+.tr-d.open{display:table-row;}
+.det-cell{padding:16px 18px;border-top:1px dashed var(--border);background:#fafbff;}
+.kb{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;}
+.rb{display:inline-flex;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.rh{background:var(--red-l);color:var(--red);}
+.rm{background:var(--amber-l);color:var(--amber);}
+.rl{background:var(--green-l);color:var(--green);}
+.tag{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:6px;}
+.tb{background:var(--blue-l);color:var(--blue);}
+.tg{background:var(--bg);color:var(--text2);border:1px solid var(--border);}
+.gun{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;}
+.gr{color:var(--red);}.ga{color:var(--amber);}.gg{color:var(--green);}
+.lbtn{font-size:11px;color:var(--blue);font-weight:600;padding:4px 8px;border-radius:6px;background:var(--blue-l);text-decoration:none;white-space:nowrap;display:inline-block;}
+.lbtn:hover{background:var(--blue-m);}
+.exp{width:20px;height:20px;border-radius:5px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;transition:transform .2s;flex-shrink:0;}
+.exp svg{width:12px;height:12px;fill:var(--text2);}
+.exp.open{transform:rotate(90deg);}
+.ai-box{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+.ai-title{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.ai-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.ai-item label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text3);display:block;margin-bottom:3px;}
+.ai-item p{font-size:12px;color:var(--text);line-height:1.5;}
+.ai-full{grid-column:1/-1;}
+.loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:40px;color:var(--text3);font-size:13px;}
+.spin{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty{text-align:center;padding:48px 20px;color:var(--text3);}
+.empty .em{font-size:36px;margin-bottom:12px;}
+.empty p{font-size:14px;color:var(--text2);font-weight:500;margin-bottom:4px;}
+.srow{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:7px 0;border-bottom:1px solid var(--border);}
+.srow:last-child{border-bottom:none;}
+.pulse{width:7px;height:7px;background:var(--green);border-radius:50%;animation:p 2s infinite;flex-shrink:0;}
+@keyframes p{0%,100%{opacity:1;}50%{opacity:.3;}}
+.fsel{font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);cursor:pointer;outline:none;}
+.chat-fab{position:fixed;bottom:24px;right:24px;width:54px;height:54px;background:var(--blue);border-radius:50%;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(19,96,239,.4);display:flex;align-items:center;justify-content:center;z-index:1000;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
+.chat-fab:hover{transform:scale(1.08);}
+.chat-fab svg{width:23px;height:23px;fill:#fff;}
+.ci{display:block;}.xi{display:none;}
+.chat-fab.open .ci{display:none;}.chat-fab.open .xi{display:block;}
+.cnotif{position:absolute;top:1px;right:1px;width:16px;height:16px;background:var(--red);border-radius:50%;border:2px solid #fff;font-size:9px;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.chat-win{position:fixed;bottom:90px;right:24px;width:380px;height:540px;background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.15);display:flex;flex-direction:column;z-index:999;transform:scale(.85) translateY(16px);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1);transform-origin:bottom right;}
+.chat-win.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all;}
+.chat-head{padding:13px 16px;background:var(--blue);border-radius:16px 16px 0 0;display:flex;align-items:center;gap:10px;}
+.chav{width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.chav+div h4{font-size:13px;font-weight:600;color:#fff;}
+.chav+div p{font-size:11px;color:rgba(255,255,255,.7);}
+.ch-badge{margin-left:auto;background:rgba(255,255,255,.2);color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;font-family:'JetBrains Mono',monospace;}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth;}
+.chat-msgs::-webkit-scrollbar{width:3px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.cmsg{display:flex;gap:7px;animation:mi .25s ease;}
+.cmsg.u{flex-direction:row-reverse;}
+@keyframes mi{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.cav{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;}
+.cmsg.b .cav{background:var(--blue-l);}
+.cmsg.u .cav{background:var(--bg);}
+.cbub{max-width:82%;padding:9px 12px;font-size:13px;line-height:1.55;}
+.cmsg.b .cbub{background:var(--bg);border:1px solid var(--border);border-radius:4px 12px 12px 12px;color:var(--text);}
+.cmsg.u .cbub{background:var(--blue);color:#fff;border-radius:12px 4px 12px 12px;}
+.ctime{font-size:10px;color:var(--text3);margin-top:2px;}
+.cmsg.u .ctime{text-align:right;}
+.typing{display:flex;gap:3px;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:4px 12px 12px 12px;width:fit-content;}
+.typing span{width:5px;height:5px;background:var(--blue);border-radius:50%;animation:ty 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes ty{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-5px);opacity:1;}}
+.qqs{padding:0 12px 10px;display:flex;flex-wrap:wrap;gap:5px;}
+.qq{background:var(--blue-l);border:1px solid #bfdbfe;color:var(--blue);font-size:11px;font-weight:500;padding:4px 10px;border-radius:16px;cursor:pointer;font-family:'Inter',sans-serif;}
+.qq:hover{background:var(--blue-m);}
+.cinput{padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:7px;align-items:flex-end;}
+.cinput textarea{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px 12px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;resize:none;outline:none;max-height:90px;min-height:38px;line-height:1.5;}
+.cinput textarea:focus{border-color:var(--blue);}
+.cinput textarea::placeholder{color:var(--text3);}
+.csend{width:38px;height:38px;background:var(--blue);border:none;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.csend:hover{background:#0f50d4;}
+.csend:disabled{opacity:.4;cursor:not-allowed;}
+.csend svg{width:16px;height:16px;fill:#fff;}
+.api-set{padding:20px;display:flex;flex-direction:column;gap:10px;}
+.api-set p{font-size:12px;color:var(--text2);line-height:1.5;}
+.api-set input{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--text);outline:none;width:100%;}
+.api-set input:focus{border-color:var(--blue);}
+.api-set button{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:9px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;border-radius:16px;width:600px;max-width:95vw;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.2);transform:scale(.95);transition:transform .2s;}
+.modal-overlay.open .modal{transform:scale(1);}
+.modal-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-head h3{font-size:15px;font-weight:600;}
+.modal-close{width:28px;height:28px;border:none;background:var(--bg);border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.modal-body{padding:20px;flex:1;overflow-y:auto;}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
+.rapor-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:13px;line-height:1.7;color:var(--text);min-height:200px;white-space:pre-wrap;}
+.musteri-btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.mb{padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;transition:all .15s;}
+.mb:hover{background:var(--blue-l);border-color:var(--blue);color:var(--blue);}
+.mb.selected{background:var(--blue);color:#fff;border-color:var(--blue);}
+.rapor-btn{font-size:11px;color:var(--blue);font-weight:600;padding:4px 8px;border-radius:6px;background:var(--blue-l);border:none;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;}
+.rapor-btn:hover{background:var(--blue-m);}
+.copy-btn{background:var(--green-l);color:var(--green);border:1px solid #bbf7d0;}
+.copy-btn:hover{background:#dcfce7;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo-area">
+    <svg viewBox="0 0 237 77" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M90.904 46.04V53H86.728C83.752 53 81.432 52.28 79.768 50.84C78.104 49.368 77.272 46.984 77.272 43.688V33.032H74.008V26.216H77.272V19.688H85.48V26.216H90.856V33.032H85.48V43.784C85.48 44.584 85.672 45.16 86.056 45.512C86.44 45.864 87.08 46.04 87.976 46.04H90.904ZM103.684 30.68C104.644 29.208 105.844 28.056 107.284 27.224C108.724 26.36 110.324 25.928 112.084 25.928V34.616H109.828C107.78 34.616 106.244 35.064 105.22 35.96C104.196 36.824 103.684 38.36 103.684 40.568V53H95.476V26.216H103.684V30.68ZM142.455 26.216V53H134.247V49.352C133.415 50.536 132.279 51.496 130.839 52.232C129.431 52.936 127.863 53.288 126.135 53.288C124.087 53.288 122.279 52.84 120.711 51.944C119.143 51.016 117.927 49.688 117.063 47.96C116.199 46.232 115.767 44.2 115.767 41.864V26.216H123.927V40.76C123.927 42.552 124.391 43.944 125.319 44.936C126.247 45.928 127.495 46.424 129.063 46.424C130.663 46.424 131.927 45.928 132.855 44.936C133.783 43.944 134.247 42.552 134.247 40.76V26.216H142.455ZM160.399 45.32L166.207 26.216H174.943L165.439 53H155.311L145.807 26.216H154.591L160.399 45.32ZM176.766 39.56C176.766 36.808 177.278 34.392 178.302 32.312C179.358 30.232 180.782 28.632 182.574 27.512C184.366 26.392 186.366 25.832 188.574 25.832C190.462 25.832 192.11 26.216 193.518 26.984C194.958 27.752 196.062 28.76 196.83 30.008V26.216H205.038V53H196.83V49.208C196.03 50.456 194.91 51.464 193.47 52.232C192.062 53 190.414 53.384 188.526 53.384C186.35 53.384 184.366 52.824 182.574 51.704C180.782 50.552 179.358 48.936 178.302 46.856C177.278 44.744 176.766 42.312 176.766 39.56ZM196.83 39.608C196.83 37.56 196.254 35.944 195.102 34.76C193.982 33.576 192.606 32.984 190.974 32.984C189.342 32.984 187.95 33.576 186.798 34.76C185.678 35.912 185.118 37.512 185.118 39.56C185.118 41.608 185.678 43.24 186.798 44.456C187.95 45.64 189.342 46.232 190.974 46.232C192.606 46.232 193.982 45.64 195.102 44.456C196.254 43.272 196.83 41.656 196.83 39.608ZM219.184 17.48V53H210.976V17.48H219.184ZM229.26 23.432C227.82 23.432 226.636 23.016 225.708 22.184C224.812 21.32 224.364 20.264 224.364 19.016C224.364 17.736 224.812 16.68 225.708 15.848C226.636 14.984 227.82 14.552 229.26 14.552C230.668 14.552 231.82 14.984 232.716 15.848C233.644 16.68 234.108 17.736 234.108 19.016C234.108 20.264 233.644 21.32 232.716 22.184C231.82 23.016 230.668 23.432 229.26 23.432ZM233.34 26.216V53H225.132V26.216H233.34Z" fill="#0E0E0E"/>
+      <path d="M2.61751 24.1763C15.1947 9.80169 38.3817 6.23561 55.4173 24.031C56.589 25.255 56.5738 27.2238 55.3833 28.4285C54.1927 29.6331 52.2777 29.6175 51.1059 28.3935C36.714 13.3597 17.5551 16.4036 7.11509 28.3356C5.99791 29.6124 4.0854 29.7164 2.84344 28.5679C1.60148 27.4193 1.50034 25.4531 2.61751 24.1763Z" fill="#1360EF"/>
+    </svg>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">
+      <span class="nav-label">Ana Menü</span>
+      <div class="nav-item active" onclick="showPage('mevzuat',this)">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        Mevzuat Takip
+        <span class="nav-badge" id="navBadge">0</span>
+      </div>
+      <div class="nav-item" onclick="showPage('dashboard',this)">
+        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+        Dashboard
+      </div>
+    </div>
+    <div class="nav-section">
+      <span class="nav-label">Truvali Panel</span>
+      <div class="nav-item" onclick="showPage('alertler',this)">
+        <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+        Alertler
+      </div>
+      <div class="nav-item" onclick="showPage('kyc',this)">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        KYC / KYB
+      </div>
+      <div class="nav-item" onclick="showPage('execlog',this)">
+        <svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+        Execution Logs
+      </div>
+      <div class="nav-item" onclick="showPage('ruleengine',this)">
+        <svg viewBox="0 0 24 24"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zm-4 10H4V5h14v14z"/></svg>
+        Rule Engine
+      </div>
+    </div>
+    <div class="nav-section">
+      <span class="nav-label">Raporlar</span>
+      <div class="nav-item" onclick="showPage('raporlar',this)">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+        MASAK Raporları
+      </div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-av">BY</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;">Burak Yaman</div>
+        <div style="font-size:11px;color:var(--text3);">Uyum Danışmanı</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div style="font-size:15px;font-weight:600;" id="pageTitle">Mevzuat Takip</div>
+      <div style="font-size:11px;color:var(--text3);" id="lastUpdate">Yükleniyor...</div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-outline" onclick="loadData()">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Yenile
+      </button>
+      <button class="btn btn-primary" onclick="toggleChat()">💬 Uyum Asistanı</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="page active" id="page-mevzuat">
+      <div class="stats">
+        <div class="stat-card"><div class="stat-icon" style="background:var(--red-l)">🚨</div><div class="stat-value" id="cH" style="color:var(--red)">—</div><div class="stat-label">Yüksek Risk</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--amber-l)">⚠️</div><div class="stat-value" id="cM" style="color:var(--amber)">—</div><div class="stat-label">Orta Risk</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--green-l)">✅</div><div class="stat-value" id="cL" style="color:var(--green)">—</div><div class="stat-label">Düşük Risk</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--blue-l)">📋</div><div class="stat-value" id="cT" style="color:var(--blue)">—</div><div class="stat-label">Toplam</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Mevzuat Listesi</div><div class="card-sub">Satıra tıklayarak AI analizini ve detayları görün</div></div>
+            <select class="fsel" onchange="filterTable(this.value)">
+              <option value="">Tüm Riskler</option>
+              <option value="Yüksek">🔴 Yüksek</option>
+              <option value="Orta">🟡 Orta</option>
+              <option value="Düşük">🟢 Düşük</option>
+            </select>
+          </div>
+          <div class="tbl-wrap">
+            <div id="tblLoad" class="loading"><div class="spin"></div>Veriler yükleniyor...</div>
+            <table id="tbl" style="display:none">
+              <thead><tr><th style="width:28px"></th><th>Tarih</th><th>Kurum</th><th>Başlık</th><th>Risk</th><th>Süre</th><th>Link</th></tr></thead>
+              <tbody id="tblBody"></tbody>
+            </table>
+            <div id="tblEmpty" class="empty" style="display:none"><div class="em">📭</div><p>Henüz mevzuat kaydı yok</p><span>Robot her sabah 08:00'de otomatik çalışır</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Sistem Durumu</div></div>
+            <div style="padding:14px 16px;display:flex;flex-direction:column;gap:6px;">
+              <div class="srow"><span style="color:var(--text2)">Robot</span><div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green);font-weight:600;"><div class="pulse"></div>Aktif</div></div>
+              <div class="srow"><span style="color:var(--text2)">Çalışma saati</span><span class="tag tb">Her gün 08:00</span></div>
+              <div class="srow"><span style="color:var(--text2)">AI Motoru</span><span class="tag tb">Gemini 2.5</span></div>
+              <div class="srow"><span style="color:var(--text2)">Veri kaynağı</span><span class="tag tg">Google Sheets</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Takip Edilen Kurumlar</div></div>
+            <div style="padding:12px 16px;display:flex;flex-direction:column;gap:7px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">🏛️ Resmi Gazete<span class="tag tb">RSS</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">🔍 MASAK<span class="tag tb">RSS</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">📊 SPK<span class="tag tb">RSS</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">🏦 BDDK<span class="tag tb">RSS</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">📡 BTK<span class="tag tb">RSS</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">🔒 KVKK<span class="tag tb">RSS</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page" id="page-dashboard"><div class="empty"><div class="em">📊</div><p>Dashboard</p><span>Yakında aktif olacak</span></div></div>
+    <div class="page" id="page-alertler"><div class="empty"><div class="em">🚨</div><p>Alertler</p><span>Truvali panel API entegrasyonu gerekiyor</span></div></div>
+    <div class="page" id="page-kyc"><div class="empty"><div class="em">👤</div><p>KYC / KYB</p><span>Truvali panel API entegrasyonu gerekiyor</span></div></div>
+    <div class="page" id="page-execlog"><div class="empty"><div class="em">📋</div><p>Execution Logs</p><span>Truvali panel API entegrasyonu gerekiyor</span></div></div>
+    <div class="page" id="page-ruleengine"><div class="empty"><div class="em">⚙️</div><p>Rule Engine</p><span>Truvali panel API entegrasyonu gerekiyor</span></div></div>
+    <div class="page" id="page-raporlar"><div class="empty"><div class="em">📄</div><p>MASAK Raporları</p><span>Yakında aktif olacak</span></div></div>
+  </div>
+</div>
+
+<button class="chat-fab" id="chatFab" onclick="toggleChat()">
+  <svg class="ci" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  <svg class="xi" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+  <div class="cnotif">AI</div>
+</button>
+
+<div class="chat-win" id="chatWin">
+  <div class="chat-head">
+    <div class="chav">⚖️</div>
+    <div><h4>Truvali Uyum Asistanı</h4><p>AML · KYC · MASAK · Panel</p></div>
+    <div class="ch-badge">AI</div>
+  </div>
+  <div id="apiSet" class="api-set" style="display:none">
+    <p>🔑 Gemini API key'inizi girin:</p>
+    <input type="text" id="apiIn" placeholder="AIzaSy...">
+    <button onclick="saveKey()">Bağlan ve Başla</button>
+  </div>
+  <div id="chatBody" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
+    <div class="chat-msgs" id="chatMsgs"></div>
+    <div class="qqs" id="qqs">
+      <button class="qq" onclick="sq('Alert nedir, ne yapmalıyım?')">Alert nedir?</button>
+      <button class="qq" onclick="sq('KYC belgesi nasıl istenir?')">KYC belgesi?</button>
+      <button class="qq" onclick="sq('MASAK bildirimi ne zaman zorunlu?')">MASAK bildirimi?</button>
+      <button class="qq" onclick="sq('Final Score 0 neden?')">Skor 0 neden?</button>
+    </div>
+    <div class="cinput">
+      <textarea id="msgIn" placeholder="Sorunuzu yazın..." rows="1" onkeydown="hk(event)" oninput="ar(this)"></textarea>
+      <button class="csend" id="sendBtn" onclick="sm()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SHEETS_URL='https://docs.google.com/spreadsheets/d/1VPvKTrIIoMpfM15UlcJqGc4b62tpVyFxBL1NsQEUKQQ/gviz/tq?tqx=out:json';
+const KC={'Resmi Gazete':'#1360EF','MASAK':'#7c3aed','SPK':'#0891b2','BDDK':'#065f46','BTK':'#92400e','KVKK':'#9f1239','Haberturk Ekonomi':'#b45309','Bloomberg HT':'#1e3a5f'};
+let allData=[],apiKey=localStorage.getItem('truvali_key')||'',chatOpen=false,firstOpen=true,busy=false;
+
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  el.classList.add('active');
+  const T={mevzuat:'Mevzuat Takip',dashboard:'Dashboard',alertler:'Alertler',kyc:'KYC / KYB',execlog:'Execution Logs',ruleengine:'Rule Engine',raporlar:'MASAK Raporları'};
+  document.getElementById('pageTitle').textContent=T[id]||id;
+}
+
+async function loadData(){
+  document.getElementById('tblLoad').style.display='flex';
+  document.getElementById('tbl').style.display='none';
+  document.getElementById('tblEmpty').style.display='none';
+  try{
+    const r=await fetch(SHEETS_URL);
+    const t=await r.text();
+    const j=JSON.parse(t.replace(/^[^(]+\(/,'').replace(/\);\s*$/,''));
+    allData=j.table.rows.filter(r=>r.c&&r.c[2]&&r.c[2].v&&r.c[2].v!=='Başlık').map(r=>({
+      tarih:fmtDate(r.c[0]?.v),
+      kurum:r.c[1]?.v||'—',
+      baslik:r.c[2]?.v||'—',
+      link:r.c[3]?.v||'',
+      risk:r.c[4]?.v||'Orta',
+      gun:String(r.c[5]?.v||'—').replace('.0',''),
+      surecler:r.c[6]?.v||'—',
+      maliyet:r.c[7]?.v||'—',
+      aksiyon:r.c[8]?.v||r.c[6]?.v||'—'
+    }));
+  }catch(e){allData=demo();}
+  if(!allData.length)allData=demo();
+  render(allData);updateStats(allData);
+  document.getElementById('lastUpdate').textContent='Son güncelleme: '+new Date().toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+
+function fmtDate(v){
+  try{
+    if(!v)return'—';
+    if(typeof v==='string'&&v.startsWith('Date(')){
+      const p=v.replace('Date(','').replace(')','').split(',');
+      return new Date(+p[0],+p[1],+p[2]).toLocaleDateString('tr-TR');
+    }
+    return new Date(v).toLocaleDateString('tr-TR');
+  }catch{return v||'—';}
+}
+
+function render(data){
+  document.getElementById('tblLoad').style.display='none';
+  if(!data.length){document.getElementById('tblEmpty').style.display='block';return;}
+  document.getElementById('tbl').style.display='table';
+  const tb=document.getElementById('tblBody');
+  tb.innerHTML='';
+  data.forEach((row,i)=>{
+    const rc=row.risk==='Yüksek'?'rh':row.risk==='Orta'?'rm':'rl';
+    const g=parseInt(row.gun)||999;
+    const gc=g<=15?'gr':g<=30?'ga':'gg';
+    const kc=KC[row.kurum]||'#6b7280';
+    const hl=row.link&&row.link.startsWith('http');
+    tb.innerHTML+=`
+    <tr class="tr-m" onclick="toggleRow(${i})">
+      <td><div class="td-i" style="padding:11px 8px;"><div class="exp" id="ex${i}"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></td>
+      <td><div class="td-i" style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;white-space:nowrap;">${row.tarih}</div></td>
+      <td><div class="td-i"><span class="kb" style="background:${kc}18;color:${kc};">${row.kurum}</span></div></td>
+      <td><div class="td-i"><div style="font-size:13px;font-weight:500;line-height:1.4;max-width:260px;">${row.baslik}</div></div></td>
+      <td><div class="td-i"><span class="rb ${rc}">${row.risk}</span></div></td>
+      <td><div class="td-i"><span class="gun ${gc}">${row.gun==='—'?'—':row.gun+'g'}</span></div></td>
+      <td><div class="td-i" style="display:flex;gap:6px;align-items:center;">
+      ${hl?`<a href="${row.link}" target="_blank" class="lbtn" onclick="event.stopPropagation()">→ Aç</a>`:''}
+      <button class="rapor-btn" onclick="event.stopPropagation();openRapor(${i})">📄 Rapor</button>
+      </div></td>
+    </tr>
+    <tr class="tr-d" id="det${i}">
+      <td colspan="7">
+        <div class="det-cell">
+          <div class="ai-box">
+            <div class="ai-title">⚖️ AI Analizi — ${row.kurum}</div>
+            <div class="ai-grid">
+              <div class="ai-item"><label>Etkilenen Süreçler</label><p>${row.surecler}</p></div>
+              <div class="ai-item"><label>Uyumsuzluk Maliyeti</label><p>${row.maliyet}</p></div>
+              <div class="ai-item ai-full"><label>Yapılması Gereken Aksiyon</label><p style="font-weight:500;">${row.aksiyon}</p></div>
+              ${hl?`<div class="ai-item ai-full"><label>Kaynak Belge</label><a href="${row.link}" target="_blank" style="color:var(--blue);font-size:12px;font-weight:500;word-break:break-all;">${row.link}</a></div>`:''}
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>`;
+  });
+}
+
+function toggleRow(i){
+  const d=document.getElementById('det'+i),e=document.getElementById('ex'+i);
+  const o=d.classList.contains('open');
+  document.querySelectorAll('.tr-d').forEach(r=>r.classList.remove('open'));
+  document.querySelectorAll('.exp').forEach(x=>x.classList.remove('open'));
+  if(!o){d.classList.add('open');e.classList.add('open');}
+}
+
+function filterTable(v){render(v?allData.filter(r=>r.risk===v):allData);}
+
+function updateStats(d){
+  document.getElementById('cH').textContent=d.filter(r=>r.risk==='Yüksek').length;
+  document.getElementById('cM').textContent=d.filter(r=>r.risk==='Orta').length;
+  document.getElementById('cL').textContent=d.filter(r=>r.risk==='Düşük').length;
+  document.getElementById('cT').textContent=d.length;
+  document.getElementById('navBadge').textContent=d.filter(r=>r.risk==='Yüksek').length;
+}
+
+function demo(){return[
+  {tarih:'13.05.2026',kurum:'Resmi Gazete',baslik:'Spor Müsabakalarına Dayalı Sabit İhtimalli Oyunlar Yönetmeliğinde Değişiklik Yapıldı',link:'https://www.resmigazete.gov.tr',risk:'Yüksek',gun:'15',surecler:'Lisans yenileme, operasyonel uyum, müşteri doğrulama',maliyet:'Lisans iptali, 500.000 TL idari para cezası',aksiyon:'Yönetmelik metnini avukata gönderin ve 15 gün içinde etki analizi yapın'},
+  {tarih:'13.05.2026',kurum:'MASAK',baslik:'Kripto Varlık Hizmet Sağlayıcılarına İlişkin AML Tebliği Yayımlandı',link:'https://masak.hmb.gov.tr',risk:'Yüksek',gun:'30',surecler:'KYC süreci, şüpheli işlem bildirimi, kayıt saklama',maliyet:'500.000 TL idari para cezası, faaliyet durdurma',aksiyon:'KYC prosedürlerini güncelleyin ve uyum görevlisi atayın'},
+  {tarih:'12.05.2026',kurum:'BDDK',baslik:'Ödeme Hizmetleri ve Elektronik Para Kuruluşları Hakkında Yönetmelik Güncellendi',link:'https://www.bddk.org.tr',risk:'Orta',gun:'45',surecler:'Ödeme altyapısı, müşteri kimlik doğrulama, raporlama',maliyet:'İdari yaptırım, faaliyet izni iptali',aksiyon:'Ödeme sistemleri ekibinizle yönetmeliği inceleyin'},
+  {tarih:'12.05.2026',kurum:'KVKK',baslik:'Kişisel Verilerin Korunması Rehberi Güncellendi',link:'https://www.kvkk.gov.tr',risk:'Orta',gun:'60',surecler:'Veri işleme, kullanıcı aydınlatma, rıza yönetimi',maliyet:'1.000.000 TL idari para cezası',aksiyon:'KVKK danışmanınıza rehberi gönderin ve aydınlatma metinlerini güncelleyin'},
+  {tarih:'11.05.2026',kurum:'BTK',baslik:'İnternet Ortamında Yapılan Yayınların Düzenlenmesi Hakkında Karar',link:'https://www.btk.gov.tr',risk:'Düşük',gun:'90',surecler:'İçerik moderasyon, erişim yönetimi',maliyet:'Erişim engeli, idari yaptırım',aksiyon:'İçerik politikasını gözden geçirin'},
+];}
+
+// CHAT
+const SP=`Sen Truvali AML uyum platformunun uzman asistanısın. Truvali, 4nala.com, oley.com, e-sans.com, ekuri.com platformlara AML hizmetleri sunuyor. Panel: Dashboards, Watchlist, Cases, KYC/KYB, Execution Logs (ID/işlem türü/müşteri/tutar/Final Score/Decision), Rule Engine. Final Score şu an 0 çünkü kural tanımlı değil, kararlar manuel veriliyor. İlk yapılacak: Rule Engine'dan AML kuralları tanımlamak. Sade Türkçe, kısa net cevaplar ver.`;
+
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('chatFab').classList.toggle('open',chatOpen);
+  document.getElementById('chatWin').classList.toggle('open',chatOpen);
+  if(chatOpen&&firstOpen){
+    firstOpen=false;
+    if(!apiKey){document.getElementById('apiSet').style.display='flex';document.getElementById('chatBody').style.display='none';}
+    else initChat();
+  }
+}
+
+function saveKey(){
+  const k=document.getElementById('apiIn').value.trim();if(!k)return;
+  apiKey=k;localStorage.setItem('truvali_key',k);
+  document.getElementById('apiSet').style.display='none';
+  document.getElementById('chatBody').style.display='flex';
+  initChat();
+}
+
+function initChat(){addMsg('b','Merhaba! AML, KYC, alert yönetimi veya Truvali panel kullanımı hakkında sorularınızı yanıtlarım.');}
+
+function addMsg(type,text){
+  const c=document.getElementById('chatMsgs');
+  const t=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+  const d=document.createElement('div');d.className='cmsg '+type;
+  d.innerHTML=`<div class="cav">${type==='b'?'⚖️':'👤'}</div><div><div class="cbub">${text}</div><div class="ctime">${t}</div></div>`;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+  document.getElementById('qqs').style.display='none';
+}
+
+function showTyp(){const c=document.getElementById('chatMsgs');const d=document.createElement('div');d.className='cmsg b';d.id='typ';d.innerHTML=`<div class="cav">⚖️</div><div class="typing"><span></span><span></span><span></span></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function hideTyp(){const t=document.getElementById('typ');if(t)t.remove();}
+
+async function sm(){
+  const inp=document.getElementById('msgIn');const txt=inp.value.trim();if(!txt||busy)return;
+  inp.value='';inp.style.height='auto';addMsg('u',txt);await ai(txt);
+}
+async function sq(t){if(busy)return;addMsg('u',t);await ai(t);}
+
+async function ai(msg){
+  busy=true;document.getElementById('sendBtn').disabled=true;showTyp();
+  try{
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {method:'POST',headers:{'Content-Type':'application/json'},
+       body:JSON.stringify({contents:[{role:'user',parts:[{text:SP+'\n\nSoru: '+msg}]}]})});
+    const d=await r.json();hideTyp();
+    if(d.candidates?.[0]){addMsg('b',d.candidates[0].content.parts[0].text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>'));}
+    else{addMsg('b','⚠️ '+(d.error?.message||'Hata oluştu.'));}
+  }catch(e){hideTyp();addMsg('b','⚠️ Bağlantı hatası.');}
+  busy=false;document.getElementById('sendBtn').disabled=false;
+}
+
+function hk(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sm();}}
+function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px';}
+
+
+// RAPOR
+let seciliMusteri='', seciliRow=null;
+
+function openRapor(i){
+  seciliRow=allData[i];
+  seciliMusteri='';
+  document.querySelectorAll('.mb').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('raporIcerik').textContent='Müşteri seçin ve "Rapor Oluştur" butonuna tıklayın...';
+  document.getElementById('copyBtn').style.display='none';
+  document.getElementById('raporModal').classList.add('open');
+}
+
+function closeRapor(){document.getElementById('raporModal').classList.remove('open');}
+
+function selectMusteri(m){
+  seciliMusteri=m;
+  document.querySelectorAll('.mb').forEach(b=>{b.classList.toggle('selected',b.textContent===m);});
+}
+
+async function generateRapor(){
+  if(!seciliMusteri){alert('Lütfen önce bir müşteri seçin!');return;}
+  if(!apiKey){alert('Önce AI bağlantısı kurun (sağ alttaki chat butonundan)');return;}
+  const btn=document.getElementById('genBtn');
+  btn.textContent='⏳ Hazırlanıyor...';btn.disabled=true;
+  document.getElementById('raporIcerik').textContent='AI rapor hazırlıyor...';
+  document.getElementById('copyBtn').style.display='none';
+
+  const prompt=`Sen Truvali AML uyum platformunun uzman danışmanısın.
+
+Aşağıdaki mevzuat için ${seciliMusteri} müşterisine gönderilecek resmi bir uyum danışmanlık raporu yaz.
+
+MEVZUAT BİLGİLERİ:
+- Başlık: ${seciliRow.baslik}
+- Kurum: ${seciliRow.kurum}
+- Risk Seviyesi: ${seciliRow.risk}
+- Kalan Süre: ${seciliRow.gun} gün
+- Etkilenen Süreçler: ${seciliRow.surecler}
+- Uyumsuzluk Maliyeti: ${seciliRow.maliyet}
+- Önerilen Aksiyon: ${seciliRow.aksiyon}
+
+RAPOR FORMATI:
+Konu: [Mevzuat başlığı] — Uyum Bildirimi
+Tarih: ${new Date().toLocaleDateString('tr-TR')}
+Hazırlayan: Truvali Uyum Danışmanlığı
+
+1. YÖNETİCİ ÖZETİ
+(2-3 cümle, teknik bilgisi olmayan yöneticinin anlayacağı dilde)
+
+2. MEVZUAT DETAYI
+(Bu mevzuat ne anlama geliyor, neden önemli)
+
+3. ${seciliMusteri} ÜZERİNDEKİ ETKİ
+(Bu müşterinin iş modelini nasıl etkiliyor, spesifik riskler)
+
+4. YAPILMASI GEREKENLER
+(Madde madde, somut aksiyonlar ve sorumlular)
+
+5. ZAMAN TABLOSU
+(Ne zaman ne yapılmalı, kritik tarihler)
+
+6. UYUMSUZLUK RİSKLERİ
+(Para cezası, lisans riski, itibar riski)
+
+Sade ve profesyonel Türkçe kullan. Gereksiz teknik jargondan kaçın.`;
+
+  try{
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {method:'POST',headers:{'Content-Type':'application/json'},
+       body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}]})});
+    const d=await r.json();
+    if(d.candidates?.[0]){
+      const txt=d.candidates[0].content.parts[0].text;
+      document.getElementById('raporIcerik').textContent=txt;
+      document.getElementById('copyBtn').style.display='flex';
+    } else {
+      document.getElementById('raporIcerik').textContent='Hata: '+(d.error?.message||'Bilinmeyen hata');
+    }
+  }catch(e){document.getElementById('raporIcerik').textContent='Bağlantı hatası: '+e.message;}
+  btn.textContent='✨ Rapor Oluştur';btn.disabled=false;
+}
+
+function copyRapor(){
+  const txt=document.getElementById('raporIcerik').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn=document.getElementById('copyBtn');
+    btn.textContent='✅ Kopyalandı!';
+    setTimeout(()=>{btn.textContent='📋 Kopyala';},2000);
+  });
+}
+
+loadData();
+</script>
+
+<!-- RAPOR MODAL -->
+<div class="modal-overlay" id="raporModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>📄 Müşteri Uyum Raporu Oluştur</h3>
+      <button class="modal-close" onclick="closeRapor()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Müşteri Seçin</div>
+        <div class="musteri-btns">
+          <button class="mb" onclick="selectMusteri('4nala.com')">4nala.com</button>
+          <button class="mb" onclick="selectMusteri('oley.com')">oley.com</button>
+          <button class="mb" onclick="selectMusteri('e-sans.com')">e-sans.com</button>
+          <button class="mb" onclick="selectMusteri('ekuri.com')">ekuri.com</button>
+          <button class="mb" onclick="selectMusteri('truvali.com')">truvali.com</button>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Oluşturulan Rapor</div>
+      <div class="rapor-box" id="raporIcerik">Müşteri seçin ve "Rapor Oluştur" butonuna tıklayın...</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeRapor()">Kapat</button>
+      <button class="btn btn-outline copy-btn" onclick="copyRapor()" id="copyBtn" style="display:none">📋 Kopyala</button>
+      <button class="btn btn-primary" onclick="generateRapor()" id="genBtn">✨ Rapor Oluştur</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
