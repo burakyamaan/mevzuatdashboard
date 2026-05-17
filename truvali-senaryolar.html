@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Truvali AML Senaryo Kataloğu</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container { max-width: 1400px; margin: 0 auto; }
+.header {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.header h1 { color: #1360EF; font-size: 32px; margin-bottom: 8px; }
+.header p { color: #6B7280; font-size: 15px; }
+.header-actions { display: flex; gap: 10px; }
+.refresh-btn, .live-indicator {
+    background: #1360EF;
+    color: white;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.refresh-btn:hover { background: #0E4DBF; transform: translateY(-2px); }
+.live-indicator {
+    background: #10B981;
+    cursor: default;
+}
+.live-dot {
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+}
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+}
+.stat-card:hover { transform: translateY(-2px); }
+.stat-card h3 {
+    font-size: 11px;
+    color: #6B7280;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+.stat-card .value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1360EF;
+}
+.stat-card .label {
+    font-size: 11px;
+    color: #9CA3AF;
+    margin-top: 4px;
+}
+
+.filters {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.filter-btn {
+    padding: 9px 16px;
+    border: 2px solid #E5E7EB;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+.filter-btn:hover { border-color: #1360EF; color: #1360EF; }
+.filter-btn.active {
+    background: #1360EF;
+    color: white;
+    border-color: #1360EF;
+}
+.search-box {
+    flex: 1;
+    min-width: 250px;
+    padding: 10px 18px;
+    border: 2px solid #E5E7EB;
+    border-radius: 8px;
+    font-size: 14px;
+}
+.search-box:focus { outline: none; border-color: #1360EF; }
+
+.loading {
+    background: white;
+    border-radius: 12px;
+    padding: 80px;
+    text-align: center;
+    color: #6B7280;
+    font-size: 18px;
+}
+.error-msg {
+    background: #FEF2F2;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    color: #DC2626;
+    font-weight: 500;
+    line-height: 1.8;
+}
+
+.scenarios {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+.scenario-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s;
+    cursor: pointer;
+    border-left: 4px solid #1360EF;
+}
+.scenario-card:hover {
+    box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    transform: translateY(-4px);
+}
+.scenario-card.reject { border-left-color: #DC2626; }
+.scenario-card.review { border-left-color: #D97706; }
+.scenario-card.accept { border-left-color: #10B981; }
+
+.scenario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    gap: 10px;
+}
+.scenario-id {
+    background: #EFF4FF;
+    color: #1360EF;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: bold;
+}
+.risk-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.risk-kritik { background: #FEF2F2; color: #DC2626; }
+.risk-yuksek { background: #FFFBEB; color: #D97706; }
+.risk-orta { background: #EFF4FF; color: #2563EB; }
+
+.scenario-title {
+    font-size: 17px;
+    font-weight: bold;
+    color: #0E0E0E;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+.scenario-desc {
+    font-size: 13px;
+    color: #6B7280;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.rule-preview {
+    background: #1F2937;
+    color: #10B981;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.action-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+.action-tag {
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 500;
+}
+.action-decision { background: #DBEAFE; color: #1E40AF; }
+.action-alarm { background: #FEE2E2; color: #991B1B; }
+.action-score { background: #D1FAE5; color: #065F46; }
+
+.scenario-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+.tag {
+    background: #F3F4F6;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    color: #4B5563;
+    font-weight: 500;
+}
+.scenario-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #E5E7EB;
+}
+.karar-badge {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: bold;
+}
+.karar-reject { background: #FEF2F2; color: #DC2626; }
+.karar-review { background: #FFFBEB; color: #D97706; }
+.karar-accept { background: #F0FDF4; color: #10B981; }
+.skor-display {
+    text-align: right;
+}
+.skor {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1360EF;
+}
+.skor-label {
+    font-size: 10px;
+    color: #9CA3AF;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.75);
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 40px 20px;
+}
+.modal-content {
+    background: white;
+    max-width: 950px;
+    margin: 0 auto;
+    border-radius: 16px;
+    padding: 40px;
+    position: relative;
+}
+.modal-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    font-size: 32px;
+    cursor: pointer;
+    color: #9CA3AF;
+    background: none;
+    border: none;
+}
+.modal-close:hover { color: #1360EF; }
+.modal-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #0E0E0E;
+    margin-bottom: 8px;
+}
+.modal-subtitle {
+    color: #6B7280;
+    margin-bottom: 24px;
+}
+.detail-section { margin-bottom: 20px; }
+.detail-label {
+    font-size: 11px;
+    font-weight: bold;
+    color: #6B7280;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.detail-content {
+    background: #F9FAFB;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #374151;
+    white-space: pre-line;
+}
+.code-block {
+    background: #1F2937;
+    color: #10B981;
+    padding: 16px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    overflow-x: auto;
+    position: relative;
+    line-height: 1.6;
+}
+.copy-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: #374151;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+}
+.copy-btn:hover { background: #4B5563; }
+
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+.action-box {
+    background: #F9FAFB;
+    padding: 14px;
+    border-radius: 8px;
+}
+.action-box-label {
+    font-size: 10px;
+    color: #6B7280;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.action-box-value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1360EF;
+}
+
+.empty-state {
+    background: white;
+    border-radius: 12px;
+    padding: 80px 40px;
+    text-align: center;
+    color: #6B7280;
+}
+.empty-state h2 { color: #1360EF; margin-bottom: 12px; }
+.empty-state p { line-height: 1.8; }
+
+.footer {
+    text-align: center;
+    color: white;
+    margin-top: 40px;
+    font-size: 12px;
+    opacity: 0.7;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>🛡️ Truvali AML Senaryo Kataloğu</h1>
+            <p>AI ile üretilen senaryolar • Google Sheets canlı bağlantı</p>
+        </div>
+        <div class="header-actions">
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span id="lastUpdate">Canlı</span>
+            </div>
+            <button class="refresh-btn" onclick="loadScenarios()">🔄 Yenile</button>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <h3>📊 Toplam Senaryo</h3>
+            <div class="value" id="totalCount">0</div>
+            <div class="label">Sheets'ten</div>
+        </div>
+        <div class="stat-card">
+            <h3>🚫 REJECT</h3>
+            <div class="value" style="color: #DC2626;" id="rejectCount">0</div>
+            <div class="label">Anında engelle</div>
+        </div>
+        <div class="stat-card">
+            <h3>⏸️ REVIEW</h3>
+            <div class="value" style="color: #D97706;" id="reviewCount">0</div>
+            <div class="label">İnceleme</div>
+        </div>
+        <div class="stat-card">
+            <h3>🔴 Kritik Risk</h3>
+            <div class="value" style="color: #DC2626;" id="kritikCount">0</div>
+            <div class="label">Acil müdahale</div>
+        </div>
+        <div class="stat-card">
+            <h3>🚨 Alarm Açık</h3>
+            <div class="value" style="color: #F59E0B;" id="alarmCount">0</div>
+            <div class="label">Bildirim üretir</div>
+        </div>
+        <div class="stat-card">
+            <h3>📈 Ortalama Skor</h3>
+            <div class="value" style="color: #10B981;" id="avgScore">0</div>
+            <div class="label">Risk puanı</div>
+        </div>
+    </div>
+
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterBy('all', this)">📊 Tümü</button>
+        <button class="filter-btn" onclick="filterBy('spor', this)">🏆 Spor</button>
+        <button class="filter-btn" onclick="filterBy('kripto', this)">₿ Kripto</button>
+        <button class="filter-btn" onclick="filterBy('genel', this)">🛡️ Genel</button>
+        <button class="filter-btn" onclick="filterBy('kritik', this)">🔴 Kritik</button>
+        <button class="filter-btn" onclick="filterBy('reject', this)">🚫 REJECT</button>
+        <button class="filter-btn" onclick="filterBy('alarm', this)">🚨 Alarm</button>
+        <input type="text" class="search-box" placeholder="🔍 Senaryo ara (ID, başlık, açıklama)..." oninput="searchScenarios(this.value)">
+    </div>
+
+    <div id="container">
+        <div class="loading">⏳ Google Sheets'ten senaryolar yükleniyor...</div>
+    </div>
+
+    <div class="footer">
+        🤖 AI ile üretildi • 🔒 Gizli Doküman • Truvali © 2026
+    </div>
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+const SHEET_ID = '1VPvKTrIIoMpfM15UlcJqGc4b62tpVyFxBL1NsQEUKQQ';
+const SHEET_NAME = 'AI Senaryolar';
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+let scenarios = [];
+let currentFilter = 'all';
+let searchTerm = '';
+
+async function loadScenarios() {
+    document.getElementById('container').innerHTML = '<div class="loading">⏳ Google Sheets bağlanıyor...</div>';
+    
+    try {
+        const response = await fetch(SHEET_URL);
+        const text = await response.text();
+        const jsonStr = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+        const data = JSON.parse(jsonStr);
+        
+        if (!data.table || !data.table.rows) {
+            throw new Error('Sheets verisi bulunamadı');
+        }
+        
+        scenarios = data.table.rows.map(row => {
+            const cells = row.c || [];
+            return {
+                id: cells[0]?.v || '',
+                title: cells[1]?.v || '',
+                category: cells[2]?.v || 'genel',
+                description: cells[3]?.v || '',
+                event: cells[4]?.v || '',
+                signals: cells[5]?.v || '',
+                rule: cells[6]?.v || '',
+                action_type: cells[7]?.v || '',
+                action_value: cells[8]?.v || '',
+                trigger_alarm: cells[9]?.v || 'HAYIR',
+                score_increase: cells[10]?.v || 0,
+                checklist: cells[11]?.v || '',
+                decision: cells[12]?.v || '',
+                action: cells[13]?.v || '',
+                risk: cells[14]?.v || 'Orta',
+                score: cells[15]?.v || 0,
+                priority: cells[16]?.v || '',
+                masak: cells[17]?.v || '',
+                law: cells[18]?.v || ''
+            };
+        }).filter(s => s.id);
+        
+        const now = new Date();
+        document.getElementById('lastUpdate').textContent = `Son: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+        
+        updateStats();
+        renderScenarios();
+    } catch (error) {
+        console.error('Yükleme hatası:', error);
+        document.getElementById('container').innerHTML = `
+            <div class="error-msg">
+                ❌ <strong>Senaryolar yüklenemedi</strong><br><br>
+                Google Sheets'in <strong>"Bağlantı bilgisi olan herkes görüntüleyebilir"</strong> olarak paylaşılması gerekiyor.<br><br>
+                <small>1) Sheets'e gidin → Paylaş → Genel erişim → "Bağlantı bilgisi olan herkes" seçin</small><br>
+                <small>2) Bu sayfayı yenileyin (F5)</small><br><br>
+                <small>Teknik hata: ${error.message}</small>
+            </div>
+        `;
+    }
+}
+
+function updateStats() {
+    const total = scenarios.length;
+    const reject = scenarios.filter(s => s.decision === 'REJECT').length;
+    const review = scenarios.filter(s => s.decision === 'REVIEW').length;
+    const kritik = scenarios.filter(s => s.risk === 'Kritik').length;
+    const alarm = scenarios.filter(s => s.trigger_alarm === 'EVET' || s.trigger_alarm === true).length;
+    const avgScore = total > 0 ? Math.round(scenarios.reduce((sum, s) => sum + (parseInt(s.score) || 0), 0) / total) : 0;
+    
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('rejectCount').textContent = reject;
+    document.getElementById('reviewCount').textContent = review;
+    document.getElementById('kritikCount').textContent = kritik;
+    document.getElementById('alarmCount').textContent = alarm;
+    document.getElementById('avgScore').textContent = avgScore;
+}
+
+function renderScenarios() {
+    const container = document.getElementById('container');
+    
+    const filtered = scenarios.filter(s => {
+        const matchFilter = currentFilter === 'all' || 
+                          (currentFilter === 'spor' && s.category === 'spor') ||
+                          (currentFilter === 'kripto' && s.category === 'kripto') ||
+                          (currentFilter === 'genel' && s.category === 'genel') ||
+                          (currentFilter === 'kritik' && s.risk === 'Kritik') ||
+                          (currentFilter === 'reject' && s.decision === 'REJECT') ||
+                          (currentFilter === 'alarm' && (s.trigger_alarm === 'EVET' || s.trigger_alarm === true));
+        const matchSearch = searchTerm === '' || 
+                          (s.title && s.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                          (s.description && s.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                          (s.id && s.id.toLowerCase().includes(searchTerm.toLowerCase()));
+        return matchFilter && matchSearch;
+    });
+    
+    if (filtered.length === 0) {
+        if (scenarios.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <h2>📭 Henüz Senaryo Yok</h2>
+                    <p>Google Sheets'te <strong>🤖 Truvali AI</strong> menüsünden ilk senaryonuzu oluşturun!<br>
+                    AI otomatik olarak burada görünecek.</p>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <h2>🔍 Sonuç Bulunamadı</h2>
+                    <p>Filtreleri değiştirin veya arama terimini temizleyin.</p>
+                </div>
+            `;
+        }
+        return;
+    }
+    
+    container.innerHTML = '<div class="scenarios">' + filtered.map(s => {
+        const riskClass = s.risk ? 'risk-' + s.risk.toLowerCase().replace('ü', 'u') : 'risk-orta';
+        const kararClass = s.decision ? 'karar-' + s.decision.toLowerCase() : '';
+        const cardClass = s.decision ? s.decision.toLowerCase() : '';
+        const categoryIcon = s.category === 'spor' ? '🏆' : s.category === 'kripto' ? '₿' : '🛡️';
+        const alarmActive = s.trigger_alarm === 'EVET' || s.trigger_alarm === true;
+        
+        let actionTags = '';
+        if (s.action_type === 'Decision') {
+            actionTags += `<span class="action-tag action-decision">⚖️ ${s.action_value || s.decision}</span>`;
+        }
+        if (alarmActive) {
+            actionTags += `<span class="action-tag action-alarm">🚨 Alarm</span>`;
+        }
+        if (s.score_increase > 0) {
+            actionTags += `<span class="action-tag action-score">📈 +${s.score_increase}</span>`;
+        }
+        
+        return `
+            <div class="scenario-card ${cardClass}" onclick="openModal('${s.id}')">
+                <div class="scenario-header">
+                    <span class="scenario-id">${s.id}</span>
+                    <span class="risk-badge ${riskClass}">${s.risk || 'Orta'}</span>
+                </div>
+                <div class="scenario-title">${s.title || 'İsimsiz'}</div>
+                <div class="scenario-desc">${s.description || ''}</div>
+                ${s.rule ? `<div class="rule-preview">${s.rule}</div>` : ''}
+                <div class="action-tags">${actionTags}</div>
+                <div class="scenario-tags">
+                    <span class="tag">${categoryIcon} ${(s.category || '').toUpperCase()}</span>
+                    ${s.event ? `<span class="tag">📌 ${s.event}</span>` : ''}
+                </div>
+                <div class="scenario-footer">
+                    <span class="karar-badge ${kararClass}">${s.decision || 'BELIRSIZ'}</span>
+                    <div class="skor-display">
+                        <div class="skor">${s.score || 0}</div>
+                        <div class="skor-label">RİSK SKOR</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('') + '</div>';
+}
+
+function filterBy(type, btn) {
+    currentFilter = type;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderScenarios();
+}
+
+function searchScenarios(term) {
+    searchTerm = term;
+    renderScenarios();
+}
+
+function openModal(id) {
+    const s = scenarios.find(x => x.id === id);
+    if (!s) return;
+    
+    const alarmActive = s.trigger_alarm === 'EVET' || s.trigger_alarm === true;
+    
+    document.getElementById('modalBody').innerHTML = `
+        <div class="modal-title">${s.id} — ${s.title}</div>
+        <div class="modal-subtitle">${s.category === 'spor' ? '🏆 Spor Bahis' : s.category === 'kripto' ? '₿ Kripto' : '🛡️ Genel AML'} | ${s.risk} Risk</div>
+        
+        <div class="detail-section">
+            <div class="detail-label">🎯 Senaryo Açıklaması</div>
+            <div class="detail-content">${s.description}</div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">📌 Truvali Event</div>
+            <div class="detail-content">${s.event}</div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">🔴 Tehlike Sinyalleri</div>
+            <div class="detail-content">${s.signals}</div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">⚡ Truvali Rule Expression</div>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this, \`${s.rule.replace(/`/g, '\\`')}\`)">📋 Kopyala</button>
+                ${s.rule}
+            </div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">⚙️ Truvali Action Ayarları</div>
+            <div class="action-grid">
+                <div class="action-box">
+                    <div class="action-box-label">Action Type</div>
+                    <div class="action-box-value">${s.action_type || 'Decision'}</div>
+                </div>
+                <div class="action-box">
+                    <div class="action-box-label">Action Value</div>
+                    <div class="action-box-value">${s.action_value || s.decision}</div>
+                </div>
+                <div class="action-box">
+                    <div class="action-box-label">Trigger Alarm</div>
+                    <div class="action-box-value">${alarmActive ? '✅ EVET' : '❌ HAYIR'}</div>
+                </div>
+                <div class="action-box">
+                    <div class="action-box-label">Score Increase</div>
+                    <div class="action-box-value">+${s.score_increase || 0}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">📋 Danışman Kontrol Listesi</div>
+            <div class="detail-content">${s.checklist}</div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">⚖️ Karar & Aksiyon Detayı</div>
+            <div class="detail-content"><strong>${s.decision}</strong> — ${s.action}</div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">📊 Risk Profili</div>
+            <div class="detail-content">${s.risk} Risk | ${s.score} puan | Öncelik: ${s.priority}</div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">📢 MASAK Bildirimi</div>
+            <div class="detail-content">${s.masak}</div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">🏛️ İlgili Kanun</div>
+            <div class="detail-content">${s.law}</div>
+        </div>
+    `;
+    document.getElementById('modal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+}
+
+function copyToClipboard(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.textContent;
+        btn.textContent = '✅ Kopyalandı!';
+        btn.style.background = '#10B981';
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.background = '#374151';
+        }, 2000);
+    });
+}
+
+window.onclick = function(event) {
+    if (event.target.id === 'modal') closeModal();
+}
+
+loadScenarios();
+setInterval(loadScenarios, 30000);
+</script>
+</body>
+</html>
