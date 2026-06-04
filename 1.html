@@ -3,172 +3,246 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Truvali — Uyum Dashboard</title>
+<title>Truvali — AML Uyum Platformu</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-:root{--bg:#f8f9fc;--surface:#fff;--border:#e8eaf0;--text:#0e0e0e;--text2:#6b7280;--text3:#9ca3af;--blue:#1360EF;--blue-l:#eff4ff;--blue-m:#dbeafe;--red:#ef4444;--red-l:#fef2f2;--amber:#f59e0b;--amber-l:#fffbeb;--green:#22c55e;--green-l:#f0fdf4;--radius:12px;}
+:root {
+  --bg: #0B0F1A;
+  --surface: #111827;
+  --surface2: #1A2236;
+  --surface3: #1E2D45;
+  --border: #1F2D42;
+  --border2: #263450;
+  --text: #F0F4FF;
+  --text2: #8899BB;
+  --text3: #4A5E80;
+  --blue: #2D7BFF;
+  --blue-l: rgba(45,123,255,0.12);
+  --blue-m: rgba(45,123,255,0.2);
+  --cyan: #00D4FF;
+  --green: #00E5A0;
+  --green-l: rgba(0,229,160,0.1);
+  --red: #FF4D6A;
+  --red-l: rgba(255,77,106,0.1);
+  --amber: #FFB020;
+  --amber-l: rgba(255,176,32,0.1);
+  --purple: #A78BFA;
+  --radius: 10px;
+}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;}
-.logo-area{padding:20px;border-bottom:1px solid var(--border);}
-.logo-area svg{width:110px;height:auto;}
-.nav{padding:12px;flex:1;overflow-y:auto;}
-.nav-section{margin-bottom:20px;}
-.nav-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);padding:0 8px;margin-bottom:6px;display:block;}
-.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:all .15s;color:var(--text2);font-weight:500;font-size:13px;margin-bottom:2px;}
-.nav-item:hover{background:var(--bg);color:var(--text);}
-.nav-item.active{background:var(--blue-l);color:var(--blue);}
-.nav-item svg{width:17px;height:17px;flex-shrink:0;fill:currentColor;}
-.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;}
-.sidebar-footer{padding:12px;border-top:1px solid var(--border);}
-.user-card{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--bg);}
-.user-av{width:32px;height:32px;background:var(--blue-l);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--blue);flex-shrink:0;}
-.main{margin-left:240px;min-height:100vh;}
-.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
-.topbar-right{display:flex;align-items:center;gap:10px;}
-.btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;transition:all .15s;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;}
+.logo-area{padding:18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.logo-area img{width:100px;height:auto;filter:brightness(1.1);}
+.nav{padding:10px 8px;flex:1;overflow-y:auto;}
+.nav-section{margin-bottom:18px;}
+.nav-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);padding:0 10px;margin-bottom:5px;display:block;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:all .15s;color:var(--text2);font-weight:500;font-size:12.5px;margin-bottom:1px;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m);}
+.nav-item svg{width:15px;height:15px;flex-shrink:0;fill:currentColor;opacity:.85;}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;}
+.nav-badge.blue{background:var(--blue);}
+.sidebar-footer{padding:10px 8px;border-top:1px solid var(--border);}
+.user-card{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;background:var(--surface2);}
+.user-av{width:30px;height:30px;background:var(--blue-l);border:1px solid var(--blue-m);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--blue);flex-shrink:0;}
+
+/* MAIN */
+.main{margin-left:220px;min-height:100vh;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);}
+.topbar-left h2{font-size:14px;font-weight:600;color:var(--text);}
+.topbar-left p{font-size:11px;color:var(--text3);margin-top:1px;font-family:'DM Mono',monospace;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .15s;}
 .btn-primary{background:var(--blue);color:#fff;}
-.btn-primary:hover{background:#0f50d4;}
-.btn-outline{background:#fff;color:var(--text);border:1px solid var(--border);}
-.btn-outline:hover{background:var(--bg);}
+.btn-primary:hover{background:#1a6aee;transform:translateY(-1px);box-shadow:0 4px 16px rgba(45,123,255,.3);}
+.btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border2);}
+.btn-outline:hover{background:var(--surface2);color:var(--text);}
+.live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,229,160,.4);}50%{opacity:.7;box-shadow:0 0 0 4px rgba(0,229,160,0);}}
+
+/* CONTENT */
 .content{padding:20px 24px;}
 .page{display:none;}
 .page.active{display:block;}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
-.stat-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px;}
-.stat-value{font-size:28px;font-weight:700;margin-bottom:2px;}
-.stat-label{font-size:12px;color:var(--text3);}
-.grid2{display:grid;grid-template-columns:1fr 300px;gap:16px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden;}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:relative;overflow:hidden;transition:transform .2s;}
+.kpi:hover{transform:translateY(-2px);}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kpi.blue::before{background:linear-gradient(90deg,var(--blue),var(--cyan));}
+.kpi.red::before{background:linear-gradient(90deg,var(--red),#ff8fa3);}
+.kpi.amber::before{background:linear-gradient(90deg,var(--amber),#ffd166);}
+.kpi.green::before{background:linear-gradient(90deg,var(--green),#66f5c8);}
+.kpi-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.kpi-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.kpi-icon svg{width:16px;height:16px;fill:currentColor;}
+.kpi-trend{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;}
+.trend-up{background:var(--red-l);color:var(--red);}
+.trend-down{background:var(--green-l);color:var(--green);}
+.trend-flat{background:var(--blue-l);color:var(--blue);}
+.kpi-value{font-size:30px;font-weight:700;margin-bottom:2px;font-family:'DM Mono',monospace;}
+.kpi-label{font-size:11px;color:var(--text3);}
+
+/* GRID LAYOUTS */
+.grid2{display:grid;grid-template-columns:1fr 280px;gap:16px;margin-bottom:16px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;}
+.grid-full{margin-bottom:16px;}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
 .card-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.card-title{font-size:14px;font-weight:600;}
+.card-title{font-size:13px;font-weight:600;color:var(--text);}
 .card-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;}
+.badge-blue{background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m);}
+.badge-red{background:var(--red-l);color:var(--red);}
+.badge-amber{background:var(--amber-l);color:var(--amber);}
+.badge-green{background:var(--green-l);color:var(--green);}
+
+/* TABLE */
 .tbl-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
-th{text-align:left;padding:9px 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);background:var(--bg);border-bottom:1px solid var(--border);}
-td{padding:0;border-bottom:1px solid var(--border);vertical-align:top;}
-tr.tr-m:last-of-type td{border-bottom:1px solid var(--border);}
-.tr-m{cursor:pointer;}
-.tr-m:hover .td-i{background:#f5f8ff;}
-.td-i{padding:11px 14px;font-size:13px;}
+th{text-align:left;padding:9px 14px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);}
+td{border-bottom:1px solid var(--border);vertical-align:top;}
+.td-i{padding:11px 14px;font-size:12.5px;}
+.tr-m{cursor:pointer;transition:background .1s;}
+.tr-m:hover .td-i{background:var(--surface2);}
 .tr-d{display:none;}
 .tr-d.open{display:table-row;}
-.det-cell{padding:16px 18px;border-top:1px dashed var(--border);background:#fafbff;}
-.kb{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;}
-.rb{display:inline-flex;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;}
-.rh{background:var(--red-l);color:var(--red);}
-.rm{background:var(--amber-l);color:var(--amber);}
-.rl{background:var(--green-l);color:var(--green);}
-.tag{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:6px;}
-.tb{background:var(--blue-l);color:var(--blue);}
-.tg{background:var(--bg);color:var(--text2);border:1px solid var(--border);}
-.gun{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;}
-.gr{color:var(--red);}.ga{color:var(--amber);}.gg{color:var(--green);}
-.lbtn{font-size:11px;color:var(--blue);font-weight:600;padding:4px 8px;border-radius:6px;background:var(--blue-l);text-decoration:none;white-space:nowrap;display:inline-block;}
-.lbtn:hover{background:var(--blue-m);}
-.exp{width:20px;height:20px;border-radius:5px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;transition:transform .2s;flex-shrink:0;}
-.exp svg{width:12px;height:12px;fill:var(--text2);}
-.exp.open{transform:rotate(90deg);}
-.ai-box{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
-.ai-title{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
-.ai-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.ai-item label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text3);display:block;margin-bottom:3px;}
-.ai-item p{font-size:12px;color:var(--text);line-height:1.5;}
-.ai-full{grid-column:1/-1;}
-.loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:40px;color:var(--text3);font-size:13px;}
-.spin{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.empty{text-align:center;padding:48px 20px;color:var(--text3);}
-.empty .em{font-size:36px;margin-bottom:12px;}
-.empty p{font-size:14px;color:var(--text2);font-weight:500;margin-bottom:4px;}
-.srow{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:7px 0;border-bottom:1px solid var(--border);}
+.det-cell{padding:16px 18px;background:var(--surface2);border-top:1px dashed var(--border2);}
+
+/* STATUS ROW */
+.srow{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border);}
 .srow:last-child{border-bottom:none;}
-.pulse{width:7px;height:7px;background:var(--green);border-radius:50%;animation:p 2s infinite;flex-shrink:0;}
-@keyframes p{0%,100%{opacity:1;}50%{opacity:.3;}}
-.fsel{font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);cursor:pointer;outline:none;}
-.chat-fab{position:fixed;bottom:24px;right:24px;width:54px;height:54px;background:var(--blue);border-radius:50%;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(19,96,239,.4);display:flex;align-items:center;justify-content:center;z-index:1000;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
-.chat-fab:hover{transform:scale(1.08);}
-.chat-fab svg{width:23px;height:23px;fill:#fff;}
+
+/* ALERTS */
+.alert-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer;}
+.alert-item:hover{background:var(--surface2);}
+.alert-item:last-child{border-bottom:none;}
+.alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.alert-content{flex:1;}
+.alert-title{font-size:12.5px;font-weight:500;margin-bottom:3px;}
+.alert-meta{font-size:11px;color:var(--text3);}
+.alert-action{padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+/* RULE ENGINE */
+.rule-item{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.rule-item:last-child{border-bottom:none;}
+.rule-toggle{width:36px;height:20px;border-radius:10px;border:none;cursor:pointer;position:relative;flex-shrink:0;transition:background .2s;}
+.rule-toggle.on{background:var(--green);}
+.rule-toggle.off{background:var(--surface3);}
+.rule-toggle::after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:3px;transition:left .2s;}
+.rule-toggle.on::after{left:19px;}
+.rule-toggle.off::after{left:3px;}
+.rule-code{font-family:'DM Mono',monospace;font-size:10px;color:var(--cyan);background:var(--surface2);padding:2px 8px;border-radius:4px;}
+
+/* KYC */
+.kyc-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);}
+.kyc-item:last-child{border-bottom:none;}
+.kyc-av{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+.kyc-score{font-family:'DM Mono',monospace;font-size:18px;font-weight:700;}
+
+/* CHART CONTAINERS */
+.chart-wrap{padding:16px 18px;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(4px);}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:14px;width:620px;max-width:95vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.6);transform:scale(.95);transition:transform .2s;}
+.modal-overlay.open .modal{transform:scale(1);}
+.modal-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-head h3{font-size:14px;font-weight:600;}
+.modal-close{width:26px;height:26px;border:1px solid var(--border2);background:var(--surface2);border-radius:6px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--text2);}
+.modal-body{padding:20px;flex:1;overflow-y:auto;}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;}
+.rapor-box{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:16px;font-size:12.5px;line-height:1.8;color:var(--text2);min-height:200px;white-space:pre-wrap;font-family:'DM Sans',sans-serif;}
+.musteri-btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.mb{padding:6px 14px;border-radius:7px;border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;transition:all .15s;color:var(--text2);}
+.mb:hover{background:var(--surface2);color:var(--text);border-color:var(--border2);}
+.mb.selected{background:var(--blue-l);color:var(--blue);border-color:var(--blue-m);}
+
+/* CHAT */
+.chat-fab{position:fixed;bottom:22px;right:22px;width:50px;height:50px;background:var(--blue);border-radius:50%;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(45,123,255,.4);display:flex;align-items:center;justify-content:center;z-index:1000;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
+.chat-fab:hover{transform:scale(1.1);}
+.chat-fab svg{width:20px;height:20px;fill:#fff;}
 .ci{display:block;}.xi{display:none;}
 .chat-fab.open .ci{display:none;}.chat-fab.open .xi{display:block;}
-.cnotif{position:absolute;top:1px;right:1px;width:16px;height:16px;background:var(--red);border-radius:50%;border:2px solid #fff;font-size:9px;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;}
-.chat-win{position:fixed;bottom:90px;right:24px;width:380px;height:540px;background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.15);display:flex;flex-direction:column;z-index:999;transform:scale(.85) translateY(16px);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1);transform-origin:bottom right;}
+.cnotif{position:absolute;top:0;right:0;width:15px;height:15px;background:var(--red);border-radius:50%;border:2px solid var(--bg);font-size:8px;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.chat-win{position:fixed;bottom:82px;right:22px;width:360px;height:520px;background:var(--surface);border:1px solid var(--border2);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.5);display:flex;flex-direction:column;z-index:999;transform:scale(.85) translateY(16px);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1);transform-origin:bottom right;}
 .chat-win.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all;}
-.chat-head{padding:13px 16px;background:var(--blue);border-radius:16px 16px 0 0;display:flex;align-items:center;gap:10px;}
-.chav{width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;}
-.chav+div h4{font-size:13px;font-weight:600;color:#fff;}
-.chav+div p{font-size:11px;color:rgba(255,255,255,.7);}
-.ch-badge{margin-left:auto;background:rgba(255,255,255,.2);color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;font-family:'JetBrains Mono',monospace;}
-.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth;}
+.chat-head{padding:12px 16px;background:linear-gradient(135deg,#1a4aee,#0099dd);border-radius:14px 14px 0 0;display:flex;align-items:center;gap:10px;}
+.chav{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.chav+div h4{font-size:12.5px;font-weight:600;color:#fff;}
+.chav+div p{font-size:10px;color:rgba(255,255,255,.65);}
+.chat-msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth;}
 .chat-msgs::-webkit-scrollbar{width:3px;}
-.chat-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 .cmsg{display:flex;gap:7px;animation:mi .25s ease;}
 .cmsg.u{flex-direction:row-reverse;}
-@keyframes mi{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-.cav{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;}
-.cmsg.b .cav{background:var(--blue-l);}
-.cmsg.u .cav{background:var(--bg);}
-.cbub{max-width:82%;padding:9px 12px;font-size:13px;line-height:1.55;}
-.cmsg.b .cbub{background:var(--bg);border:1px solid var(--border);border-radius:4px 12px 12px 12px;color:var(--text);}
-.cmsg.u .cbub{background:var(--blue);color:#fff;border-radius:12px 4px 12px 12px;}
+@keyframes mi{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.cav{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px;}
+.cmsg.b .cav{background:var(--blue-l);color:var(--blue);}
+.cmsg.u .cav{background:var(--surface2);}
+.cbub{max-width:84%;padding:8px 12px;font-size:12.5px;line-height:1.55;}
+.cmsg.b .cbub{background:var(--surface2);border:1px solid var(--border);border-radius:4px 10px 10px 10px;color:var(--text2);}
+.cmsg.u .cbub{background:var(--blue);color:#fff;border-radius:10px 4px 10px 10px;}
 .ctime{font-size:10px;color:var(--text3);margin-top:2px;}
 .cmsg.u .ctime{text-align:right;}
-.typing{display:flex;gap:3px;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:4px 12px 12px 12px;width:fit-content;}
+.typing{display:flex;gap:3px;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:4px 10px 10px 10px;width:fit-content;}
 .typing span{width:5px;height:5px;background:var(--blue);border-radius:50%;animation:ty 1.2s infinite;}
 .typing span:nth-child(2){animation-delay:.2s;}
 .typing span:nth-child(3){animation-delay:.4s;}
-@keyframes ty{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-5px);opacity:1;}}
-.qqs{padding:0 12px 10px;display:flex;flex-wrap:wrap;gap:5px;}
-.qq{background:var(--blue-l);border:1px solid #bfdbfe;color:var(--blue);font-size:11px;font-weight:500;padding:4px 10px;border-radius:16px;cursor:pointer;font-family:'Inter',sans-serif;}
-.qq:hover{background:var(--blue-m);}
-.cinput{padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:7px;align-items:flex-end;}
-.cinput textarea{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px 12px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;resize:none;outline:none;max-height:90px;min-height:38px;line-height:1.5;}
+@keyframes ty{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-4px);opacity:1;}}
+.qqs{padding:0 10px 8px;display:flex;flex-wrap:wrap;gap:4px;}
+.qq{background:var(--surface2);border:1px solid var(--border2);color:var(--text2);font-size:11px;font-weight:500;padding:4px 9px;border-radius:14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.qq:hover{background:var(--blue-l);color:var(--blue);border-color:var(--blue-m);}
+.cinput{padding:10px;border-top:1px solid var(--border);display:flex;gap:7px;align-items:flex-end;}
+.cinput textarea{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:8px 11px;color:var(--text);font-size:12.5px;font-family:'DM Sans',sans-serif;resize:none;outline:none;max-height:80px;min-height:36px;line-height:1.5;}
 .cinput textarea:focus{border-color:var(--blue);}
 .cinput textarea::placeholder{color:var(--text3);}
-.csend{width:38px;height:38px;background:var(--blue);border:none;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.csend:hover{background:#0f50d4;}
+.csend{width:36px;height:36px;background:var(--blue);border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.csend:hover{background:#1a6aee;}
 .csend:disabled{opacity:.4;cursor:not-allowed;}
-.csend svg{width:16px;height:16px;fill:#fff;}
+.csend svg{width:15px;height:15px;fill:#fff;}
 .api-set{padding:20px;display:flex;flex-direction:column;gap:10px;}
 .api-set p{font-size:12px;color:var(--text2);line-height:1.5;}
-.api-set input{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--text);outline:none;width:100%;}
+.api-set input{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;font-size:12px;font-family:'DM Mono',monospace;color:var(--text);outline:none;width:100%;}
 .api-set input:focus{border-color:var(--blue);}
-.api-set button{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:9px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;}
+.api-set button{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;}
 
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
-.modal-overlay.open{opacity:1;pointer-events:all;}
-.modal{background:#fff;border-radius:16px;width:600px;max-width:95vw;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.2);transform:scale(.95);transition:transform .2s;}
-.modal-overlay.open .modal{transform:scale(1);}
-.modal-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.modal-head h3{font-size:15px;font-weight:600;}
-.modal-close{width:28px;height:28px;border:none;background:var(--bg);border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
-.modal-body{padding:20px;flex:1;overflow-y:auto;}
-.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
-.rapor-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:13px;line-height:1.7;color:var(--text);min-height:200px;white-space:pre-wrap;}
-.musteri-btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
-.mb{padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;transition:all .15s;}
-.mb:hover{background:var(--blue-l);border-color:var(--blue);color:var(--blue);}
-.mb.selected{background:var(--blue);color:#fff;border-color:var(--blue);}
-.rapor-btn{font-size:11px;color:var(--blue);font-weight:600;padding:4px 8px;border-radius:6px;background:var(--blue-l);border:none;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;}
-.rapor-btn:hover{background:var(--blue-m);}
-.copy-btn{background:var(--green-l);color:var(--green);border:1px solid #bbf7d0;}
-.copy-btn:hover{background:#dcfce7;}
+/* MISC */
+.mono{font-family:'DM Mono',monospace;}
+.loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:40px;color:var(--text3);font-size:13px;}
+.spin{width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty{text-align:center;padding:48px 20px;color:var(--text3);}
+.fsel{font-size:11px;padding:5px 9px;border:1px solid var(--border2);border-radius:7px;background:var(--surface2);color:var(--text2);cursor:pointer;outline:none;}
+.exp{width:18px;height:18px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;transition:transform .2s;flex-shrink:0;}
+.exp svg{width:10px;height:10px;fill:var(--text3);}
+.exp.open{transform:rotate(90deg);}
+.lbtn{font-size:11px;color:var(--blue);font-weight:600;padding:3px 8px;border-radius:5px;background:var(--blue-l);text-decoration:none;display:inline-block;border:1px solid var(--blue-m);}
+.rapor-btn{font-size:11px;color:var(--text2);font-weight:600;padding:3px 8px;border-radius:5px;background:var(--surface2);border:1px solid var(--border2);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.rapor-btn:hover{background:var(--surface3);color:var(--text);}
+@keyframes fadeRow{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
 </style>
 </head>
 <body>
 
 <div class="sidebar">
   <div class="logo-area">
-    <img src="data:image/jpeg;base64,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" style="width:120px;height:auto;display:block;" alt="Truvali">
+    <img src="data:image/jpeg;base64,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" alt="Truvali">
   </div>
   <nav class="nav">
     <div class="nav-section">
       <span class="nav-label">Ana Menü</span>
       <div class="nav-item active" onclick="showPage('mevzuat',this)">
         <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-        Mevzuat Takip
+        İlgili İçerikler
         <span class="nav-badge" id="navBadge">0</span>
       </div>
       <div class="nav-item" onclick="showPage('dashboard',this)">
@@ -177,22 +251,24 @@ tr.tr-m:last-of-type td{border-bottom:1px solid var(--border);}
       </div>
     </div>
     <div class="nav-section">
-      <span class="nav-label">Truvali Panel</span>
+      <span class="nav-label">AML Panel</span>
       <div class="nav-item" onclick="showPage('alertler',this)">
         <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-        Alertler
+        Alert Yönetimi
+        <span class="nav-badge" id="alertBadge">7</span>
       </div>
       <div class="nav-item" onclick="showPage('kyc',this)">
         <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
         KYC / KYB
       </div>
-      <div class="nav-item" onclick="showPage('execlog',this)">
-        <svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
-        Execution Logs
-      </div>
       <div class="nav-item" onclick="showPage('ruleengine',this)">
         <svg viewBox="0 0 24 24"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zm-4 10H4V5h14v14z"/></svg>
         Rule Engine
+        <span class="nav-badge blue" id="ruleBadge">10</span>
+      </div>
+      <div class="nav-item" onclick="showPage('execlog',this)">
+        <svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+        Execution Logs
       </div>
     </div>
     <div class="nav-section">
@@ -207,8 +283,8 @@ tr.tr-m:last-of-type td{border-bottom:1px solid var(--border);}
     <div class="user-card">
       <div class="user-av">BY</div>
       <div>
-        <div style="font-size:13px;font-weight:600;">Burak Yaman</div>
-        <div style="font-size:11px;color:var(--text3);">Uyum Danışmanı</div>
+        <div style="font-size:12px;font-weight:600;">Burak Yaman</div>
+        <div style="font-size:10px;color:var(--text3);">Uyum Danışmanı</div>
       </div>
     </div>
   </div>
@@ -216,79 +292,334 @@ tr.tr-m:last-of-type td{border-bottom:1px solid var(--border);}
 
 <div class="main">
   <div class="topbar">
-    <div>
-      <div style="font-size:15px;font-weight:600;" id="pageTitle">Mevzuat Takip</div>
-      <div style="font-size:11px;color:var(--text3);" id="lastUpdate">Yükleniyor...</div>
+    <div class="topbar-left">
+      <h2 id="pageTitle">İlgili İçerikler</h2>
+      <p id="lastUpdate">Yükleniyor...</p>
     </div>
     <div class="topbar-right">
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green);font-weight:600;padding:5px 10px;background:var(--green-l);border-radius:7px;border:1px solid rgba(0,229,160,.2);">
+        <div class="live-dot"></div>Sistem Aktif
+      </div>
       <button class="btn btn-outline" onclick="loadData()">
-        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
         Yenile
       </button>
-      <button class="btn btn-primary" onclick="toggleChat()">💬 Uyum Asistanı</button>
+      <button class="btn btn-primary" onclick="toggleChat()">
+        <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        Uyum Asistanı
+      </button>
     </div>
   </div>
 
   <div class="content">
+
+    <!-- MEVZUAT TAKIP -->
     <div class="page active" id="page-mevzuat">
-      <div class="stats">
-        <div class="stat-card"><div class="stat-icon" style="background:var(--red-l)">🚨</div><div class="stat-value" id="cH" style="color:var(--red)">—</div><div class="stat-label">Yüksek Risk</div></div>
-        <div class="stat-card"><div class="stat-icon" style="background:var(--amber-l)">⚠️</div><div class="stat-value" id="cM" style="color:var(--amber)">—</div><div class="stat-label">Orta Risk</div></div>
-        <div class="stat-card"><div class="stat-icon" style="background:var(--green-l)">✅</div><div class="stat-value" id="cL" style="color:var(--green)">—</div><div class="stat-label">Düşük Risk</div></div>
-        <div class="stat-card"><div class="stat-icon" style="background:var(--blue-l)">📋</div><div class="stat-value" id="cT" style="color:var(--blue)">—</div><div class="stat-label">Toplam</div></div>
+      <div class="kpi-grid">
+        <div class="kpi red">
+          <div class="kpi-header">
+            <div class="kpi-icon" style="background:var(--red-l);color:var(--red)"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+            <span class="badge badge-red" id="hTrend">↑ Yüksek</span>
+          </div>
+          <div class="kpi-value" id="cH" style="color:var(--red)">—</div>
+          <div class="kpi-label">Yüksek Risk Mevzuat</div>
+        </div>
+        <div class="kpi amber">
+          <div class="kpi-header">
+            <div class="kpi-icon" style="background:var(--amber-l);color:var(--amber)"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+            <span class="badge badge-amber">Orta</span>
+          </div>
+          <div class="kpi-value" id="cM" style="color:var(--amber)">—</div>
+          <div class="kpi-label">Orta Risk Mevzuat</div>
+        </div>
+        <div class="kpi green">
+          <div class="kpi-header">
+            <div class="kpi-icon" style="background:var(--green-l);color:var(--green)"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+            <span class="badge badge-green">Düşük</span>
+          </div>
+          <div class="kpi-value" id="cL" style="color:var(--green)">—</div>
+          <div class="kpi-label">Düşük Risk Mevzuat</div>
+        </div>
+        <div class="kpi blue">
+          <div class="kpi-header">
+            <div class="kpi-icon" style="background:var(--blue-l);color:var(--blue)"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+            <span class="badge badge-blue">Toplam</span>
+          </div>
+          <div class="kpi-value" id="cT" style="color:var(--blue)">—</div>
+          <div class="kpi-label">Toplam Takip Edilen</div>
+        </div>
       </div>
+
       <div class="grid2">
         <div class="card">
           <div class="card-header">
             <div><div class="card-title">İlgili İçerikler</div><div class="card-sub">Satıra tıklayarak AI analizini ve detayları görün</div></div>
             <select class="fsel" onchange="filterTable(this.value)">
               <option value="">Tüm Riskler</option>
-              <option value="Yüksek">🔴 Yüksek</option>
-              <option value="Orta">🟡 Orta</option>
-              <option value="Düşük">🟢 Düşük</option>
+              <option value="Yüksek">Yüksek</option>
+              <option value="Orta">Orta</option>
+              <option value="Düşük">Düşük</option>
             </select>
           </div>
           <div class="tbl-wrap">
             <div id="tblLoad" class="loading"><div class="spin"></div>Veriler yükleniyor...</div>
             <table id="tbl" style="display:none">
-              <thead><tr><th style="width:28px"></th><th>Tarih</th><th>Kurum</th><th>Başlık</th><th>Risk</th><th>Süre</th><th>Link</th></tr></thead>
+              <thead><tr><th style="width:24px"></th><th>Tarih</th><th>Kurum</th><th>Başlık</th><th>Risk</th><th>Süre</th><th>Link</th></tr></thead>
               <tbody id="tblBody"></tbody>
             </table>
-            <div id="tblEmpty" class="empty" style="display:none"><div class="em">📭</div><p>Henüz mevzuat kaydı yok</p><span>Robot her sabah 08:00'de otomatik çalışır</span></div>
+            <div id="tblEmpty" class="empty" style="display:none"><p style="color:var(--text2)">Henüz mevzuat kaydı yok</p></div>
           </div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
           <div class="card">
             <div class="card-header"><div class="card-title">Sistem Durumu</div></div>
-            <div style="padding:14px 16px;display:flex;flex-direction:column;gap:6px;">
-              <div class="srow"><span style="color:var(--text2)">Robot</span><div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green);font-weight:600;"><div class="pulse"></div>Aktif</div></div>
-              <div class="srow"><span style="color:var(--text2)">Çalışma saati</span><span class="tag tb">Her gün 08:00</span></div>
-              <div class="srow"><span style="color:var(--text2)">Veri kaynağı</span><span class="tag tg">Google Sheets</span></div>
+            <div style="padding:12px 16px;">
+              <div class="srow"><span style="color:var(--text2)">Robot</span><div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green);font-weight:600;"><div class="live-dot"></div>Aktif</div></div>
+              <div class="srow"><span style="color:var(--text2)">Çalışma saati</span><span class="badge badge-blue">Her gün 08:00</span></div>
+              <div class="srow"><span style="color:var(--text2)">Veri kaynağı</span><span class="badge" style="background:var(--surface2);color:var(--text2);border:1px solid var(--border2)">Google Sheets</span></div>
             </div>
           </div>
           <div class="card">
             <div class="card-header"><div class="card-title">Takip Edilen Kurumlar</div></div>
             <div style="padding:12px 16px;display:flex;flex-direction:column;gap:7px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">🏛️ Resmi Gazete<span class="tag tb">RSS</span></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">🔍 MASAK<span class="tag tb">RSS</span></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">📊 SPK<span class="tag tb">RSS</span></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">🏦 BDDK<span class="tag tb">RSS</span></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">📡 BTK<span class="tag tb">RSS</span></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">🔒 KVKK<span class="tag tb">RSS</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">Resmi Gazete<span class="badge badge-blue">RSS</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">MASAK<span class="badge badge-blue">RSS</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">SPK<span class="badge badge-blue">RSS</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">BDDK<span class="badge badge-blue">RSS</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">BTK<span class="badge badge-blue">RSS</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">KVKK<span class="badge badge-blue">RSS</span></div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="page" id="page-dashboard"><div class="empty"><div class="em">📊</div><p>Dashboard</p><span>Yakında aktif olacak</span></div></div>
-    <div class="page" id="page-alertler"><div class="empty"><div class="em">🚨</div><p>Alertler</p><span>Truvali panel API entegrasyonu gerekiyor</span></div></div>
-    <div class="page" id="page-kyc"><div class="empty"><div class="em">👤</div><p>KYC / KYB</p><span>Truvali panel API entegrasyonu gerekiyor</span></div></div>
-    <div class="page" id="page-execlog"><div class="empty"><div class="em">📋</div><p>Execution Logs</p><span>Truvali panel API entegrasyonu gerekiyor</span></div></div>
-    <div class="page" id="page-ruleengine"><div class="empty"><div class="em">⚙️</div><p>Rule Engine</p><span>Truvali panel API entegrasyonu gerekiyor</span></div></div>
-    <div class="page" id="page-raporlar"><div class="empty"><div class="em">📄</div><p>MASAK Raporları</p><span>Yakında aktif olacak</span></div></div>
+
+    <!-- DASHBOARD -->
+    <div class="page" id="page-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi blue">
+          <div class="kpi-header"><div class="kpi-icon" style="background:var(--blue-l);color:var(--blue)"><svg viewBox="0 0 24 24"><path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.81 6-4.72 7.28L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.94-9.45-9-9.95zM11 2.05C5.95 2.55 2 6.82 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5V2.05z"/></svg></div><span class="badge badge-blue" id="liveBadge">Canlı</span></div>
+          <div class="kpi-value" id="liveCount" style="color:var(--blue)">0</div>
+          <div class="kpi-label">İşlem / Dakika</div>
+        </div>
+        <div class="kpi red">
+          <div class="kpi-header"><div class="kpi-icon" style="background:var(--red-l);color:var(--red)"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div><span class="badge badge-red">Acil</span></div>
+          <div class="kpi-value" id="suspCount" style="color:var(--red)">43</div>
+          <div class="kpi-label">Şüpheli İşlem</div>
+        </div>
+        <div class="kpi amber">
+          <div class="kpi-header"><div class="kpi-icon" style="background:var(--amber-l);color:var(--amber)"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div><span class="badge badge-amber">ŞİB</span></div>
+          <div class="kpi-value" id="masak_count" style="color:var(--amber)">7</div>
+          <div class="kpi-label">Bu Ay MASAK Bildirimi</div>
+        </div>
+        <div class="kpi green">
+          <div class="kpi-header"><div class="kpi-icon" style="background:var(--green-l);color:var(--green)"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div><span class="badge badge-green">Temiz</span></div>
+          <div class="kpi-value" id="cleanCount" style="color:var(--green)">2,847</div>
+          <div class="kpi-label">Onaylanan İşlem</div>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-bottom:16px;">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Canlı İşlem Akışı</div><div class="card-sub">İşlem/dakika — Son 20 veri noktası</div></div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);font-weight:600;"><div class="live-dot"></div>Canlı</div>
+          </div>
+          <div class="chart-wrap"><canvas id="liveChart" height="130"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">Risk Skoru Dağılımı</div><div class="card-sub">Müşteri segmentasyonu</div></div></div>
+          <div class="chart-wrap"><canvas id="riskChart" height="130"></canvas></div>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div class="card">
+          <div class="card-header"><div class="card-title">MASAK Bildirim Durumu</div></div>
+          <div style="padding:18px;text-align:center;">
+            <div style="font-size:56px;font-weight:700;color:var(--blue);font-family:'DM Mono',monospace;">7</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:16px;">Bu Ay Yapılan ŞİB</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="srow"><span style="color:var(--text2)">Bekleyen</span><span class="badge badge-red">3</span></div>
+              <div class="srow"><span style="color:var(--text2)">Tamamlanan</span><span class="badge badge-green">4</span></div>
+              <div class="srow"><span style="color:var(--text2)">Kalan Süre</span><span class="badge badge-amber">24 saat</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Mevzuat Takvimi</div></div>
+          <div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px;">
+            <div style="padding:10px;border-radius:7px;background:var(--red-l);border-left:3px solid var(--red);">
+              <div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:3px;">5 GÜN KALDI</div>
+              <div style="font-size:12px;font-weight:600;">KYC Yenileme Dönemi</div>
+              <div style="font-size:10px;color:var(--text3);">MASAK Tebliğ No:19</div>
+            </div>
+            <div style="padding:10px;border-radius:7px;background:var(--amber-l);border-left:3px solid var(--amber);">
+              <div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:3px;">18 GÜN KALDI</div>
+              <div style="font-size:12px;font-weight:600;">Yıllık Risk Değerlendirmesi</div>
+              <div style="font-size:10px;color:var(--text3);">5549 Sayılı Kanun</div>
+            </div>
+            <div style="padding:10px;border-radius:7px;background:var(--green-l);border-left:3px solid var(--green);">
+              <div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:3px;">32 GÜN KALDI</div>
+              <div style="font-size:12px;font-weight:600;">Kripto Rapor Dönemi</div>
+              <div style="font-size:10px;color:var(--text3);">7518 Sayılı Kanun</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Müşteri Segmentasyonu</div></div>
+          <div style="padding:14px 16px;">
+            <canvas id="segChart" height="110"></canvas>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px;">
+              <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;background:var(--green);border-radius:50%;display:inline-block"></span>Düşük Risk</span><span class="mono" style="font-weight:700;">730</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;background:var(--amber);border-radius:50%;display:inline-block"></span>Orta Risk</span><span class="mono" style="font-weight:700;">272</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;background:var(--red);border-radius:50%;display:inline-block"></span>Yüksek Risk</span><span class="mono" style="font-weight:700;">55</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Gerçek Zamanlı Alert Akışı</div><div class="card-sub">AML motoru tespitleri</div></div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);font-weight:600;"><div class="live-dot"></div>Canlı</div>
+        </div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Zaman</th><th>İşlem ID</th><th>Müşteri</th><th>Tutar</th><th>Tetikleyen Kural</th><th>Risk Skoru</th><th>Karar</th></tr></thead>
+          <tbody id="liveAlerts"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERTLER -->
+    <div class="page" id="page-alertler">
+      <div class="kpi-grid">
+        <div class="kpi red"><div class="kpi-header"><div class="kpi-icon" style="background:var(--red-l);color:var(--red)"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><span class="badge badge-red">Kritik</span></div><div class="kpi-value" style="color:var(--red)">3</div><div class="kpi-label">Kritik Alert</div></div>
+        <div class="kpi amber"><div class="kpi-header"><div class="kpi-icon" style="background:var(--amber-l);color:var(--amber)"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div><span class="badge badge-amber">Yüksek</span></div><div class="kpi-value" style="color:var(--amber)">4</div><div class="kpi-label">Yüksek Alert</div></div>
+        <div class="kpi blue"><div class="kpi-header"><div class="kpi-icon" style="background:var(--blue-l);color:var(--blue)"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></div><span class="badge badge-blue">Toplam</span></div><div class="kpi-value" style="color:var(--blue)">7</div><div class="kpi-label">Açık Alert</div></div>
+        <div class="kpi green"><div class="kpi-header"><div class="kpi-icon" style="background:var(--green-l);color:var(--green)"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div><span class="badge badge-green">Kapandı</span></div><div class="kpi-value" style="color:var(--green)">124</div><div class="kpi-label">Bu Ay Kapatılan</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">Aktif Alertler</div><div class="card-sub">Öncelik sırasına göre</div></div></div>
+        <div id="alertList">
+          <div class="alert-item"><div class="alert-dot" style="background:var(--red)"></div><div class="alert-content"><div class="alert-title">PEP Müşteri — Yüksek Tutarlı Çekim Tespiti</div><div class="alert-meta">TRV-00234 · ₺127,000 · 2 dakika önce · <span style="color:var(--red)">Sanction Score 88</span></div></div><button class="alert-action" style="background:var(--red-l);color:var(--red);border:1px solid rgba(255,77,106,.2);" onclick="alertAction(this,'REVIEW')">İncele</button></div>
+          <div class="alert-item"><div class="alert-dot" style="background:var(--red)"></div><div class="alert-content"><div class="alert-title">Koordineli Çoklu Hesap — Match Fixing Şüphesi</div><div class="alert-meta">10 hesap · Aynı maç · 8 dakika önce · <span style="color:var(--red)">Kritik</span></div></div><button class="alert-action" style="background:var(--red-l);color:var(--red);border:1px solid rgba(255,77,106,.2);" onclick="alertAction(this,'REJECT')">Dondur</button></div>
+          <div class="alert-item"><div class="alert-dot" style="background:var(--red)"></div><div class="alert-content"><div class="alert-title">Sanction Score 91 — Yaptırım Eşleşmesi</div><div class="alert-meta">TRV-00891 · 15 dakika önce · <span style="color:var(--red)">ŞİB Zorunlu</span></div></div><button class="alert-action" style="background:var(--red-l);color:var(--red);border:1px solid rgba(255,77,106,.2);" onclick="alertAction(this,'ŞİB')">ŞİB Yap</button></div>
+          <div class="alert-item"><div class="alert-dot" style="background:var(--amber)"></div><div class="alert-content"><div class="alert-title">Günlük Tutar Eşiği Aşıldı — ₺215,000</div><div class="alert-meta">TRV-02341 · 22 dakika önce · <span style="color:var(--amber)">Yüksek</span></div></div><button class="alert-action" style="background:var(--amber-l);color:var(--amber);border:1px solid rgba(255,176,32,.2);" onclick="alertAction(this,'REVIEW')">İncele</button></div>
+          <div class="alert-item"><div class="alert-dot" style="background:var(--amber)"></div><div class="alert-content"><div class="alert-title">Hesap Ele Geçirme Şüphesi — ATO Pattern</div><div class="alert-meta">TRV-01203 · Yeni IP + IBAN · 35 dakika önce · <span style="color:var(--amber)">Yüksek</span></div></div><button class="alert-action" style="background:var(--amber-l);color:var(--amber);border:1px solid rgba(255,176,32,.2);" onclick="alertAction(this,'KİLİT')">Kilitle</button></div>
+          <div class="alert-item"><div class="alert-dot" style="background:var(--amber)"></div><div class="alert-content"><div class="alert-title">Smurfing Tespiti — 5 Ardışık Eşik Altı İşlem</div><div class="alert-meta">TRV-00567 · ₺49,500 × 5 · 1 saat önce</div></div><button class="alert-action" style="background:var(--amber-l);color:var(--amber);border:1px solid rgba(255,176,32,.2);" onclick="alertAction(this,'REVIEW')">İncele</button></div>
+          <div class="alert-item"><div class="alert-dot" style="background:var(--blue)"></div><div class="alert-content"><div class="alert-title">Yüksek IP Risk Skoru — VPN Kullanımı</div><div class="alert-meta">TRV-03421 · IP Score 87 · 2 saat önce</div></div><button class="alert-action" style="background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m);" onclick="alertAction(this,'ACCEPT')">Kapat</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KYC / KYB -->
+    <div class="page" id="page-kyc">
+      <div class="kpi-grid">
+        <div class="kpi blue"><div class="kpi-header"><div class="kpi-icon" style="background:var(--blue-l);color:var(--blue)"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div><span class="badge badge-blue">Toplam</span></div><div class="kpi-value" style="color:var(--blue)">1,057</div><div class="kpi-label">Toplam Müşteri</div></div>
+        <div class="kpi amber"><div class="kpi-header"><div class="kpi-icon" style="background:var(--amber-l);color:var(--amber)"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><span class="badge badge-amber">EDD</span></div><div class="kpi-value" style="color:var(--amber)">23</div><div class="kpi-label">EDD Bekleyen</div></div>
+        <div class="kpi red"><div class="kpi-header"><div class="kpi-icon" style="background:var(--red-l);color:var(--red)"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div><span class="badge badge-red">PEP</span></div><div class="kpi-value" style="color:var(--red)">8</div><div class="kpi-label">PEP Müşteri</div></div>
+        <div class="kpi green"><div class="kpi-header"><div class="kpi-icon" style="background:var(--green-l);color:var(--green)"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div><span class="badge badge-green">Onaylı</span></div><div class="kpi-value" style="color:var(--green)">1,014</div><div class="kpi-label">KYC Tamamlanan</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">Yüksek Riskli Müşteriler</div><div class="card-sub">Sanction Score ve KYC Risk bazlı sıralama</div></div></div>
+        <div id="kycList">
+          <div class="kyc-item"><div class="kyc-av" style="background:var(--red-l);color:var(--red);">AK</div><div style="flex:1"><div style="font-size:13px;font-weight:600;">TRV-00234 — Ahmet K.</div><div style="font-size:11px;color:var(--text3);">Sanction: role.pep · KYC Risk: 72 · Son tarama: 3 gün önce</div></div><div style="text-align:right"><div class="kyc-score" style="color:var(--red)">88</div><div style="font-size:10px;color:var(--text3)">Sanction Score</div></div><span class="badge badge-red" style="margin-left:12px">EDD Gerekli</span></div>
+          <div class="kyc-item"><div class="kyc-av" style="background:var(--red-l);color:var(--red);">MÇ</div><div style="flex:1"><div style="font-size:13px;font-weight:600;">TRV-00891 — Mehmet Ç.</div><div style="font-size:11px;color:var(--text3);">Sanction: debarment · KYC Risk: 85 · Hesap kilitli</div></div><div style="text-align:right"><div class="kyc-score" style="color:var(--red)">91</div><div style="font-size:10px;color:var(--text3)">Sanction Score</div></div><span class="badge badge-red" style="margin-left:12px">Kilitli</span></div>
+          <div class="kyc-item"><div class="kyc-av" style="background:var(--amber-l);color:var(--amber);">FY</div><div style="flex:1"><div style="font-size:13px;font-weight:600;">TRV-01203 — Fatma Y.</div><div style="font-size:11px;color:var(--text3);">Sanction: gov.pep · KYC Risk: 61 · EDD süreci devam ediyor</div></div><div style="text-align:right"><div class="kyc-score" style="color:var(--amber)">74</div><div style="font-size:10px;color:var(--text3)">Sanction Score</div></div><span class="badge badge-amber" style="margin-left:12px">EDD Süreci</span></div>
+          <div class="kyc-item"><div class="kyc-av" style="background:var(--amber-l);color:var(--amber);">SK</div><div style="flex:1"><div style="font-size:13px;font-weight:600;">TRV-02341 — Selin K.</div><div style="font-size:11px;color:var(--text3);">Sanction: neg.action · KYC Risk: 58 · 180 gün taranmadı</div></div><div style="text-align:right"><div class="kyc-score" style="color:var(--amber)">67</div><div style="font-size:10px;color:var(--text3)">Sanction Score</div></div><span class="badge badge-amber" style="margin-left:12px">Rescan Gerekli</span></div>
+          <div class="kyc-item"><div class="kyc-av" style="background:var(--blue-l);color:var(--blue);">BT</div><div style="flex:1"><div style="font-size:13px;font-weight:600;">TRV-00567 — Burak T.</div><div style="font-size:11px;color:var(--text3);">Sanction: crime · KYC Risk: 45 · İzleme listesinde</div></div><div style="text-align:right"><div class="kyc-score" style="color:var(--blue)">52</div><div style="font-size:10px;color:var(--text3)">Sanction Score</div></div><span class="badge badge-blue" style="margin-left:12px">İzlemede</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RULE ENGINE -->
+    <div class="page" id="page-ruleengine">
+      <div class="kpi-grid">
+        <div class="kpi green"><div class="kpi-header"><div class="kpi-icon" style="background:var(--green-l);color:var(--green)"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div><span class="badge badge-green">Aktif</span></div><div class="kpi-value" style="color:var(--green)">10</div><div class="kpi-label">Aktif Kural</div></div>
+        <div class="kpi blue"><div class="kpi-header"><div class="kpi-icon" style="background:var(--blue-l);color:var(--blue)"><svg viewBox="0 0 24 24"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zm-4 10H4V5h14v14z"/></svg></div><span class="badge badge-blue">Toplam</span></div><div class="kpi-value" style="color:var(--blue)">3</div><div class="kpi-label">Ruleset</div></div>
+        <div class="kpi amber"><div class="kpi-header"><div class="kpi-icon" style="background:var(--amber-l);color:var(--amber)"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div><span class="badge badge-amber">Uyarı</span></div><div class="kpi-value" style="color:var(--amber)">1</div><div class="kpi-label">Kapalı Kritik Kural</div></div>
+        <div class="kpi red"><div class="kpi-header"><div class="kpi-icon" style="background:var(--red-l);color:var(--red)"><svg viewBox="0 0 24 24"><path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.81 6-4.72 7.28L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.94-9.45-9-9.95zM11 2.05C5.95 2.55 2 6.82 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5V2.05z"/></svg></div><span class="badge badge-red">Bugün</span></div><div class="kpi-value" style="color:var(--red)">284</div><div class="kpi-label">Tetikleme Sayısı</div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-header">
+          <div><div class="card-title">Financial Transaction Ruleset</div><div class="card-sub">Para hareketi tetikleyicileri</div></div>
+          <span class="badge badge-green">7 Aktif</span>
+        </div>
+        <div>
+          <div class="rule-item"><button class="rule-toggle on" onclick="toggleRule(this)"></button><div style="flex:1"><div style="font-size:13px;font-weight:600;">Yüksek Tutarlı TL Çekim</div><div style="margin-top:3px;"><span class="rule-code">Transaction: Event = fiat_withdraw AND Transaction: Amount >= 50000</span></div></div><span class="badge badge-amber" style="margin-left:8px">REVIEW</span><span style="font-size:12px;color:var(--text3);margin-left:8px;font-family:'DM Mono',monospace;">+50 skor</span></div>
+          <div class="rule-item"><button class="rule-toggle on" onclick="toggleRule(this)"></button><div style="flex:1"><div style="font-size:13px;font-weight:600;">PEP Yüksek Tutarlı Çekim</div><div style="margin-top:3px;"><span class="rule-code">Customer: Sanction Topic CONTAINS role.pep AND Transaction: Amount >= 50000</span></div></div><span class="badge badge-red" style="margin-left:8px">REJECT</span><span style="font-size:12px;color:var(--text3);margin-left:8px;font-family:'DM Mono',monospace;">+100 skor</span></div>
+          <div class="rule-item"><button class="rule-toggle on" onclick="toggleRule(this)"></button><div style="flex:1"><div style="font-size:13px;font-weight:600;">Sanction Score Kritik</div><div style="margin-top:3px;"><span class="rule-code">Customer: Sanction Score >= 85</span></div></div><span class="badge badge-red" style="margin-left:8px">REJECT</span><span style="font-size:12px;color:var(--text3);margin-left:8px;font-family:'DM Mono',monospace;">+100 skor</span></div>
+          <div class="rule-item" style="background:rgba(255,176,32,0.05);border-left:2px solid var(--amber);"><button class="rule-toggle off" onclick="toggleRule(this)"></button><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--amber)">Yüksek Tutarlı İşlem ⚠️ KAPALI</div><div style="margin-top:3px;"><span class="rule-code">Transaction: Amount >= 100000</span></div><div style="font-size:11px;color:var(--amber);margin-top:4px;">Bu kritik kural kapalı — hemen aktif edin!</div></div><span class="badge badge-red" style="margin-left:8px">REJECT</span><span style="font-size:12px;color:var(--text3);margin-left:8px;font-family:'DM Mono',monospace;">+75 skor</span></div>
+          <div class="rule-item"><button class="rule-toggle on" onclick="toggleRule(this)"></button><div style="flex:1"><div style="font-size:13px;font-weight:600;">Günlük Tutar Eşiği</div><div style="margin-top:3px;"><span class="rule-code">Custom filter: Gunluk Toplam Islem Tutari >= 200000</span></div></div><span class="badge badge-amber" style="margin-left:8px">REVIEW</span><span style="font-size:12px;color:var(--text3);margin-left:8px;font-family:'DM Mono',monospace;">+50 skor</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Customer Upsert Ruleset</div><div class="card-sub">Müşteri kayıt ve güncelleme tetikleyicileri</div></div>
+          <span class="badge badge-green">3 Aktif</span>
+        </div>
+        <div>
+          <div class="rule-item"><button class="rule-toggle on" onclick="toggleRule(this)"></button><div style="flex:1"><div style="font-size:13px;font-weight:600;">Reşit Olmayan Kayıt</div><div style="margin-top:3px;"><span class="rule-code">Customer: Age < 18</span></div></div><span class="badge badge-red" style="margin-left:8px">REJECT</span><span style="font-size:12px;color:var(--text3);margin-left:8px;font-family:'DM Mono',monospace;">+100 skor</span></div>
+          <div class="rule-item"><button class="rule-toggle on" onclick="toggleRule(this)"></button><div style="flex:1"><div style="font-size:13px;font-weight:600;">Debarment Tespiti</div><div style="margin-top:3px;"><span class="rule-code">Customer: Sanction Topic CONTAINS debarment</span></div></div><span class="badge badge-red" style="margin-left:8px">REJECT</span><span style="font-size:12px;color:var(--text3);margin-left:8px;font-family:'DM Mono',monospace;">+100 skor</span></div>
+          <div class="rule-item"><button class="rule-toggle on" onclick="toggleRule(this)"></button><div style="flex:1"><div style="font-size:13px;font-weight:600;">Yüksek KYC Risk</div><div style="margin-top:3px;"><span class="rule-code">Customer: KYC Risk Score >= 75</span></div></div><span class="badge badge-red" style="margin-left:8px">REJECT</span><span style="font-size:12px;color:var(--text3);margin-left:8px;font-family:'DM Mono',monospace;">+100 skor</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXECUTION LOGS -->
+    <div class="page" id="page-execlog">
+      <div class="kpi-grid">
+        <div class="kpi green"><div class="kpi-header"><div class="kpi-icon" style="background:var(--green-l);color:var(--green)"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div><span class="badge badge-green">ACCEPT</span></div><div class="kpi-value" style="color:var(--green)">2,847</div><div class="kpi-label">Otomatik Onay</div></div>
+        <div class="kpi amber"><div class="kpi-header"><div class="kpi-icon" style="background:var(--amber-l);color:var(--amber)"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div><span class="badge badge-amber">REVIEW</span></div><div class="kpi-value" style="color:var(--amber)">43</div><div class="kpi-label">Manuel İnceleme</div></div>
+        <div class="kpi red"><div class="kpi-header"><div class="kpi-icon" style="background:var(--red-l);color:var(--red)"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><span class="badge badge-red">REJECT</span></div><div class="kpi-value" style="color:var(--red)">12</div><div class="kpi-label">Otomatik Red</div></div>
+        <div class="kpi blue"><div class="kpi-header"><div class="kpi-icon" style="background:var(--blue-l);color:var(--blue)"><svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3z"/></svg></div><span class="badge badge-blue">Bugün</span></div><div class="kpi-value" style="color:var(--blue)">2,902</div><div class="kpi-label">Toplam İşlem</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">Son Execution Logları</div><div class="card-sub">Truvali Rule Engine kararları</div></div></div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Zaman</th><th>İşlem ID</th><th>Müşteri</th><th>Event</th><th>Tutar</th><th>Tetikleyen Kural</th><th>Final Score</th><th>Karar</th></tr></thead>
+          <tbody id="execBody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- RAPORLAR -->
+    <div class="page" id="page-raporlar">
+      <div class="kpi-grid">
+        <div class="kpi blue"><div class="kpi-header"><div class="kpi-icon" style="background:var(--blue-l);color:var(--blue)"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div><span class="badge badge-blue">Bu Ay</span></div><div class="kpi-value" style="color:var(--blue)">7</div><div class="kpi-label">ŞİB Bildirimi</div></div>
+        <div class="kpi amber"><div class="kpi-header"><div class="kpi-icon" style="background:var(--amber-l);color:var(--amber)"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div><span class="badge badge-amber">Bekleyen</span></div><div class="kpi-value" style="color:var(--amber)">3</div><div class="kpi-label">Onay Bekleyen</div></div>
+        <div class="kpi green"><div class="kpi-header"><div class="kpi-icon" style="background:var(--green-l);color:var(--green)"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div><span class="badge badge-green">Tamamlandı</span></div><div class="kpi-value" style="color:var(--green)">4</div><div class="kpi-label">İletilen ŞİB</div></div>
+        <div class="kpi red"><div class="kpi-header"><div class="kpi-icon" style="background:var(--red-l);color:var(--red)"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><span class="badge badge-red">Son Tarih</span></div><div class="kpi-value" style="color:var(--red)">24s</div><div class="kpi-label">Acil ŞİB Süresi</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">Müşteri Uyum Raporu Oluştur</div><div class="card-sub">AI destekli — 30 saniyede hazır</div></div></div>
+        <div style="padding:20px;">
+          <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Müşteri Seçin</div>
+          <div class="musteri-btns" style="margin-bottom:20px;">
+            <button class="mb" onclick="selectMusteri('KolayÖde')">KolayÖde</button>
+            <button class="mb" onclick="selectMusteri('4nala.com')">4nala.com</button>
+            <button class="mb" onclick="selectMusteri('oley.com')">oley.com</button>
+            <button class="mb" onclick="selectMusteri('e-sans.com')">e-sans.com</button>
+            <button class="mb" onclick="selectMusteri('ekuri.com')">ekuri.com</button>
+          </div>
+          <div id="raporArea" style="display:none">
+            <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Oluşturulan Rapor</div>
+            <div class="rapor-box" id="raporIcerik">Rapor burada görünecek...</div>
+            <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end;">
+              <button class="btn btn-outline" onclick="copyRapor()">Kopyala</button>
+              <button class="btn btn-primary" onclick="generateRaporDirect()" id="genBtn">Rapor Oluştur</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
+<!-- CHAT -->
 <button class="chat-fab" id="chatFab" onclick="toggleChat()">
   <svg class="ci" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
   <svg class="xi" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -298,13 +629,12 @@ tr.tr-m:last-of-type td{border-bottom:1px solid var(--border);}
 <div class="chat-win" id="chatWin">
   <div class="chat-head">
     <div class="chav">⚖️</div>
-    <div><h4>Truvali Uyum Asistanı</h4><p>AML · KYC · MASAK · Panel</p></div>
-    <div class="ch-badge">AI</div>
+    <div><h4>Truvali Uyum Asistanı</h4><p>AML · KYC · MASAK · Rule Engine</p></div>
   </div>
   <div id="apiSet" class="api-set" style="display:none">
-    <p>🔑 Gemini API key'inizi girin:</p>
+    <p style="color:var(--text2)">Gemini API key girin:</p>
     <input type="text" id="apiIn" placeholder="AIzaSy...">
-    <button onclick="saveKey()">Bağlan ve Başla</button>
+    <button onclick="saveKey()">Bağlan</button>
   </div>
   <div id="chatBody" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
     <div class="chat-msgs" id="chatMsgs"></div>
@@ -312,7 +642,6 @@ tr.tr-m:last-of-type td{border-bottom:1px solid var(--border);}
       <button class="qq" onclick="sq('Alert nedir, ne yapmalıyım?')">Alert nedir?</button>
       <button class="qq" onclick="sq('KYC belgesi nasıl istenir?')">KYC belgesi?</button>
       <button class="qq" onclick="sq('MASAK bildirimi ne zaman zorunlu?')">MASAK bildirimi?</button>
-      <button class="qq" onclick="sq('Final Score 0 neden?')">Skor 0 neden?</button>
     </div>
     <div class="cinput">
       <textarea id="msgIn" placeholder="Sorunuzu yazın..." rows="1" onkeydown="hk(event)" oninput="ar(this)"></textarea>
@@ -321,39 +650,53 @@ tr.tr-m:last-of-type td{border-bottom:1px solid var(--border);}
   </div>
 </div>
 
+<!-- RAPOR MODAL (mevzuat için) -->
+<div class="modal-overlay" id="raporModal">
+  <div class="modal">
+    <div class="modal-head"><h3>Müşteri Uyum Raporu</h3><button class="modal-close" onclick="closeRapor()">✕</button></div>
+    <div class="modal-body">
+      <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Müşteri Seçin</div>
+      <div class="musteri-btns"><button class="mb" onclick="selectMusteri('KolayÖde')">KolayÖde</button><button class="mb" onclick="selectMusteri('4nala.com')">4nala.com</button><button class="mb" onclick="selectMusteri('oley.com')">oley.com</button><button class="mb" onclick="selectMusteri('e-sans.com')">e-sans.com</button><button class="mb" onclick="selectMusteri('ekuri.com')">ekuri.com</button></div>
+      <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Oluşturulan Rapor</div>
+      <div class="rapor-box" id="raporIcerikModal">Müşteri seçin ve Rapor Oluştur butonuna tıklayın...</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeRapor()">Kapat</button>
+      <button class="btn btn-outline" onclick="copyRaporModal()" id="copyBtnModal" style="display:none">Kopyala</button>
+      <button class="btn btn-primary" onclick="generateRapor()" id="genBtnModal">Rapor Oluştur</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const SHEETS_URL='https://docs.google.com/spreadsheets/d/1VPvKTrIIoMpfM15UlcJqGc4b62tpVyFxBL1NsQEUKQQ/gviz/tq?tqx=out:json';
-const KC={'Resmi Gazete':'#1360EF','MASAK':'#7c3aed','SPK':'#0891b2','BDDK':'#065f46','BTK':'#92400e','KVKK':'#9f1239','Haberturk Ekonomi':'#b45309','Bloomberg HT':'#1e3a5f'};
+const KC={'Resmi Gazete':'#2D7BFF','MASAK':'#A78BFA','SPK':'#00D4FF','BDDK':'#00E5A0','BTK':'#FFB020','KVKK':'#FF4D6A','Resmi Gazete Bahis':'#2D7BFF','MASAK Operasyon':'#A78BFA'};
 let allData=[],apiKey=localStorage.getItem('truvali_key')||'',chatOpen=false,firstOpen=true,busy=false;
+let seciliMusteri='',seciliRow=null;
+let liveChart,riskChart,segChart,dashInited=false;
 
 function showPage(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   el.classList.add('active');
-  const T={mevzuat:'Mevzuat Takip',dashboard:'Dashboard',alertler:'Alertler',kyc:'KYC / KYB',execlog:'Execution Logs',ruleengine:'Rule Engine',raporlar:'MASAK Raporları'};
+  const T={mevzuat:'İlgili İçerikler',dashboard:'Dashboard',alertler:'Alert Yönetimi',kyc:'KYC / KYB',ruleengine:'Rule Engine',execlog:'Execution Logs',raporlar:'MASAK Raporları'};
   document.getElementById('pageTitle').textContent=T[id]||id;
+  if(id==='dashboard'&&!dashInited){dashInited=true;setTimeout(initDashboard,100);}
+  if(id==='execlog'){renderExecLogs();}
 }
 
+// MEVZUAT
 async function loadData(){
   document.getElementById('tblLoad').style.display='flex';
   document.getElementById('tbl').style.display='none';
-  document.getElementById('tblEmpty').style.display='none';
   try{
     const r=await fetch(SHEETS_URL);
     const t=await r.text();
     const j=JSON.parse(t.replace(/^[^(]+\(/,'').replace(/\);\s*$/,''));
-    allData=j.table.rows.filter(r=>r.c&&r.c[2]&&r.c[2].v&&r.c[2].v!=='Başlık').map(r=>({
-      tarih:fmtDate(r.c[0]?.v),
-      kurum:r.c[1]?.v||'—',
-      baslik:r.c[2]?.v||'—',
-      link:r.c[3]?.v||'',
-      risk:r.c[4]?.v||'Orta',
-      gun:String(r.c[5]?.v||'—').replace('.0',''),
-      surecler:r.c[6]?.v||'—',
-      maliyet:r.c[7]?.v||'—',
-      aksiyon:r.c[8]?.v||r.c[6]?.v||'—'
-    }));
+    allData=j.table.rows.filter(r=>r.c&&r.c[2]&&r.c[2].v&&r.c[2].v!=='Başlık').map(r=>{
+      return{tarih:fmtDate(r.c[0]?.v),kurum:r.c[1]?.v||'—',baslik:r.c[2]?.v||'—',link:r.c[3]?.v||'',risk:r.c[4]?.v||'Orta',gun:String(r.c[5]?.v||'—').replace('.0',''),surecler:r.c[6]?.v||'—',maliyet:r.c[7]?.v||'—',aksiyon:r.c[8]?.v||r.c[6]?.v||'—'};
+    });
   }catch(e){allData=demo();}
   if(!allData.length)allData=demo();
   render(allData);updateStats(allData);
@@ -361,68 +704,26 @@ async function loadData(){
 }
 
 function fmtDate(v){
-  try{
-    if(!v)return'—';
-    if(typeof v==='string'&&v.startsWith('Date(')){
-      const p=v.replace('Date(','').replace(')','').split(',');
-      return new Date(+p[0],+p[1],+p[2]).toLocaleDateString('tr-TR');
-    }
-    return new Date(v).toLocaleDateString('tr-TR');
-  }catch{return v||'—';}
+  try{if(!v)return'—';if(typeof v==='string'&&v.startsWith('Date(')){const p=v.replace('Date(','').replace(')','').split(',');return new Date(+p[0],+p[1],+p[2]).toLocaleDateString('tr-TR');}return new Date(v).toLocaleDateString('tr-TR');}catch{return v||'—';}
 }
 
 function render(data){
   document.getElementById('tblLoad').style.display='none';
   if(!data.length){document.getElementById('tblEmpty').style.display='block';return;}
   document.getElementById('tbl').style.display='table';
-  const tb=document.getElementById('tblBody');
-  tb.innerHTML='';
+  const tb=document.getElementById('tblBody');tb.innerHTML='';
   data.forEach((row,i)=>{
-    const rc=row.risk==='Yüksek'?'rh':row.risk==='Orta'?'rm':'rl';
+    const rc=row.risk==='Yüksek'?'badge-red':row.risk==='Orta'?'badge-amber':'badge-green';
     const g=parseInt(row.gun)||999;
-    const gc=g<=15?'gr':g<=30?'ga':'gg';
-    const kc=KC[row.kurum]||'#6b7280';
+    const gc=g<=15?'var(--red)':g<=30?'var(--amber)':'var(--green)';
+    const kc=KC[row.kurum]||'#8899BB';
     const hl=row.link&&row.link.startsWith('http');
-    tb.innerHTML+=`
-    <tr class="tr-m" onclick="toggleRow(${i})">
-      <td><div class="td-i" style="padding:11px 8px;"><div class="exp" id="ex${i}"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></td>
-      <td><div class="td-i" style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;white-space:nowrap;">${row.tarih}</div></td>
-      <td><div class="td-i"><span class="kb" style="background:${kc}18;color:${kc};">${row.kurum}</span></div></td>
-      <td><div class="td-i"><div style="font-size:13px;font-weight:500;line-height:1.4;max-width:260px;">${row.baslik}</div></div></td>
-      <td><div class="td-i"><span class="rb ${rc}">${row.risk}</span></div></td>
-      <td><div class="td-i"><span class="gun ${gc}">${row.gun==='—'?'—':row.gun+'g'}</span></div></td>
-      <td><div class="td-i" style="display:flex;gap:6px;align-items:center;">
-      ${hl?`<a href="${row.link}" target="_blank" class="lbtn" onclick="event.stopPropagation()">→ Aç</a>`:''}
-      <button class="rapor-btn" onclick="event.stopPropagation();openRapor(${i})">📄 Rapor</button>
-      </div></td>
-    </tr>
-    <tr class="tr-d" id="det${i}">
-      <td colspan="7">
-        <div class="det-cell">
-          <div class="ai-box">
-            <div class="ai-title">⚖️ AI Analizi — ${row.kurum}</div>
-            <div class="ai-grid">
-              <div class="ai-item"><label>Etkilenen Süreçler</label><p>${row.surecler}</p></div>
-              <div class="ai-item ai-full"><label>Yapılması Gereken Aksiyon</label><p style="font-weight:500;">${row.aksiyon}</p></div>
-              ${hl?`<div class="ai-item ai-full"><label>Kaynak Belge</label><a href="${row.link}" target="_blank" style="color:var(--blue);font-size:12px;font-weight:500;word-break:break-all;">${row.link}</a></div>`:''}
-            </div>
-          </div>
-        </div>
-      </td>
-    </tr>`;
+    tb.innerHTML+=`<tr class="tr-m" onclick="toggleRow(${i})"><td><div class="td-i" style="padding:11px 8px;"><div class="exp" id="ex${i}"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></td><td><div class="td-i mono" style="font-size:11px;color:var(--text3);white-space:nowrap;">${row.tarih}</div></td><td><div class="td-i"><span class="badge" style="background:${kc}18;color:${kc};border:1px solid ${kc}33;">${row.kurum}</span></div></td><td><div class="td-i" style="font-size:12.5px;font-weight:500;line-height:1.4;max-width:280px;">${row.baslik}</div></td><td><div class="td-i"><span class="badge ${rc}">${row.risk}</span></div></td><td><div class="td-i mono" style="font-size:12px;color:${gc};font-weight:600;">${row.gun==='—'?'—':row.gun+'g'}</div></td><td><div class="td-i" style="display:flex;gap:5px;align-items:center;">${hl?`<a href="${row.link}" target="_blank" class="lbtn" onclick="event.stopPropagation()">→ Aç</a>`:''} <button class="rapor-btn" onclick="event.stopPropagation();openRapor(${i})">Rapor</button></div></td></tr><tr class="tr-d" id="det${i}"><td colspan="7"><div class="det-cell"><div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:14px;"><div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">AI Analizi — ${row.kurum}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Etkilenen Süreçler</div><div style="font-size:12.5px;color:var(--text2);">${row.surecler}</div></div><div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Yapılması Gereken</div><div style="font-size:12.5px;color:var(--text);font-weight:500;">${row.aksiyon}</div></div></div></div></div></td></tr>`;
   });
 }
 
-function toggleRow(i){
-  const d=document.getElementById('det'+i),e=document.getElementById('ex'+i);
-  const o=d.classList.contains('open');
-  document.querySelectorAll('.tr-d').forEach(r=>r.classList.remove('open'));
-  document.querySelectorAll('.exp').forEach(x=>x.classList.remove('open'));
-  if(!o){d.classList.add('open');e.classList.add('open');}
-}
-
+function toggleRow(i){const d=document.getElementById('det'+i),e=document.getElementById('ex'+i);const o=d.classList.contains('open');document.querySelectorAll('.tr-d').forEach(r=>r.classList.remove('open'));document.querySelectorAll('.exp').forEach(x=>x.classList.remove('open'));if(!o){d.classList.add('open');e.classList.add('open');}}
 function filterTable(v){render(v?allData.filter(r=>r.risk===v):allData);}
-
 function updateStats(d){
   document.getElementById('cH').textContent=d.filter(r=>r.risk==='Yüksek').length;
   document.getElementById('cM').textContent=d.filter(r=>r.risk==='Orta').length;
@@ -430,195 +731,162 @@ function updateStats(d){
   document.getElementById('cT').textContent=d.length;
   document.getElementById('navBadge').textContent=d.filter(r=>r.risk==='Yüksek').length;
 }
-
 function demo(){return[
-  {tarih:'13.05.2026',kurum:'Resmi Gazete',baslik:'Spor Müsabakalarına Dayalı Sabit İhtimalli Oyunlar Yönetmeliğinde Değişiklik Yapıldı',link:'https://www.resmigazete.gov.tr',risk:'Yüksek',gun:'15',surecler:'Lisans yenileme, operasyonel uyum, müşteri doğrulama',maliyet:'Lisans iptali, 500.000 TL idari para cezası',aksiyon:'Yönetmelik metnini avukata gönderin ve 15 gün içinde etki analizi yapın'},
-  {tarih:'13.05.2026',kurum:'MASAK',baslik:'Kripto Varlık Hizmet Sağlayıcılarına İlişkin AML Tebliği Yayımlandı',link:'https://masak.hmb.gov.tr',risk:'Yüksek',gun:'30',surecler:'KYC süreci, şüpheli işlem bildirimi, kayıt saklama',maliyet:'500.000 TL idari para cezası, faaliyet durdurma',aksiyon:'KYC prosedürlerini güncelleyin ve uyum görevlisi atayın'},
-  {tarih:'12.05.2026',kurum:'BDDK',baslik:'Ödeme Hizmetleri ve Elektronik Para Kuruluşları Hakkında Yönetmelik Güncellendi',link:'https://www.bddk.org.tr',risk:'Orta',gun:'45',surecler:'Ödeme altyapısı, müşteri kimlik doğrulama, raporlama',maliyet:'İdari yaptırım, faaliyet izni iptali',aksiyon:'Ödeme sistemleri ekibinizle yönetmeliği inceleyin'},
-  {tarih:'12.05.2026',kurum:'KVKK',baslik:'Kişisel Verilerin Korunması Rehberi Güncellendi',link:'https://www.kvkk.gov.tr',risk:'Orta',gun:'60',surecler:'Veri işleme, kullanıcı aydınlatma, rıza yönetimi',maliyet:'1.000.000 TL idari para cezası',aksiyon:'KVKK danışmanınıza rehberi gönderin ve aydınlatma metinlerini güncelleyin'},
-  {tarih:'11.05.2026',kurum:'BTK',baslik:'İnternet Ortamında Yapılan Yayınların Düzenlenmesi Hakkında Karar',link:'https://www.btk.gov.tr',risk:'Düşük',gun:'90',surecler:'İçerik moderasyon, erişim yönetimi',maliyet:'Erişim engeli, idari yaptırım',aksiyon:'İçerik politikasını gözden geçirin'},
+  {tarih:'15.05.2026',kurum:'MASAK',baslik:'MASAK Operasyonu: 200 Şüpheli Hakkında Gözaltı',link:'https://masak.hmb.gov.tr',risk:'Yüksek',gun:'14',surecler:'KYC prosedürleri, ŞİB yükümlülüğü',maliyet:'500.000 TL idari para cezası',aksiyon:'KYC prosedürlerini güncelleyin, müşteri taramalarını artırın'},
+  {tarih:'16.05.2026',kurum:'SPK',baslik:'SPK: Menkul Kıymet Yöneticilerine Milyonlarca Liralık Ceza',link:'https://www.spk.gov.tr',risk:'Yüksek',gun:'98',surecler:'Sermaye piyasası uyumu, lisans yenileme',maliyet:'Lisans iptali, ağır idari yaptırım',aksiyon:'SPK düzenlemelerini avukata gönderin, etki analizi yapın'},
+  {tarih:'17.05.2026',kurum:'Resmi Gazete Bahis',baslik:'35 İlde Yasa Dışı Bahis Operasyonu: 98 Kişi Tutuklandı',link:'https://www.resmigazete.gov.tr',risk:'Yüksek',gun:'15',surecler:'Lisans uyumu, müşteri doğrulama, STT bildirimleri',maliyet:'Faaliyet durdurma, lisans iptali',aksiyon:'STT ile iletişime geçin, tüm müşteri KYC kayıtlarını kontrol edin'},
+  {tarih:'18.05.2026',kurum:'BDDK',baslik:'Ödeme Hizmetleri Yönetmeliği Güncellendi',link:'https://www.bddk.org.tr',risk:'Orta',gun:'45',surecler:'Ödeme altyapısı, müşteri doğrulama',maliyet:'İdari yaptırım',aksiyon:'Teknik ekiple değerlendirin'}
 ];}
 
-// CHAT
-const SP=`Sen Truvali AML uyum platformunun uzman asistanısın. Truvali, 4nala.com, oley.com, e-sans.com, ekuri.com platformlara AML hizmetleri sunuyor. Panel: Dashboards, Watchlist, Cases, KYC/KYB, Execution Logs (ID/işlem türü/müşteri/tutar/Final Score/Decision), Rule Engine. Final Score şu an 0 çünkü kural tanımlı değil, kararlar manuel veriliyor. İlk yapılacak: Rule Engine'dan AML kuralları tanımlamak. Sade Türkçe, kısa net cevaplar ver.`;
+// DASHBOARD
+let liveData=Array(20).fill(0),liveLabels=Array(20).fill(''),alertId=1000;
+const RULES=['Günlük Tutar Eşiği Aşıldı','PEP Yüksek Tutarlı İşlem','Smurfing Tespiti','Çoklu IP Anomalisi','Yüksek Risk IP','Koordineli Hesap','ATO Şüphesi','Sanction Score 85+','Eşik Altı Yapısal İşlem'];
+const CUSTS=['TRV-00234','TRV-00891','TRV-01203','TRV-00567','TRV-02341','TRV-00123','TRV-03421'];
 
-function toggleChat(){
-  chatOpen=!chatOpen;
-  document.getElementById('chatFab').classList.toggle('open',chatOpen);
-  document.getElementById('chatWin').classList.toggle('open',chatOpen);
-  if(chatOpen&&firstOpen){
-    firstOpen=false;
-    if(!apiKey){document.getElementById('apiSet').style.display='flex';document.getElementById('chatBody').style.display='none';}
-    else initChat();
+function initDashboard(){
+  Chart.defaults.color='#8899BB';Chart.defaults.borderColor='#1F2D42';
+  liveChart=new Chart(document.getElementById('liveChart').getContext('2d'),{type:'line',data:{labels:liveLabels,datasets:[{data:liveData,borderColor:'#2D7BFF',backgroundColor:'rgba(45,123,255,0.06)',borderWidth:2,pointRadius:0,fill:true,tension:.4}]},options:{responsive:true,animation:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:true,min:0,ticks:{font:{size:10},color:'#4A5E80'},grid:{color:'#1F2D42'}}}}}); 
+  riskChart=new Chart(document.getElementById('riskChart').getContext('2d'),{type:'bar',data:{labels:['0-20','21-40','41-60','61-75','76-90','91-100'],datasets:[{data:[420,310,185,87,43,12],backgroundColor:['#00E5A0','#4ade80','#FFB020','#fb923c','#FF4D6A','#991b1b'],borderRadius:5}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10},color:'#4A5E80'},grid:{display:false}},y:{ticks:{font:{size:10},color:'#4A5E80'},grid:{color:'#1F2D42'}}}}}); 
+  segChart=new Chart(document.getElementById('segChart').getContext('2d'),{type:'doughnut',data:{labels:['Düşük','Orta','Yüksek'],datasets:[{data:[730,272,55],backgroundColor:['#00E5A0','#FFB020','#FF4D6A'],borderWidth:0,hoverOffset:4}]},options:{responsive:true,cutout:'74%',plugins:{legend:{display:false}}}}); 
+  startLive();
+}
+
+function startLive(){
+  let total=2847,susp=43;
+  setInterval(()=>{
+    const v=Math.floor(Math.random()*18)+5;
+    liveData.shift();liveData.push(v);liveLabels.shift();liveLabels.push('');
+    liveChart.update('none');
+    document.getElementById('liveCount').textContent=v;
+    if(Math.random()>.55){susp++;document.getElementById('suspCount').textContent=susp;addLiveAlert();}
+    total+=v;document.getElementById('cleanCount').textContent=total.toLocaleString('tr-TR');
+  },1800);
+}
+
+function addLiveAlert(){
+  const tbody=document.getElementById('liveAlerts');
+  const scores=[72,85,91,68,95,78,88];
+  const decs=['REVIEW','REVIEW','REJECT','REVIEW','REJECT','REVIEW','REJECT'];
+  const amts=['₺48,500','₺127,000','₺94,200','₺31,800','₺215,000','₺67,500','₺156,000'];
+  const i=Math.floor(Math.random()*scores.length);
+  const s=scores[i],d=decs[i],a=amts[i];
+  const r=RULES[Math.floor(Math.random()*RULES.length)];
+  const c=CUSTS[Math.floor(Math.random()*CUSTS.length)];
+  const t=new Date();
+  const ts=t.getHours().toString().padStart(2,'0')+':'+t.getMinutes().toString().padStart(2,'0')+':'+t.getSeconds().toString().padStart(2,'0');
+  const dBg=d==='REJECT'?'rgba(255,77,106,.15)':'rgba(255,176,32,.15)';
+  const dC=d==='REJECT'?'var(--red)':'var(--amber)';
+  const sBg=s>=85?'rgba(255,77,106,.15)':'rgba(255,176,32,.15)';
+  const sC=s>=85?'var(--red)':'var(--amber)';
+  const row=`<tr style="animation:fadeRow .4s ease"><td><div class="td-i mono" style="font-size:11px;color:var(--text3)">${ts}</div></td><td><div class="td-i mono" style="font-size:11px">#TRV${alertId++}</div></td><td><div class="td-i" style="font-size:12px;font-weight:500">${c}</div></td><td><div class="td-i mono" style="font-size:12px;font-weight:600">${a}</div></td><td><div class="td-i" style="font-size:12px;color:var(--text2)">${r}</div></td><td><div class="td-i"><span style="background:${sBg};color:${sC};font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;font-family:'DM Mono',monospace">${s}</span></div></td><td><div class="td-i"><span style="background:${dBg};color:${dC};font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px">${d}</span></div></td></tr>`;
+  tbody.insertAdjacentHTML('afterbegin',row);
+  const rows=tbody.querySelectorAll('tr');
+  if(rows.length>8)rows[rows.length-1].remove();
+}
+
+@keyframes fadeRow{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+
+// EXEC LOGS
+function renderExecLogs(){
+  const events=['fiat_withdraw','fiat_deposit','crypto_withdraw','game_purchase','add_iban','login'];
+  const decisions=[['ACCEPT','var(--green)'],['REVIEW','var(--amber)'],['REJECT','var(--red)']];
+  const rules=['Yüksek Tutarlı Çekim','PEP Tespiti','Smurfing','Sanction Score','Günlük Limit','Çoklu IP','Normal'];
+  const tb=document.getElementById('execBody');tb.innerHTML='';
+  for(let i=0;i<15;i++){
+    const d=decisions[Math.random()>.85?2:Math.random()>.7?1:0];
+    const score=d[0]==='REJECT'?Math.floor(Math.random()*15)+85:d[0]==='REVIEW'?Math.floor(Math.random()*25)+50:Math.floor(Math.random()*40);
+    const t=new Date(Date.now()-i*180000);
+    const ts=t.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const e=events[Math.floor(Math.random()*events.length)];
+    const c=CUSTS[Math.floor(Math.random()*CUSTS.length)];
+    const r=rules[Math.floor(Math.random()*rules.length)];
+    const amt=Math.floor(Math.random()*200+1)*1000;
+    tb.innerHTML+=`<tr><td><div class="td-i mono" style="font-size:11px;color:var(--text3)">${ts}</div></td><td><div class="td-i mono" style="font-size:11px">#TRV${9000+i}</div></td><td><div class="td-i" style="font-size:12px">${c}</div></td><td><div class="td-i"><span class="badge badge-blue">${e}</span></div></td><td><div class="td-i mono" style="font-size:12px">₺${amt.toLocaleString('tr-TR')}</div></td><td><div class="td-i" style="font-size:12px;color:var(--text2)">${r}</div></td><td><div class="td-i mono" style="font-weight:700;color:${score>=75?'var(--red)':score>=50?'var(--amber)':'var(--green)'}">${score}</div></td><td><div class="td-i"><span style="color:${d[1]};font-size:11px;font-weight:700;padding:3px 9px;background:${d[1].replace('var(','').replace(')','').replace('--red','rgba(255,77,106,.15)').replace('--amber','rgba(255,176,32,.15)').replace('--green','rgba(0,229,160,.1)')};border-radius:20px">${d[0]}</span></div></td></tr>`;
   }
 }
 
-function saveKey(){
-  const k=document.getElementById('apiIn').value.trim();if(!k)return;
-  apiKey=k;localStorage.setItem('truvali_key',k);
-  document.getElementById('apiSet').style.display='none';
-  document.getElementById('chatBody').style.display='flex';
-  initChat();
+// ALERT ACTION
+function alertAction(btn,action){
+  const item=btn.closest('.alert-item');
+  item.style.opacity='0.4';item.style.transition='opacity .3s';
+  setTimeout(()=>item.remove(),300);
+  const badge=document.getElementById('alertBadge');
+  badge.textContent=Math.max(0,parseInt(badge.textContent)-1);
 }
 
-function initChat(){addMsg('b','Merhaba! AML, KYC, alert yönetimi veya Truvali panel kullanımı hakkında sorularınızı yanıtlarım.');}
-
-function addMsg(type,text){
-  const c=document.getElementById('chatMsgs');
-  const t=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
-  const d=document.createElement('div');d.className='cmsg '+type;
-  d.innerHTML=`<div class="cav">${type==='b'?'⚖️':'👤'}</div><div><div class="cbub">${text}</div><div class="ctime">${t}</div></div>`;
-  c.appendChild(d);c.scrollTop=c.scrollHeight;
-  document.getElementById('qqs').style.display='none';
+// RULE TOGGLE
+function toggleRule(btn){
+  btn.classList.toggle('on');btn.classList.toggle('off');
+  const item=btn.closest('.rule-item');
+  if(btn.classList.contains('off')){item.style.opacity='.6';}else{item.style.opacity='1';}
 }
 
-function showTyp(){const c=document.getElementById('chatMsgs');const d=document.createElement('div');d.className='cmsg b';d.id='typ';d.innerHTML=`<div class="cav">⚖️</div><div class="typing"><span></span><span></span><span></span></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;}
-function hideTyp(){const t=document.getElementById('typ');if(t)t.remove();}
-
-async function sm(){
-  const inp=document.getElementById('msgIn');const txt=inp.value.trim();if(!txt||busy)return;
-  inp.value='';inp.style.height='auto';addMsg('u',txt);await ai(txt);
-}
-async function sq(t){if(busy)return;addMsg('u',t);await ai(t);}
-
-async function ai(msg){
-  busy=true;document.getElementById('sendBtn').disabled=true;showTyp();
-  try{
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
-      {method:'POST',headers:{'Content-Type':'application/json'},
-       body:JSON.stringify({contents:[{role:'user',parts:[{text:SP+'\n\nSoru: '+msg}]}]})});
-    const d=await r.json();hideTyp();
-    if(d.candidates?.[0]){addMsg('b',d.candidates[0].content.parts[0].text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>'));}
-    else{addMsg('b','⚠️ '+(d.error?.message||'Hata oluştu.'));}
-  }catch(e){hideTyp();addMsg('b','⚠️ Bağlantı hatası.');}
-  busy=false;document.getElementById('sendBtn').disabled=false;
-}
-
-function hk(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sm();}}
-function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px';}
-
-
-// RAPOR
-let seciliMusteri='', seciliRow=null;
-
-function openRapor(i){
-  seciliRow=allData[i];
-  seciliMusteri='';
-  document.querySelectorAll('.mb').forEach(b=>b.classList.remove('selected'));
-  document.getElementById('raporIcerik').textContent='Müşteri seçin ve "Rapor Oluştur" butonuna tıklayın...';
-  document.getElementById('copyBtn').style.display='none';
-  document.getElementById('raporModal').classList.add('open');
-}
-
+// RAPOR (mevzuat sayfası için)
+function openRapor(i){seciliRow=allData[i];seciliMusteri='';document.querySelectorAll('.mb').forEach(b=>b.classList.remove('selected'));document.getElementById('raporIcerikModal').textContent='Müşteri seçin ve Rapor Oluştur butonuna tıklayın...';document.getElementById('copyBtnModal').style.display='none';document.getElementById('raporModal').classList.add('open');}
 function closeRapor(){document.getElementById('raporModal').classList.remove('open');}
 
+// RAPOR (raporlar sayfası için)
 function selectMusteri(m){
   seciliMusteri=m;
-  document.querySelectorAll('.mb').forEach(b=>{b.classList.toggle('selected',b.textContent===m);});
+  document.querySelectorAll('.mb').forEach(b=>b.classList.toggle('selected',b.textContent===m));
+  document.getElementById('raporArea').style.display='block';
+  document.getElementById('raporIcerik').textContent='Rapor Oluştur butonuna tıklayın...';
+}
+
+async function generateRaporDirect(){
+  if(!seciliMusteri){alert('Müşteri seçin');return;}
+  if(!apiKey){alert('Önce AI bağlantısı kurun (sağ alttaki chat butonundan)');return;}
+  const btn=document.getElementById('genBtn');
+  btn.textContent='Hazırlanıyor...';btn.disabled=true;
+  document.getElementById('raporIcerik').textContent='AI rapor hazırlıyor...';
+  await _generateRaporContent(seciliMusteri,{baslik:'Genel Uyum Değerlendirmesi',kurum:'MASAK/BDDK',risk:'Yüksek',gun:'—',surecler:'Tüm uyum süreçleri',aksiyon:'Kapsamlı uyum değerlendirmesi'},document.getElementById('raporIcerik'),document.getElementById('genBtn'),'Rapor Oluştur');
 }
 
 async function generateRapor(){
-  if(!seciliMusteri){alert('Lütfen önce bir müşteri seçin!');return;}
-  if(!apiKey){alert('Önce AI bağlantısı kurun (sağ alttaki chat butonundan)');return;}
-  const btn=document.getElementById('genBtn');
-  btn.textContent='⏳ Hazırlanıyor...';btn.disabled=true;
-  document.getElementById('raporIcerik').textContent='AI rapor hazırlıyor...';
-  document.getElementById('copyBtn').style.display='none';
+  if(!seciliMusteri){alert('Müşteri seçin');return;}
+  if(!seciliRow)return;
+  if(!apiKey){alert('Önce AI bağlantısı kurun');return;}
+  document.getElementById('genBtnModal').textContent='Hazırlanıyor...';document.getElementById('genBtnModal').disabled=true;
+  document.getElementById('raporIcerikModal').textContent='AI rapor hazırlıyor...';
+  await _generateRaporContent(seciliMusteri,seciliRow,document.getElementById('raporIcerikModal'),document.getElementById('genBtnModal'),'Rapor Oluştur');
+  document.getElementById('copyBtnModal').style.display='flex';
+}
 
-  const prompt=`Sen Truvali AML uyum platformunun uzman danışmanısın.
-
-Aşağıdaki mevzuat için ${seciliMusteri} müşterisine gönderilecek resmi bir uyum danışmanlık raporu yaz.
-
-MEVZUAT BİLGİLERİ:
-- Başlık: ${seciliRow.baslik}
-- Kurum: ${seciliRow.kurum}
-- Risk Seviyesi: ${seciliRow.risk}
-- Kalan Süre: ${seciliRow.gun} gün
-- Etkilenen Süreçler: ${seciliRow.surecler}
-- Uyumsuzluk Maliyeti: ${seciliRow.maliyet}
-- Önerilen Aksiyon: ${seciliRow.aksiyon}
-
-RAPOR FORMATI:
-Konu: [Mevzuat başlığı] — Uyum Bildirimi
-Tarih: ${new Date().toLocaleDateString('tr-TR')}
-Hazırlayan: Truvali Uyum Danışmanlığı
-
-1. YÖNETİCİ ÖZETİ
-(2-3 cümle, teknik bilgisi olmayan yöneticinin anlayacağı dilde)
-
-2. MEVZUAT DETAYI
-(Bu mevzuat ne anlama geliyor, neden önemli)
-
-3. ${seciliMusteri} ÜZERİNDEKİ ETKİ
-(Bu müşterinin iş modelini nasıl etkiliyor, spesifik riskler)
-
-4. YAPILMASI GEREKENLER
-(Madde madde, somut aksiyonlar ve sorumlular)
-
-5. ZAMAN TABLOSU
-(Ne zaman ne yapılmalı, kritik tarihler)
-
-6. UYUMSUZLUK RİSKLERİ
-(Para cezası, lisans riski, itibar riski)
-
-Sade ve profesyonel Türkçe kullan. Gereksiz teknik jargondan kaçın.`;
-
+async function _generateRaporContent(musteri,row,el,btn,btnText){
+  const prompt=`Sen Truvali AML uyum platformunun uzman danışmanısın. ${musteri} müşterisine yönelik resmi uyum raporu yaz.
+MEVZUAT: ${row.baslik} | ${row.kurum} | Risk: ${row.risk} | Süre: ${row.gun} gün
+Etkilenen Süreçler: ${row.surecler}
+Önerilen Aksiyon: ${row.aksiyon}
+Sade profesyonel Türkçe, 6 bölüm: 1-Yönetici Özeti 2-Mevzuat Detayı 3-${musteri} Üzerindeki Etki 4-Yapılması Gerekenler 5-Zaman Tablosu 6-Uyumsuzluk Riskleri`;
   try{
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
-      {method:'POST',headers:{'Content-Type':'application/json'},
-       body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}]})});
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}]})});
     const d=await r.json();
-    if(d.candidates?.[0]){
-      const txt=d.candidates[0].content.parts[0].text;
-      document.getElementById('raporIcerik').textContent=txt;
-      document.getElementById('copyBtn').style.display='flex';
-    } else {
-      document.getElementById('raporIcerik').textContent='Hata: '+(d.error?.message||'Bilinmeyen hata');
-    }
-  }catch(e){document.getElementById('raporIcerik').textContent='Bağlantı hatası: '+e.message;}
-  btn.textContent='✨ Rapor Oluştur';btn.disabled=false;
+    if(d.candidates?.[0]){el.textContent=d.candidates[0].content.parts[0].text;}
+    else{el.textContent='Hata: '+(d.error?.message||'Bilinmeyen hata');}
+  }catch(e){el.textContent='Bağlantı hatası: '+e.message;}
+  btn.textContent=btnText;btn.disabled=false;
 }
 
-function copyRapor(){
-  const txt=document.getElementById('raporIcerik').textContent;
-  navigator.clipboard.writeText(txt).then(()=>{
-    const btn=document.getElementById('copyBtn');
-    btn.textContent='✅ Kopyalandı!';
-    setTimeout(()=>{btn.textContent='📋 Kopyala';},2000);
-  });
-}
+function copyRapor(){navigator.clipboard.writeText(document.getElementById('raporIcerik').textContent);}
+function copyRaporModal(){navigator.clipboard.writeText(document.getElementById('raporIcerikModal').textContent);}
+
+// CHAT
+const SP=`Sen Truvali AML uyum platformunun uzman asistanısın. Truvali, fintech ve bahis sektörüne AML hizmetleri sunuyor. Sade Türkçe, kısa net cevaplar ver.`;
+function toggleChat(){chatOpen=!chatOpen;document.getElementById('chatFab').classList.toggle('open',chatOpen);document.getElementById('chatWin').classList.toggle('open',chatOpen);if(chatOpen&&firstOpen){firstOpen=false;if(!apiKey){document.getElementById('apiSet').style.display='flex';document.getElementById('chatBody').style.display='none';}else initChat();}}
+function saveKey(){const k=document.getElementById('apiIn').value.trim();if(!k)return;apiKey=k;localStorage.setItem('truvali_key',k);document.getElementById('apiSet').style.display='none';document.getElementById('chatBody').style.display='flex';initChat();}
+function initChat(){addMsg('b','Merhaba! AML, KYC, alert yönetimi veya Truvali panel hakkında sorularınızı yanıtlarım.');}
+function addMsg(type,text){const c=document.getElementById('chatMsgs');const t=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});const d=document.createElement('div');d.className='cmsg '+type;d.innerHTML=`<div class="cav">${type==='b'?'⚖️':'👤'}</div><div><div class="cbub">${text}</div><div class="ctime">${t}</div></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;document.getElementById('qqs').style.display='none';}
+function showTyp(){const c=document.getElementById('chatMsgs');const d=document.createElement('div');d.className='cmsg b';d.id='typ';d.innerHTML=`<div class="cav">⚖️</div><div class="typing"><span></span><span></span><span></span></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function hideTyp(){const t=document.getElementById('typ');if(t)t.remove();}
+async function sm(){const inp=document.getElementById('msgIn');const txt=inp.value.trim();if(!txt||busy)return;inp.value='';inp.style.height='auto';addMsg('u',txt);await ai(txt);}
+async function sq(t){if(busy)return;addMsg('u',t);await ai(t);}
+async function ai(msg){busy=true;document.getElementById('sendBtn').disabled=true;showTyp();try{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:SP+'\n\nSoru: '+msg}]}]})});const d=await r.json();hideTyp();if(d.candidates?.[0]){addMsg('b',d.candidates[0].content.parts[0].text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>'));}else{addMsg('b','⚠️ '+(d.error?.message||'Hata oluştu.'));}}catch(e){hideTyp();addMsg('b','⚠️ Bağlantı hatası.');}busy=false;document.getElementById('sendBtn').disabled=false;}
+function hk(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sm();}}
+function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,80)+'px';}
+window.onclick=function(e){if(e.target.id==='raporModal')closeRapor();};
 
 loadData();
 </script>
-
-<!-- RAPOR MODAL -->
-<div class="modal-overlay" id="raporModal">
-  <div class="modal">
-    <div class="modal-head">
-      <h3>📄 Müşteri Uyum Raporu Oluştur</h3>
-      <button class="modal-close" onclick="closeRapor()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div style="margin-bottom:12px;">
-        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Müşteri Seçin</div>
-        <div class="musteri-btns">
-          <button class="mb" onclick="selectMusteri('4nala.com')">4nala.com</button>
-          <button class="mb" onclick="selectMusteri('oley.com')">oley.com</button>
-          <button class="mb" onclick="selectMusteri('e-sans.com')">e-sans.com</button>
-          <button class="mb" onclick="selectMusteri('ekuri.com')">ekuri.com</button>
-          <button class="mb" onclick="selectMusteri('truvali.com')">truvali.com</button>
-        </div>
-      </div>
-      <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Oluşturulan Rapor</div>
-      <div class="rapor-box" id="raporIcerik">Müşteri seçin ve "Rapor Oluştur" butonuna tıklayın...</div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeRapor()">Kapat</button>
-      <button class="btn btn-outline copy-btn" onclick="copyRapor()" id="copyBtn" style="display:none">📋 Kopyala</button>
-      <button class="btn btn-primary" onclick="generateRapor()" id="genBtn">✨ Rapor Oluştur</button>
-    </div>
-  </div>
-</div>
-
+<style>@keyframes fadeRow{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}</style>
 </body>
 </html>
