@@ -784,8 +784,6 @@ function addLiveAlert(){
   if(rows.length>8)rows[rows.length-1].remove();
 }
 
-@keyframes fadeRow{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
-
 // EXEC LOGS
 function renderExecLogs(){
   const events=['fiat_withdraw','fiat_deposit','crypto_withdraw','game_purchase','add_iban','login'];
@@ -801,7 +799,10 @@ function renderExecLogs(){
     const c=CUSTS[Math.floor(Math.random()*CUSTS.length)];
     const r=rules[Math.floor(Math.random()*rules.length)];
     const amt=Math.floor(Math.random()*200+1)*1000;
-    tb.innerHTML+=`<tr><td><div class="td-i mono" style="font-size:11px;color:var(--text3)">${ts}</div></td><td><div class="td-i mono" style="font-size:11px">#TRV${9000+i}</div></td><td><div class="td-i" style="font-size:12px">${c}</div></td><td><div class="td-i"><span class="badge badge-blue">${e}</span></div></td><td><div class="td-i mono" style="font-size:12px">₺${amt.toLocaleString('tr-TR')}</div></td><td><div class="td-i" style="font-size:12px;color:var(--text2)">${r}</div></td><td><div class="td-i mono" style="font-weight:700;color:${score>=75?'var(--red)':score>=50?'var(--amber)':'var(--green)'}">${score}</div></td><td><div class="td-i"><span style="color:${d[1]};font-size:11px;font-weight:700;padding:3px 9px;background:${d[1].replace('var(','').replace(')','').replace('--red','rgba(255,77,106,.15)').replace('--amber','rgba(255,176,32,.15)').replace('--green','rgba(0,229,160,.1)')};border-radius:20px">${d[0]}</span></div></td></tr>`;
+    const dBg2=d[0]==='REJECT'?'rgba(255,77,106,.15)':d[0]==='REVIEW'?'rgba(255,176,32,.15)':'rgba(0,229,160,.1)';
+    const dC2=d[0]==='REJECT'?'var(--red)':d[0]==='REVIEW'?'var(--amber)':'var(--green)';
+    const sC2=score>=75?'var(--red)':score>=50?'var(--amber)':'var(--green)';
+    tb.innerHTML+=`<tr><td><div class="td-i mono" style="font-size:11px;color:var(--text3)">${ts}</div></td><td><div class="td-i mono" style="font-size:11px">#TRV${9000+i}</div></td><td><div class="td-i" style="font-size:12px">${c}</div></td><td><div class="td-i"><span class="badge badge-blue">${e}</span></div></td><td><div class="td-i mono" style="font-size:12px">&#x20BA;${amt.toLocaleString('tr-TR')}</div></td><td><div class="td-i" style="font-size:12px;color:var(--text2)">${r}</div></td><td><div class="td-i mono" style="font-weight:700;color:${sC2}">${score}</div></td><td><div class="td-i"><span style="color:${dC2};font-size:11px;font-weight:700;padding:3px 9px;background:${dBg2};border-radius:20px">${d[0]}</span></div></td></tr>`;
   }
 }
 
