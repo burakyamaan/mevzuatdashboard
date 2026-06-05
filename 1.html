@@ -362,8 +362,8 @@ td{border-bottom:1px solid var(--border);vertical-align:top;}
             </select>
           </div>
           <div class="tbl-wrap">
-            <div id="tblLoad" class="loading"><div class="spin"></div>Veriler yükleniyor...</div>
-            <table id="tbl" style="display:none">
+            <div id="tblLoad" class="loading" style="display:none"><div class="spin"></div>Veriler yükleniyor...</div>
+            <table id="tbl">
               <thead><tr><th style="width:24px"></th><th>Tarih</th><th>Kurum</th><th>Başlık</th><th>Risk</th><th>Süre</th><th>Link</th></tr></thead>
               <tbody id="tblBody"></tbody>
             </table>
@@ -877,20 +877,22 @@ function showPage(id,el){
 
 // MEVZUAT
 async function loadData(){
-  document.getElementById('tblLoad').style.display='flex';
-  document.getElementById('tbl').style.display='none';
-  try{
-    const r=await fetch(SHEETS_URL);
-    const t=await r.text();
-    if(!t || t.includes('Host not in allowlist') || t.length<100) throw new Error('no access');
+  document.getElementById('tblLoad').style.display='none';
+  document.getElementById('tbl').style.display='table';
+  allData=demo();
+  render(allData);
+  updateStats(allData);
+  document.getElementById('lastUpdate').textContent='Son güncelleme: '+new Date().toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  // Sheets varsa üzerine yaz
+  fetch(SHEETS_URL).then(r=>r.text()).then(t=>{
+    if(!t||t.includes('Host not in allowlist')||t.length<200) return;
     const j=JSON.parse(t.replace(/^[^(]+\(/,'').replace(/\);\s*$/,''));
     const rows=j.table.rows.filter(r=>r.c&&r.c[2]&&r.c[2].v&&r.c[2].v!=='Başlık');
     if(rows.length>0){
-      allData=rows.map(r=>{return{tarih:fmtDate(r.c[0]?.v),kurum:r.c[1]?.v||'—',baslik:r.c[2]?.v||'—',link:r.c[3]?.v||'',risk:r.c[4]?.v||'Orta',gun:String(r.c[5]?.v||'—').replace('.0',''),surecler:r.c[6]?.v||'—',maliyet:r.c[7]?.v||'—',aksiyon:r.c[8]?.v||r.c[6]?.v||'—'};});
-    } else { allData=demo(); }
-  }catch(e){ allData=demo(); }
-  render(allData);updateStats(allData);
-  document.getElementById('lastUpdate').textContent='Son güncelleme: '+new Date().toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+      allData=rows.map(r=>({tarih:fmtDate(r.c[0]?.v),kurum:r.c[1]?.v||'—',baslik:r.c[2]?.v||'—',link:r.c[3]?.v||'',risk:r.c[4]?.v||'Orta',gun:String(r.c[5]?.v||'—').replace('.0',''),surecler:r.c[6]?.v||'—',aksiyon:r.c[8]?.v||r.c[6]?.v||'—'}));
+      render(allData);updateStats(allData);
+    }
+  }).catch(()=>{});
 }
 
 function fmtDate(v){
@@ -1083,12 +1085,12 @@ const SP=`Sen Truvali AML uyum platformunun uzman asistanısın. Truvali, fintec
 function toggleChat(){chatOpen=!chatOpen;document.getElementById('chatFab').classList.toggle('open',chatOpen);document.getElementById('chatWin').classList.toggle('open',chatOpen);if(chatOpen&&firstOpen){firstOpen=false;if(!apiKey){document.getElementById('apiSet').style.display='flex';document.getElementById('chatBody').style.display='none';}else initChat();}}
 function saveKey(){const k=document.getElementById('apiIn').value.trim();if(!k)return;apiKey=k;localStorage.setItem('truvali_key',k);document.getElementById('apiSet').style.display='none';document.getElementById('chatBody').style.display='flex';initChat();}
 function initChat(){addMsg('b','Merhaba! AML, KYC, alert yönetimi veya Truvali panel hakkında sorularınızı yanıtlarım.');}
-function addMsg(type,text){const c=document.getElementById('chatMsgs');const t=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});const d=document.createElement('div');d.className='cmsg '+type;d.innerHTML=`<div class="cav">${type==='b'?'⚖️':'👤'}</div><div><div class="cbub">${text}</div><div class="ctime">${t}</div></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;document.getElementById('qqs').style.display='none';}
-function showTyp(){const c=document.getElementById('chatMsgs');const d=document.createElement('div');d.className='cmsg b';d.id='typ';d.innerHTML=`<div class="cav">⚖️</div><div class="typing"><span></span><span></span><span></span></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function addMsg(type,text){const c=document.getElementById('chatMsgs');const t=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});const d=document.createElement('div');d.className='cmsg '+type;d.innerHTML=`<div class="cav">${type==='b'?'[Terazi]':'[Kisi]'}</div><div><div class="cbub">${text}</div><div class="ctime">${t}</div></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;document.getElementById('qqs').style.display='none';}
+function showTyp(){const c=document.getElementById('chatMsgs');const d=document.createElement('div');d.className='cmsg b';d.id='typ';d.innerHTML=`<div class="cav">[Terazi]</div><div class="typing"><span></span><span></span><span></span></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;}
 function hideTyp(){const t=document.getElementById('typ');if(t)t.remove();}
 async function sm(){const inp=document.getElementById('msgIn');const txt=inp.value.trim();if(!txt||busy)return;inp.value='';inp.style.height='auto';addMsg('u',txt);await ai(txt);}
 async function sq(t){if(busy)return;addMsg('u',t);await ai(t);}
-async function ai(msg){busy=true;document.getElementById('sendBtn').disabled=true;showTyp();try{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:SP+'\n\nSoru: '+msg}]}]})});const d=await r.json();hideTyp();if(d.candidates?.[0]){addMsg('b',d.candidates[0].content.parts[0].text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>'));}else{addMsg('b','⚠️ '+(d.error?.message||'Hata oluştu.'));}}catch(e){hideTyp();addMsg('b','⚠️ Bağlantı hatası.');}busy=false;document.getElementById('sendBtn').disabled=false;}
+async function ai(msg){busy=true;document.getElementById('sendBtn').disabled=true;showTyp();try{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:SP+'\n\nSoru: '+msg}]}]})});const d=await r.json();hideTyp();if(d.candidates?.[0]){addMsg('b',d.candidates[0].content.parts[0].text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>'));}else{addMsg('b','[Uyari] '+(d.error?.message||'Hata oluştu.'));}}catch(e){hideTyp();addMsg('b','[Uyari] Bağlantı hatası.');}busy=false;document.getElementById('sendBtn').disabled=false;}
 function hk(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sm();}}
 function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,80)+'px';}
 window.onclick=function(e){if(e.target.id==='raporModal')closeRapor();};
@@ -1213,7 +1215,7 @@ Tarih: ${new Date().toLocaleDateString('tr-TR')}
 Hazırlayan: Burak Yaman — Uyum Danışmanı
 Referans No: SIB-${Date.now().toString().slice(-6)}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 1. BİLDİRİMDE BULUNAN YÜKÜMLÜNİN BİLGİLERİ
 Kuruluş: Truvali AML Platformu
@@ -1221,7 +1223,7 @@ Yetkili: Burak Yaman
 İletişim: burak@truvali.com
 Bildirim Tarihi: ${new Date().toLocaleDateString('tr-TR')}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 2. ŞÜPHELİ KİŞİ BİLGİLERİ
 Adı Soyadı: ${sibKisi.ad}
@@ -1229,32 +1231,31 @@ Müşteri ID: ${sibKisi.id}
 Sanction Durumu: ${sibKisi.sanction}
 Risk Skoru: ${sibKisi.score}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 3. ŞÜPHELİ İŞLEM NEDENİ
 ${sibNeden}
 
 ${sibNedenAciklama}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 4. ŞÜPHELİ İŞLEMLERİN DETAYI
-${secili.map((i,n)=>`${n+1}. ${i.tarih} | ${i.event} | ${i.tutar} | ${i.aciklama} | Risk Skoru: ${i.skor}`).join('
-')}
+${secili.map((i,n)=>`${n+1}. ${i.tarih} | ${i.event} | ${i.tutar} | ${i.aciklama} | Risk Skoru: ${i.skor}`).join('\n')}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 5. UYUM GÖREVLİSİ NOTU
 ${ekNot||'Ek not bulunmamaktadır.'}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 6. SONUÇ VE DEĞERLENDİRME
 Yukarıda detaylandırılan işlemler, 5549 Sayılı Suç Gelirlerinin Aklanmasının Önlenmesi Hakkında Kanun kapsamında şüpheli işlem niteliği taşımaktadır. İlgili işlemler Truvali AML sistemi tarafından otomatik olarak tespit edilmiş ve uyum yetkilisi tarafından incelenerek bu bildirim hazırlanmıştır.
 
 Bildirimin MASAK'a iletilmesi önerilmektedir.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 İmza: Burak Yaman | Tarih: ${new Date().toLocaleDateString('tr-TR')}`;
     
     setTimeout(()=>{
@@ -1270,8 +1271,7 @@ Bildirimin MASAK'a iletilmesi önerilmektedir.
 KİŞİ: ${sibKisi.ad} (${sibKisi.id}) — ${sibKisi.sanction} — ${sibKisi.score}
 ŞÜPHE NEDENİ: ${sibNeden} — ${sibNedenAciklama}
 İŞLEMLER:
-${secili.map((i,n)=>`${n+1}. ${i.tarih} | ${i.event} | ${i.tutar} | ${i.aciklama} | Risk: ${i.skor}`).join('
-')}
+${secili.map((i,n)=>`${n+1}. ${i.tarih} | ${i.event} | ${i.tutar} | ${i.aciklama} | Risk: ${i.skor}`).join('')}
 ${ekNot?'EK NOT: '+ekNot:''}
 
 5549 Sayılı Kanun çerçevesinde resmi ŞİB formatında yaz. Bölümler: 1-Yükümlü Bilgileri 2-Şüpheli Kişi Bilgileri 3-İşlem Detayları 4-Şüphe Gerekçesi 5-Alınan Aksiyonlar 6-Sonuç`;
@@ -1424,7 +1424,7 @@ function renderKisiler(idx, kisiler, kaynakHaber) {
 }
 
 function kisiKYCEkle(ad, rol, risk, btn) {
-  btn.textContent = 'Eklendi ✓';
+  btn.textContent = 'Eklendi v';
   btn.style.background = 'var(--green-l)';
   btn.style.color = 'var(--green)';
   btn.style.borderColor = 'rgba(0,229,160,.3)';
@@ -1454,17 +1454,17 @@ function kisiKYCEkle(ad, rol, risk, btn) {
 }
 
 function kisiWatchlistEkle(ad, rol, btn) {
-  btn.textContent = 'Eklendi ✓';
+  btn.textContent = 'Eklendi v';
   btn.style.background = 'var(--green-l)';
   btn.style.color = 'var(--green)';
   btn.style.borderColor = 'rgba(0,229,160,.3)';
   btn.disabled = true;
-  showToast(ad + ' Watchlist'e eklendi');
+  showToast(ad + ' Watchlist eklendi');
 }
 
 function showToast(msg) {
   const t = document.getElementById('kisiToast');
-  t.textContent = '✓ ' + msg;
+  t.textContent = 'v ' + msg;
   t.style.opacity = '1';
   t.style.transform = 'translateX(-50%) translateY(0)';
   setTimeout(() => {
