@@ -593,24 +593,214 @@ td{border-bottom:1px solid var(--border);vertical-align:top;}
         <div class="kpi green"><div class="kpi-header"><div class="kpi-icon" style="background:var(--green-l);color:var(--green)"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div><span class="badge badge-green">Tamamlandı</span></div><div class="kpi-value" style="color:var(--green)">4</div><div class="kpi-label">İletilen ŞİB</div></div>
         <div class="kpi red"><div class="kpi-header"><div class="kpi-icon" style="background:var(--red-l);color:var(--red)"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><span class="badge badge-red">Son Tarih</span></div><div class="kpi-value" style="color:var(--red)">24s</div><div class="kpi-label">Acil ŞİB Süresi</div></div>
       </div>
-      <div class="card">
-        <div class="card-header"><div><div class="card-title">Müşteri Uyum Raporu Oluştur</div><div class="card-sub">AI destekli — 30 saniyede hazır</div></div></div>
-        <div style="padding:20px;">
-          <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Müşteri Seçin</div>
-          <div class="musteri-btns" style="margin-bottom:20px;">
-            <button class="mb" onclick="selectMusteri('4nala.com')">4nala.com</button>
-            <button class="mb" onclick="selectMusteri('oley.com')">oley.com</button>
-            <button class="mb" onclick="selectMusteri('e-sans.com')">e-sans.com</button>
-            <button class="mb" onclick="selectMusteri('ekuri.com')">ekuri.com</button>
+
+      <!-- ŞİB HAZIRLAMA AKIŞI -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-header">
+          <div><div class="card-title">ŞİB Hazırlama Sihirbazı</div><div class="card-sub">Adım adım — AI destekli otomatik taslak</div></div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--blue);font-weight:600;padding:4px 10px;background:var(--blue-l);border-radius:6px;border:1px solid var(--blue-m);">
+            <span id="sibStep">Adım 1/4</span>
           </div>
-          <div id="raporArea" style="display:none">
-            <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Oluşturulan Rapor</div>
-            <div class="rapor-box" id="raporIcerik">Rapor burada görünecek...</div>
-            <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end;">
-              <button class="btn btn-outline" onclick="copyRapor()">Kopyala</button>
-              <button class="btn btn-primary" onclick="generateRaporDirect()" id="genBtn">Rapor Oluştur</button>
+        </div>
+
+        <!-- ADIM GÖSTERGESİ -->
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;gap:0;">
+          <div class="sib-step-item active" id="stepDot1" onclick="goStep(1)">
+            <div class="sib-dot">1</div>
+            <div class="sib-dot-label">Kişi Seç</div>
+          </div>
+          <div class="sib-step-line" id="stepLine1"></div>
+          <div class="sib-step-item" id="stepDot2" onclick="goStep(2)">
+            <div class="sib-dot">2</div>
+            <div class="sib-dot-label">Şüphe Nedeni</div>
+          </div>
+          <div class="sib-step-line" id="stepLine2"></div>
+          <div class="sib-step-item" id="stepDot3" onclick="goStep(3)">
+            <div class="sib-dot">3</div>
+            <div class="sib-dot-label">İşlem Listesi</div>
+          </div>
+          <div class="sib-step-line" id="stepLine3"></div>
+          <div class="sib-step-item" id="stepDot4" onclick="goStep(4)">
+            <div class="sib-dot">4</div>
+            <div class="sib-dot-label">ŞİB Taslağı</div>
+          </div>
+        </div>
+
+        <!-- ADIM 1: KİŞİ SEÇ -->
+        <div id="sibPanel1" style="padding:20px;">
+          <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">Bildirim Yapılacak Kişiyi Seçin</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
+            <div class="kisi-kart" id="kk1" onclick="secKisi('TRV-00234','Ahmet K.','role.pep','Sanction Score: 88','₺127,000 çekim')">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="width:36px;height:36px;background:var(--red-l);color:var(--red);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">AK</div>
+                <div><div style="font-size:13px;font-weight:600;">Ahmet K.</div><div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;">TRV-00234</div></div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                <span class="badge badge-red" style="font-size:9px;">role.pep</span>
+                <span class="badge badge-red" style="font-size:9px;">Score: 88</span>
+              </div>
+              <div style="font-size:11px;color:var(--text2);margin-top:6px;">₺127,000 yüksek tutarlı çekim</div>
+            </div>
+            <div class="kisi-kart" id="kk2" onclick="secKisi('TRV-00891','Mehmet Ç.','debarment','Sanction Score: 91','Yaptırım listesi eşleşmesi')">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="width:36px;height:36px;background:var(--red-l);color:var(--red);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">MÇ</div>
+                <div><div style="font-size:13px;font-weight:600;">Mehmet Ç.</div><div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;">TRV-00891</div></div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                <span class="badge badge-red" style="font-size:9px;">debarment</span>
+                <span class="badge badge-red" style="font-size:9px;">Score: 91</span>
+              </div>
+              <div style="font-size:11px;color:var(--text2);margin-top:6px;">Yaptırım listesi eşleşmesi</div>
+            </div>
+            <div class="kisi-kart" id="kk3" onclick="secKisi('TRV-01203','Fatma Y.','gov.pep','Sanction Score: 74','EDD süreci devam ediyor')">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="width:36px;height:36px;background:var(--amber-l);color:var(--amber);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">FY</div>
+                <div><div style="font-size:13px;font-weight:600;">Fatma Y.</div><div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;">TRV-01203</div></div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                <span class="badge badge-amber" style="font-size:9px;">gov.pep</span>
+                <span class="badge badge-amber" style="font-size:9px;">Score: 74</span>
+              </div>
+              <div style="font-size:11px;color:var(--text2);margin-top:6px;">EDD süreci devam ediyor</div>
+            </div>
+            <div class="kisi-kart" id="kk4" onclick="secKisi('TRV-02341','Selin K.','neg.action','Sanction Score: 67','Günlük ₺215,000 eşiği aşıldı')">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="width:36px;height:36px;background:var(--amber-l);color:var(--amber);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">SK</div>
+                <div><div style="font-size:13px;font-weight:600;">Selin K.</div><div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;">TRV-02341</div></div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                <span class="badge badge-amber" style="font-size:9px;">neg.action</span>
+                <span class="badge badge-amber" style="font-size:9px;">Score: 67</span>
+              </div>
+              <div style="font-size:11px;color:var(--text2);margin-top:6px;">Günlük ₺215,000 eşiği aşıldı</div>
+            </div>
+            <div class="kisi-kart" id="kk5" onclick="secKisi('TRV-00567','Burak T.','crime','Sanction Score: 52','5 ardışık eşik altı işlem')">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="width:36px;height:36px;background:var(--blue-l);color:var(--blue);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">BT</div>
+                <div><div style="font-size:13px;font-weight:600;">Burak T.</div><div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;">TRV-00567</div></div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                <span class="badge badge-blue" style="font-size:9px;">crime</span>
+                <span class="badge badge-blue" style="font-size:9px;">Score: 52</span>
+              </div>
+              <div style="font-size:11px;color:var(--text2);margin-top:6px;">5 ardışık eşik altı işlem</div>
+            </div>
+            <div class="kisi-kart" id="kk6" onclick="secKisi('TRV-03421','Ali R.','sanction.counter','Sanction Score: 61','VPN + yüksek IP riski')">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="width:36px;height:36px;background:var(--blue-l);color:var(--blue);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">AR</div>
+                <div><div style="font-size:13px;font-weight:600;">Ali R.</div><div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;">TRV-03421</div></div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                <span class="badge badge-blue" style="font-size:9px;">sanction.counter</span>
+                <span class="badge badge-blue" style="font-size:9px;">Score: 61</span>
+              </div>
+              <div style="font-size:11px;color:var(--text2);margin-top:6px;">VPN + yüksek IP riski</div>
             </div>
           </div>
+          <div style="display:flex;justify-content:flex-end;">
+            <button class="btn btn-primary" onclick="goStep(2)" id="btn1Next" disabled>Sonraki Adım →</button>
+          </div>
+        </div>
+
+        <!-- ADIM 2: ŞÜPHE NEDENİ -->
+        <div id="sibPanel2" style="padding:20px;display:none;">
+          <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">Şüpheli İşlem Nedenini Seçin</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+            <div class="neden-kart" onclick="secNeden(this,'Smurfing / Yapısal İşlem','Bildirim eşiğinin altında kalmak amacıyla işlemlerin bölünmesi')">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px;">Smurfing / Yapısal İşlem</div>
+              <div style="font-size:11px;color:var(--text2);">Bildirim eşiğinin altında kalmak amacıyla işlemlerin bölünmesi</div>
+            </div>
+            <div class="neden-kart" onclick="secNeden(this,'Yaptırım Listesi Eşleşmesi','Müşterinin uluslararası yaptırım listesinde tespit edilmesi')">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px;">Yaptırım Listesi Eşleşmesi</div>
+              <div style="font-size:11px;color:var(--text2);">Müşterinin uluslararası yaptırım listesinde tespit edilmesi</div>
+            </div>
+            <div class="neden-kart" onclick="secNeden(this,'PEP Yüksek Tutarlı İşlem','Siyasi nüfuz sahibi kişinin açıklanamayan yüksek tutarlı işlemi')">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px;">PEP Yüksek Tutarlı İşlem</div>
+              <div style="font-size:11px;color:var(--text2);">Siyasi nüfuz sahibi kişinin açıklanamayan yüksek tutarlı işlemi</div>
+            </div>
+            <div class="neden-kart" onclick="secNeden(this,'Hesap Ele Geçirme (ATO)','Yeni cihaz/IP + şifre değişimi + IBAN ekleme ardışık kalıbı')">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px;">Hesap Ele Geçirme (ATO)</div>
+              <div style="font-size:11px;color:var(--text2);">Yeni cihaz/IP + şifre değişimi + IBAN ekleme ardışık kalıbı</div>
+            </div>
+            <div class="neden-kart" onclick="secNeden(this,'Mule Hesap Şüphesi','Çoklu hesaptan gelen para transferlerinin tek noktada toplanması')">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px;">Mule Hesap Şüphesi</div>
+              <div style="font-size:11px;color:var(--text2);">Çoklu hesaptan gelen para transferlerinin tek noktada toplanması</div>
+            </div>
+            <div class="neden-kart" onclick="secNeden(this,'Match Fixing / Bahis Şikesi','Koordineli çoklu hesap aynı sonuca bahis, tümü kazandı')">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px;">Match Fixing / Bahis Şikesi</div>
+              <div style="font-size:11px;color:var(--text2);">Koordineli çoklu hesap aynı sonuca bahis, tümü kazandı</div>
+            </div>
+            <div class="neden-kart" onclick="secNeden(this,'Kripto Aklama','Kripto para üzerinden gerçekleştirilen layering işlemi')">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px;">Kripto Aklama</div>
+              <div style="font-size:11px;color:var(--text2);">Kripto para üzerinden gerçekleştirilen layering işlemi</div>
+            </div>
+            <div class="neden-kart" onclick="secNeden(this,'Terör Finansmanı Şüphesi','Yaptırım altındaki ülke veya kişiye düzenli fon transferi')">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px;">Terör Finansmanı Şüphesi</div>
+              <div style="font-size:11px;color:var(--text2);">Yaptırım altındaki ülke veya kişiye düzenli fon transferi</div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <button class="btn btn-outline" onclick="goStep(1)">← Geri</button>
+            <button class="btn btn-primary" onclick="goStep(3)" id="btn2Next" disabled>Sonraki Adım →</button>
+          </div>
+        </div>
+
+        <!-- ADIM 3: İŞLEM LİSTESİ -->
+        <div id="sibPanel3" style="padding:20px;display:none;">
+          <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Seçili Kişi: <span id="seciliKisiLabel" style="color:var(--blue)">—</span></div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">Son 30 gün şüpheli işlem geçmişi</div>
+          <div class="tbl-wrap" style="margin-bottom:16px;">
+            <table>
+              <thead><tr><th><input type="checkbox" id="selectAll" onchange="toggleAllIslem(this)" style="accent-color:var(--blue)"></th><th>Tarih</th><th>Event</th><th>Tutar</th><th>Açıklama</th><th>Risk Skoru</th><th>Karar</th></tr></thead>
+              <tbody id="islemListesi"></tbody>
+            </table>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Ek Notlar (İsteğe Bağlı)</div>
+            <textarea id="ekNot" placeholder="Uyum görevlisinin eklemek istediği notlar, gözlemler..." style="width:100%;background:transparent;border:none;color:var(--text2);font-size:12.5px;font-family:'DM Sans',sans-serif;resize:none;outline:none;min-height:60px;line-height:1.6;"></textarea>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <button class="btn btn-outline" onclick="goStep(2)">← Geri</button>
+            <button class="btn btn-primary" onclick="goStep(4);generateSIB()">ŞİB Taslağı Oluştur →</button>
+          </div>
+        </div>
+
+        <!-- ADIM 4: ŞİB TASLAĞI -->
+        <div id="sibPanel4" style="padding:20px;display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div>
+              <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;">Oluşturulan ŞİB Taslağı</div>
+              <div style="font-size:11px;color:var(--text3);margin-top:2px;">AI tarafından hazırlandı — gözden geçirin ve onaylayın</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-outline" id="sibCopyBtn" onclick="copySIB()">Kopyala</button>
+              <button class="btn btn-outline" onclick="downloadSIB()">İndir (.txt)</button>
+            </div>
+          </div>
+          <div id="sibLoading" style="display:flex;align-items:center;gap:10px;padding:30px;justify-content:center;color:var(--text3);font-size:13px;">
+            <div class="spin"></div>AI taslağı hazırlıyor...
+          </div>
+          <div class="rapor-box" id="sibTaslak" style="display:none;min-height:280px;font-size:12px;line-height:1.9;"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:12px;">
+            <button class="btn btn-outline" onclick="goStep(3)">← Geri</button>
+            <button class="btn btn-primary" onclick="sibTamamla()" style="background:var(--green);border-color:var(--green);">Onaylandı — ŞİB Teslim Edildi</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ŞİB GEÇMİŞİ -->
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">ŞİB Geçmişi</div><div class="card-sub">Bu ay hazırlanan bildirimler</div></div></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Tarih</th><th>Müşteri</th><th>Şüphe Nedeni</th><th>Durum</th><th>Hazırlayan</th></tr></thead>
+            <tbody>
+              <tr><td><div class="td-i mono" style="font-size:11px;color:var(--text3)">28.05.2026</div></td><td><div class="td-i" style="font-size:12px;font-weight:500">TRV-00891 — Mehmet Ç.</div></td><td><div class="td-i" style="font-size:12px;color:var(--text2)">Yaptırım Listesi Eşleşmesi</div></td><td><div class="td-i"><span class="badge badge-green">İletildi</span></div></td><td><div class="td-i" style="font-size:12px;color:var(--text3)">Burak Y.</div></td></tr>
+              <tr><td><div class="td-i mono" style="font-size:11px;color:var(--text3)">25.05.2026</div></td><td><div class="td-i" style="font-size:12px;font-weight:500">TRV-00234 — Ahmet K.</div></td><td><div class="td-i" style="font-size:12px;color:var(--text2)">PEP Yüksek Tutarlı İşlem</div></td><td><div class="td-i"><span class="badge badge-green">İletildi</span></div></td><td><div class="td-i" style="font-size:12px;color:var(--text3)">Burak Y.</div></td></tr>
+              <tr><td><div class="td-i mono" style="font-size:11px;color:var(--text3)">22.05.2026</div></td><td><div class="td-i" style="font-size:12px;font-weight:500">TRV-02341 — Selin K.</div></td><td><div class="td-i" style="font-size:12px;color:var(--text2)">Smurfing Tespiti</div></td><td><div class="td-i"><span class="badge badge-amber">İnceleniyor</span></div></td><td><div class="td-i" style="font-size:12px;color:var(--text3)">Burak Y.</div></td></tr>
+              <tr><td><div class="td-i mono" style="font-size:11px;color:var(--text3)">19.05.2026</div></td><td><div class="td-i" style="font-size:12px;font-weight:500">TRV-01203 — Fatma Y.</div></td><td><div class="td-i" style="font-size:12px;color:var(--text2)">Mule Hesap Şüphesi</div></td><td><div class="td-i"><span class="badge badge-green">İletildi</span></div></td><td><div class="td-i" style="font-size:12px;color:var(--text3)">Burak Y.</div></td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -692,12 +882,13 @@ async function loadData(){
   try{
     const r=await fetch(SHEETS_URL);
     const t=await r.text();
+    if(!t || t.includes('Host not in allowlist') || t.length<100) throw new Error('no access');
     const j=JSON.parse(t.replace(/^[^(]+\(/,'').replace(/\);\s*$/,''));
-    allData=j.table.rows.filter(r=>r.c&&r.c[2]&&r.c[2].v&&r.c[2].v!=='Başlık').map(r=>{
-      return{tarih:fmtDate(r.c[0]?.v),kurum:r.c[1]?.v||'—',baslik:r.c[2]?.v||'—',link:r.c[3]?.v||'',risk:r.c[4]?.v||'Orta',gun:String(r.c[5]?.v||'—').replace('.0',''),surecler:r.c[6]?.v||'—',maliyet:r.c[7]?.v||'—',aksiyon:r.c[8]?.v||r.c[6]?.v||'—'};
-    });
-  }catch(e){allData=demo();}
-  if(!allData.length)allData=demo();
+    const rows=j.table.rows.filter(r=>r.c&&r.c[2]&&r.c[2].v&&r.c[2].v!=='Başlık');
+    if(rows.length>0){
+      allData=rows.map(r=>{return{tarih:fmtDate(r.c[0]?.v),kurum:r.c[1]?.v||'—',baslik:r.c[2]?.v||'—',link:r.c[3]?.v||'',risk:r.c[4]?.v||'Orta',gun:String(r.c[5]?.v||'—').replace('.0',''),surecler:r.c[6]?.v||'—',maliyet:r.c[7]?.v||'—',aksiyon:r.c[8]?.v||r.c[6]?.v||'—'};});
+    } else { allData=demo(); }
+  }catch(e){ allData=demo(); }
   render(allData);updateStats(allData);
   document.getElementById('lastUpdate').textContent='Son güncelleme: '+new Date().toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
 }
@@ -717,7 +908,20 @@ function render(data){
     const gc=g<=15?'var(--red)':g<=30?'var(--amber)':'var(--green)';
     const kc=KC[row.kurum]||'#8899BB';
     const hl=row.link&&row.link.startsWith('http');
-    tb.innerHTML+=`<tr class="tr-m" onclick="toggleRow(${i})"><td><div class="td-i" style="padding:11px 8px;"><div class="exp" id="ex${i}"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></td><td><div class="td-i mono" style="font-size:11px;color:var(--text3);white-space:nowrap;">${row.tarih}</div></td><td><div class="td-i"><span class="badge" style="background:${kc}18;color:${kc};border:1px solid ${kc}33;">${row.kurum}</span></div></td><td><div class="td-i" style="font-size:12.5px;font-weight:500;line-height:1.4;max-width:280px;">${row.baslik}</div></td><td><div class="td-i"><span class="badge ${rc}">${row.risk}</span></div></td><td><div class="td-i mono" style="font-size:12px;color:${gc};font-weight:600;">${row.gun==='—'?'—':row.gun+'g'}</div></td><td><div class="td-i" style="display:flex;gap:5px;align-items:center;">${hl?`<a href="${row.link}" target="_blank" class="lbtn" onclick="event.stopPropagation()">→ Aç</a>`:''} <button class="rapor-btn" onclick="event.stopPropagation();openRapor(${i})">Rapor</button></div></td></tr><tr class="tr-d" id="det${i}"><td colspan="7"><div class="det-cell"><div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:14px;"><div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">AI Analizi — ${row.kurum}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Etkilenen Süreçler</div><div style="font-size:12.5px;color:var(--text2);">${row.surecler}</div></div><div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Yapılması Gereken</div><div style="font-size:12.5px;color:var(--text);font-weight:500;">${row.aksiyon}</div></div></div></div></div></td></tr>`;
+    tb.innerHTML+=`<tr class="tr-m" onclick="toggleRow(${i})"><td><div class="td-i" style="padding:11px 8px;"><div class="exp" id="ex${i}"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></td><td><div class="td-i mono" style="font-size:11px;color:var(--text3);white-space:nowrap;">${row.tarih}</div></td><td><div class="td-i"><span class="badge" style="background:${kc}18;color:${kc};border:1px solid ${kc}33;">${row.kurum}</span></div></td><td><div class="td-i" style="font-size:12.5px;font-weight:500;line-height:1.4;max-width:280px;">${row.baslik}</div></td><td><div class="td-i"><span class="badge ${rc}">${row.risk}</span></div></td><td><div class="td-i mono" style="font-size:12px;color:${gc};font-weight:600;">${row.gun==='—'?'—':row.gun+'g'}</div></td><td><div class="td-i" style="display:flex;gap:5px;align-items:center;">${hl?`<a href="${row.link}" target="_blank" class="lbtn" onclick="event.stopPropagation()">→ Aç</a>`:''} <button class="rapor-btn" onclick="event.stopPropagation();openRapor(${i})">Rapor</button></div></td></tr><tr class="tr-d" id="det${i}"><td colspan="7"><div class="det-cell"><div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:14px;">
+<div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">AI Analizi — ${row.kurum}</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+<div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Etkilenen Süreçler</div><div style="font-size:12.5px;color:var(--text2);">${row.surecler}</div></div>
+<div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Yapılması Gereken</div><div style="font-size:12.5px;color:var(--text);font-weight:500;">${row.aksiyon}</div></div>
+</div>
+<div style="border-top:1px solid var(--border);padding-top:12px;">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+<div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.5px;">Haberde Geçen Kişiler</div>
+<button onclick="kisiTespit(${i},this)" data-baslik="${row.baslik}" data-kurum="${row.kurum}" style="font-size:10px;font-weight:600;padding:3px 10px;background:var(--amber-l);color:var(--amber);border:1px solid rgba(255,176,32,.3);border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;" id="kisiBtn${i}">AI ile Tespit Et</button>
+</div>
+<div id="kisiSonuc${i}" style="display:none;"></div>
+</div>
+</div></div></td></tr>`;
   });
 }
 
@@ -731,10 +935,14 @@ function updateStats(d){
   document.getElementById('navBadge').textContent=d.filter(r=>r.risk==='Yüksek').length;
 }
 function demo(){return[
-  {tarih:'15.05.2026',kurum:'MASAK',baslik:'MASAK Operasyonu: 200 Şüpheli Hakkında Gözaltı',link:'https://masak.hmb.gov.tr',risk:'Yüksek',gun:'14',surecler:'KYC prosedürleri, ŞİB yükümlülüğü',maliyet:'500.000 TL idari para cezası',aksiyon:'KYC prosedürlerini güncelleyin, müşteri taramalarını artırın'},
-  {tarih:'16.05.2026',kurum:'SPK',baslik:'SPK: Menkul Kıymet Yöneticilerine Milyonlarca Liralık Ceza',link:'https://www.spk.gov.tr',risk:'Yüksek',gun:'98',surecler:'Sermaye piyasası uyumu, lisans yenileme',maliyet:'Lisans iptali, ağır idari yaptırım',aksiyon:'SPK düzenlemelerini avukata gönderin, etki analizi yapın'},
-  {tarih:'17.05.2026',kurum:'Resmi Gazete Bahis',baslik:'35 İlde Yasa Dışı Bahis Operasyonu: 98 Kişi Tutuklandı',link:'https://www.resmigazete.gov.tr',risk:'Yüksek',gun:'15',surecler:'Lisans uyumu, müşteri doğrulama, STT bildirimleri',maliyet:'Faaliyet durdurma, lisans iptali',aksiyon:'STT ile iletişime geçin, tüm müşteri KYC kayıtlarını kontrol edin'},
-  {tarih:'18.05.2026',kurum:'BDDK',baslik:'Ödeme Hizmetleri Yönetmeliği Güncellendi',link:'https://www.bddk.org.tr',risk:'Orta',gun:'45',surecler:'Ödeme altyapısı, müşteri doğrulama',maliyet:'İdari yaptırım',aksiyon:'Teknik ekiple değerlendirin'}
+  {tarih:'03.06.2026',kurum:'MASAK Operasyon',baslik:'Kara Para Aklamada Cevdet Yılmaz ve Ali Rıza Kaya Tutuklandı',link:'https://masak.hmb.gov.tr',risk:'Yüksek',gun:'5',surecler:'KYC prosedürleri, ŞİB yükümlülüğü, müşteri tarama',aksiyon:'Müşteri portföyünü tarayın, benzer profil varsa ŞİB yapın'},
+  {tarih:'02.06.2026',kurum:'Resmi Gazete Bahis',baslik:'35 İlde Yasa Dışı Bahis: Mehmet Şahin ve 97 Kişi Tutuklandı',link:'https://www.resmigazete.gov.tr',risk:'Yüksek',gun:'6',surecler:'Lisans uyumu, müşteri doğrulama, STT bildirimleri',aksiyon:'STT ile iletişime geçin, tüm müşteri KYC kayıtlarını kontrol edin'},
+  {tarih:'01.06.2026',kurum:'MASAK',masak:'MASAK Operasyonu: Kripto Şüphelisi Hasan Demir Gözaltına Alındı',baslik:'MASAK Operasyonu: Kripto Şüphelisi Hasan Demir Gözaltına Alındı',link:'https://masak.hmb.gov.tr',risk:'Yüksek',gun:'7',surecler:'Kripto AML uyumu, 7518 Sayılı Kanun, SPK bildirimi',aksiyon:'Kripto müşterilerini yeniden tarayın, SPK ile koordinasyon sağlayın'},
+  {tarih:'31.05.2026',kurum:'SPK',baslik:'SPK: Ayşe Kılıç ve Fatih Arslan Hakkında İşlem Durdurma Kararı',link:'https://www.spk.gov.tr',risk:'Yüksek',gun:'8',surecler:'Sermaye piyasası uyumu, lisans yenileme, müşteri bildirimi',aksiyon:'SPK kararını avukata gönderin, etkilenen müşterileri tespit edin'},
+  {tarih:'30.05.2026',kurum:'BDDK',baslik:'Ödeme Kuruluşlarına Yönelik Yeni Yönetmelik Yayımlandı',link:'https://www.bddk.org.tr',risk:'Orta',gun:'18',surecler:'Ödeme altyapısı, müşteri doğrulama, raporlama',aksiyon:'Teknik ekiple 30 gün içinde etki analizi tamamlayın'},
+  {tarih:'29.05.2026',kurum:'MASAK',baslik:'MASAK: Yüksek Riskli Ülkelerden Gelen Transferlere Artırılmış Tedbir',link:'https://masak.hmb.gov.tr',risk:'Yüksek',gun:'10',surecler:'Uluslararası transfer izleme, FATF uyumu, ŞİB değerlendirmesi',aksiyon:'Yüksek riskli ülke transferlerini derhal gözden geçirin'},
+  {tarih:'28.05.2026',kurum:'BTK',baslik:'İnternet Bahis Sitelerine Erişim Engeli Kararı',link:'https://www.btk.gov.tr',risk:'Orta',gun:'11',surecler:'İçerik moderasyon, lisanssız platform tespiti',aksiyon:'Lisanssız platform bağlantılarını kontrol edin'},
+  {tarih:'27.05.2026',kurum:'KVKK',baslik:'Finansal Kuruluşlar İçin Kişisel Veri Rehberi Güncellendi',link:'https://www.kvkk.gov.tr',risk:'Düşük',gun:'32',surecler:'Veri işleme, müşteri aydınlatma, rıza yönetimi',aksiyon:'KVKK danışmanınıza gönderin, aydınlatma metinlerini güncelleyin'}
 ];}
 
 // DASHBOARD
@@ -885,8 +1093,412 @@ function hk(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sm();}}
 function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,80)+'px';}
 window.onclick=function(e){if(e.target.id==='raporModal')closeRapor();};
 
+
+// ============ ŞİB SİHİRBAZI ============
+let sibKisi={}, sibNeden='', sibNedenAciklama='', currentStep=1;
+
+const ISLEMLER = {
+  'TRV-00234': [
+    {tarih:'03.06.2026',event:'fiat_withdraw',tutar:'₺127,000',aciklama:'Banka hesabına transfer',skor:88,karar:'REVIEW'},
+    {tarih:'01.06.2026',event:'fiat_withdraw',tutar:'₺49,800',aciklama:'Eşik altı çekim #3',skor:72,karar:'REVIEW'},
+    {tarih:'30.05.2026',event:'fiat_withdraw',tutar:'₺49,500',aciklama:'Eşik altı çekim #2',skor:68,karar:'REVIEW'},
+    {tarih:'28.05.2026',event:'fiat_deposit',tutar:'₺245,000',aciklama:'Nakit yatırım — kaynak belirsiz',skor:85,karar:'REVIEW'},
+    {tarih:'25.05.2026',event:'fiat_withdraw',tutar:'₺48,900',aciklama:'Eşik altı çekim #1',skor:65,karar:'REVIEW'},
+  ],
+  'TRV-00891': [
+    {tarih:'03.06.2026',event:'login',tutar:'—',aciklama:'Yabancı IP girişi (RU)',skor:91,karar:'REJECT'},
+    {tarih:'02.06.2026',event:'fiat_withdraw',tutar:'₺89,000',aciklama:'Acil çekim talebi',skor:91,karar:'REJECT'},
+    {tarih:'01.06.2026',event:'add_iban',tutar:'—',aciklama:'Yeni IBAN ekleme',skor:91,karar:'REJECT'},
+    {tarih:'29.05.2026',event:'fiat_deposit',tutar:'₺155,000',aciklama:'Transfer — kaynak bilinmiyor',skor:88,karar:'REVIEW'},
+  ],
+  'TRV-01203': [
+    {tarih:'04.06.2026',event:'fiat_withdraw',tutar:'₺67,500',aciklama:'Kamu görevlisi çekimi',skor:74,karar:'REVIEW'},
+    {tarih:'31.05.2026',event:'fiat_deposit',tutar:'₺210,000',aciklama:'Danışmanlık bedeli açıklamalı',skor:70,karar:'REVIEW'},
+    {tarih:'28.05.2026',event:'fiat_withdraw',tutar:'₺55,000',aciklama:'Kişisel harcama',skor:68,karar:'REVIEW'},
+  ],
+  'TRV-02341': [
+    {tarih:'05.06.2026',event:'fiat_deposit',tutar:'₺49,200',aciklama:'Eşik altı yatırım #5',skor:67,karar:'REVIEW'},
+    {tarih:'04.06.2026',event:'fiat_deposit',tutar:'₺49,700',aciklama:'Eşik altı yatırım #4',skor:65,karar:'REVIEW'},
+    {tarih:'03.06.2026',event:'fiat_deposit',tutar:'₺48,900',aciklama:'Eşik altı yatırım #3',skor:63,karar:'REVIEW'},
+    {tarih:'01.06.2026',event:'fiat_deposit',tutar:'₺49,400',aciklama:'Eşik altı yatırım #2',skor:61,karar:'REVIEW'},
+    {tarih:'29.05.2026',event:'fiat_deposit',tutar:'₺49,100',aciklama:'Eşik altı yatırım #1',skor:60,karar:'REVIEW'},
+  ],
+  'TRV-00567': [
+    {tarih:'04.06.2026',event:'game_purchase',tutar:'₺9,800',aciklama:'Bahis kuponu #5',skor:55,karar:'REVIEW'},
+    {tarih:'04.06.2026',event:'game_purchase',tutar:'₺9,900',aciklama:'Bahis kuponu #4',skor:54,karar:'REVIEW'},
+    {tarih:'03.06.2026',event:'game_purchase',tutar:'₺9,700',aciklama:'Bahis kuponu #3',skor:53,karar:'REVIEW'},
+    {tarih:'02.06.2026',event:'fiat_withdraw',tutar:'₺48,200',aciklama:'Toplu çekim',skor:58,karar:'REVIEW'},
+  ],
+  'TRV-03421': [
+    {tarih:'05.06.2026',event:'login',tutar:'—',aciklama:'Tor exit node girişi',skor:87,karar:'REVIEW'},
+    {tarih:'04.06.2026',event:'fiat_withdraw',tutar:'₺156,000',aciklama:'Yüksek tutarlı çekim',skor:78,karar:'REVIEW'},
+    {tarih:'03.06.2026',event:'crypto_withdraw',tutar:'₺94,000',aciklama:'Kripto transfer — hedef bilinmiyor',skor:82,karar:'REVIEW'},
+  ]
+};
+
+function goStep(n){
+  if(n===2 && !sibKisi.id) return;
+  if(n===3 && !sibNeden) return;
+  currentStep=n;
+  document.getElementById('sibStep').textContent='Adım '+n+'/4';
+  [1,2,3,4].forEach(i=>{
+    document.getElementById('sibPanel'+i).style.display = i===n ? 'block':'none';
+    const dot=document.getElementById('stepDot'+i);
+    dot.classList.remove('active','done');
+    if(i===n) dot.classList.add('active');
+    else if(i<n) dot.classList.add('done');
+    if(i<4){
+      const line=document.getElementById('stepLine'+i);
+      line.classList.toggle('done', i<n);
+    }
+  });
+  if(n===3) renderIslemler();
+}
+
+function secKisi(id,ad,sanction,score,aciklama){
+  sibKisi={id,ad,sanction,score,aciklama};
+  document.querySelectorAll('.kisi-kart').forEach(k=>k.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  document.getElementById('btn1Next').disabled=false;
+  document.getElementById('seciliKisiLabel').textContent=ad+' ('+id+')';
+}
+
+function secNeden(el,neden,aciklama){
+  sibNeden=neden; sibNedenAciklama=aciklama;
+  document.querySelectorAll('.neden-kart').forEach(k=>k.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('btn2Next').disabled=false;
+}
+
+function renderIslemler(){
+  const islemler=ISLEMLER[sibKisi.id]||[];
+  const tbody=document.getElementById('islemListesi');
+  tbody.innerHTML='';
+  islemler.forEach((i,idx)=>{
+    const sC=i.skor>=75?'var(--red)':i.skor>=50?'var(--amber)':'var(--green)';
+    const kBg=i.karar==='REJECT'?'rgba(255,77,106,.15)':'rgba(255,176,32,.15)';
+    const kC=i.karar==='REJECT'?'var(--red)':'var(--amber)';
+    tbody.innerHTML+=`<tr>
+      <td><div class="td-i"><input type="checkbox" class="islem-cb" checked style="accent-color:var(--blue)"></div></td>
+      <td><div class="td-i mono" style="font-size:11px;color:var(--text3)">${i.tarih}</div></td>
+      <td><div class="td-i"><span class="badge badge-blue" style="font-size:10px">${i.event}</span></div></td>
+      <td><div class="td-i mono" style="font-size:12px;font-weight:600">${i.tutar}</div></td>
+      <td><div class="td-i" style="font-size:12px;color:var(--text2)">${i.aciklama}</div></td>
+      <td><div class="td-i"><span style="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:${sC}">${i.skor}</span></div></td>
+      <td><div class="td-i"><span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:${kBg};color:${kC}">${i.karar}</span></div></td>
+    </tr>`;
+  });
+}
+
+function toggleAllIslem(cb){
+  document.querySelectorAll('.islem-cb').forEach(c=>c.checked=cb.checked);
+}
+
+async function generateSIB(){
+  document.getElementById('sibLoading').style.display='flex';
+  document.getElementById('sibTaslak').style.display='none';
+  
+  const islemler=ISLEMLER[sibKisi.id]||[];
+  const secili=[];
+  document.querySelectorAll('.islem-cb').forEach((cb,i)=>{
+    if(cb.checked && islemler[i]) secili.push(islemler[i]);
+  });
+  const ekNot=document.getElementById('ekNot').value;
+  
+  if(!apiKey){
+    // API key yoksa örnek taslak göster
+    const ornek=`ŞÜPHELİ İŞLEM BİLDİRİM FORMU (ŞİB)
+
+Tarih: ${new Date().toLocaleDateString('tr-TR')}
+Hazırlayan: Burak Yaman — Uyum Danışmanı
+Referans No: SIB-${Date.now().toString().slice(-6)}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. BİLDİRİMDE BULUNAN YÜKÜMLÜNİN BİLGİLERİ
+Kuruluş: Truvali AML Platformu
+Yetkili: Burak Yaman
+İletişim: burak@truvali.com
+Bildirim Tarihi: ${new Date().toLocaleDateString('tr-TR')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2. ŞÜPHELİ KİŞİ BİLGİLERİ
+Adı Soyadı: ${sibKisi.ad}
+Müşteri ID: ${sibKisi.id}
+Sanction Durumu: ${sibKisi.sanction}
+Risk Skoru: ${sibKisi.score}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3. ŞÜPHELİ İŞLEM NEDENİ
+${sibNeden}
+
+${sibNedenAciklama}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4. ŞÜPHELİ İŞLEMLERİN DETAYI
+${secili.map((i,n)=>`${n+1}. ${i.tarih} | ${i.event} | ${i.tutar} | ${i.aciklama} | Risk Skoru: ${i.skor}`).join('
+')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+5. UYUM GÖREVLİSİ NOTU
+${ekNot||'Ek not bulunmamaktadır.'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+6. SONUÇ VE DEĞERLENDİRME
+Yukarıda detaylandırılan işlemler, 5549 Sayılı Suç Gelirlerinin Aklanmasının Önlenmesi Hakkında Kanun kapsamında şüpheli işlem niteliği taşımaktadır. İlgili işlemler Truvali AML sistemi tarafından otomatik olarak tespit edilmiş ve uyum yetkilisi tarafından incelenerek bu bildirim hazırlanmıştır.
+
+Bildirimin MASAK'a iletilmesi önerilmektedir.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+İmza: Burak Yaman | Tarih: ${new Date().toLocaleDateString('tr-TR')}`;
+    
+    setTimeout(()=>{
+      document.getElementById('sibLoading').style.display='none';
+      document.getElementById('sibTaslak').style.display='block';
+      document.getElementById('sibTaslak').textContent=ornek;
+    },1500);
+    return;
+  }
+
+  const prompt=`Sen Türkiye MASAK mevzuatı uzmanısın. Aşağıdaki bilgilere göre resmi Şüpheli İşlem Bildirimi (ŞİB) taslağı hazırla.
+
+KİŞİ: ${sibKisi.ad} (${sibKisi.id}) — ${sibKisi.sanction} — ${sibKisi.score}
+ŞÜPHE NEDENİ: ${sibNeden} — ${sibNedenAciklama}
+İŞLEMLER:
+${secili.map((i,n)=>`${n+1}. ${i.tarih} | ${i.event} | ${i.tutar} | ${i.aciklama} | Risk: ${i.skor}`).join('
+')}
+${ekNot?'EK NOT: '+ekNot:''}
+
+5549 Sayılı Kanun çerçevesinde resmi ŞİB formatında yaz. Bölümler: 1-Yükümlü Bilgileri 2-Şüpheli Kişi Bilgileri 3-İşlem Detayları 4-Şüphe Gerekçesi 5-Alınan Aksiyonlar 6-Sonuç`;
+
+  try{
+    const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}]})});
+    const d=await r.json();
+    document.getElementById('sibLoading').style.display='none';
+    document.getElementById('sibTaslak').style.display='block';
+    if(d.candidates?.[0]){
+      document.getElementById('sibTaslak').textContent=d.candidates[0].content.parts[0].text;
+    } else {
+      document.getElementById('sibTaslak').textContent='Hata: '+(d.error?.message||'API bağlantı hatası');
+    }
+  }catch(e){
+    document.getElementById('sibLoading').style.display='none';
+    document.getElementById('sibTaslak').style.display='block';
+    document.getElementById('sibTaslak').textContent='Bağlantı hatası: '+e.message;
+  }
+}
+
+function copySIB(){
+  navigator.clipboard.writeText(document.getElementById('sibTaslak').textContent);
+  const btn=document.getElementById('sibCopyBtn');
+  btn.textContent='Kopyalandı!';
+  setTimeout(()=>btn.textContent='Kopyala',2000);
+}
+
+function downloadSIB(){
+  const txt=document.getElementById('sibTaslak').textContent;
+  const blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='SIB-'+sibKisi.id+'-'+new Date().toLocaleDateString('tr-TR').replace(/\./g,'')+'.txt';
+  a.click();
+}
+
+function sibTamamla(){
+  alert('ŞİB başarıyla teslim edildi olarak işaretlendi. MASAK bildirim kaydı oluşturuldu.');
+  goStep(1);
+  sibKisi={};sibNeden='';
+  document.querySelectorAll('.kisi-kart,.neden-kart').forEach(k=>k.classList.remove('selected'));
+  document.getElementById('btn1Next').disabled=true;
+  document.getElementById('btn2Next').disabled=true;
+}
+
+
+// ============ KİŞİ TESPİT ============
+async function kisiTespit(idx, btnEl) {
+  const baslik = btnEl.dataset.baslik || '';
+  const kurum = btnEl.dataset.kurum || '';
+  const btn = document.getElementById('kisiBtn'+idx);
+  const sonuc = document.getElementById('kisiSonuc'+idx);
+  
+  btn.textContent = 'Analiz ediliyor...';
+  btn.disabled = true;
+  sonuc.style.display = 'block';
+  sonuc.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:8px;color:var(--text3);font-size:12px;"><div class="spin"></div>Haberdeki isimler tespit ediliyor...</div>';
+
+  // API key yoksa örnek göster
+  if (!apiKey) {
+    setTimeout(() => {
+      const ornekKisiler = ornekKisiCikar(baslik, kurum);
+      renderKisiler(idx, ornekKisiler, baslik);
+      btn.textContent = 'Yenile';
+      btn.disabled = false;
+    }, 1200);
+    return;
+  }
+
+  const prompt = `Aşağıdaki haber başlığında geçen kişi isimlerini tespit et.
+Haber: "${baslik}" — Kaynak: ${kurum}
+
+Kuralllar:
+- Sadece gerçek kişi adı/soyadı listele
+- Kurum/kuruluş adlarını dahil etme
+- Her kişi için muhtemel rol/unvan tahmini yap
+- JSON formatında döndür: [{"ad":"Ali Veli","rol":"Şüpheli","risk":"Yüksek"},...]
+- Risk: Yüksek/Orta/Düşük
+- Kişi yoksa: []
+- Sadece JSON, başka hiçbir şey yazma`;
+
+  try {
+    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+apiKey, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}]})
+    });
+    const d = await r.json();
+    
+    if (d.candidates?.[0]) {
+      let txt = d.candidates[0].content.parts[0].text.trim();
+      txt = txt.replace(/```json/gi,'').replace(/```/g,'').trim();
+      try {
+        const kisiler = JSON.parse(txt);
+        renderKisiler(idx, kisiler, baslik);
+      } catch(e) {
+        renderKisiler(idx, ornekKisiCikar(baslik, kurum), baslik);
+      }
+    } else {
+      renderKisiler(idx, ornekKisiCikar(baslik, kurum), baslik);
+    }
+  } catch(e) {
+    renderKisiler(idx, ornekKisiCikar(baslik, kurum), baslik);
+  }
+  
+  btn.textContent = 'Yenile';
+  btn.disabled = false;
+}
+
+function ornekKisiCikar(baslik, kurum) {
+  // Haberde geçen Türkçe isimleri regex ile çıkar
+  const isimRegex = /([A-ZÇĞİÖŞÜ][a-zçğışöüı]+\s+[A-ZÇĞİÖŞÜ][a-zçğışöüı]+)/g;
+  const esleseler = baslik.match(isimRegex) || [];
+  if (esleseler.length > 0) {
+    return esleseler.map(ad => ({
+      ad: ad,
+      rol: 'Haber İlgilisi',
+      risk: 'Orta'
+    }));
+  }
+  return [];
+}
+
+function renderKisiler(idx, kisiler, kaynakHaber) {
+  const sonuc = document.getElementById('kisiSonuc'+idx);
+  if (!kisiler || kisiler.length === 0) {
+    sonuc.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:6px;">Bu haberde tespit edilebilen kişi adı bulunamadı.</div>';
+    return;
+  }
+  
+  let html2 = '';
+  kisiler.forEach((k, i) => {
+    const riskBadge = k.risk === 'Yüksek' ? 'badge-red' : k.risk === 'Orta' ? 'badge-amber' : 'badge-blue';
+    html2 += `<div class="kisi-tespit-item">
+      <div>
+        <div class="kisi-tespit-ad">${k.ad}</div>
+        <div class="kisi-tespit-meta">${k.rol || 'Belirtilmedi'} · Haber: ${kaynakHaber.substring(0,45)}...</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span class="badge ${riskBadge}" style="font-size:9px;">${k.risk}</span>
+        <button class="kisi-ekle-btn" style="background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m);" 
+          onclick="kisiKYCEkle('${k.ad}','${k.rol}','${k.risk}',this)">KYC Ekle</button>
+        <button class="kisi-ekle-btn" style="background:var(--amber-l);color:var(--amber);border:1px solid rgba(255,176,32,.3);" 
+          onclick="kisiWatchlistEkle('${k.ad}','${k.rol}',this)">Watchlist</button>
+      </div>
+    </div>`;
+  });
+  sonuc.innerHTML = html2;
+}
+
+function kisiKYCEkle(ad, rol, risk, btn) {
+  btn.textContent = 'Eklendi ✓';
+  btn.style.background = 'var(--green-l)';
+  btn.style.color = 'var(--green)';
+  btn.style.borderColor = 'rgba(0,229,160,.3)';
+  btn.disabled = true;
+  
+  // KYC listesine yeni satır ekle
+  const kycList = document.getElementById('kycList');
+  if (kycList) {
+    const initials = ad.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const rBg = risk==='Yüksek'?'var(--red-l)':'var(--amber-l)';
+    const rC = risk==='Yüksek'?'var(--red)':'var(--amber)';
+    const badgeCls = risk==='Yüksek'?'badge-red':risk==='Orta'?'badge-amber':'badge-blue';
+    const newId = 'TRV-'+Math.floor(Math.random()*90000+10000);
+    const newRow = document.createElement('div');
+    newRow.className = 'kyc-item';
+    newRow.style.animation = 'fadeRow .4s ease';
+    newRow.innerHTML = `<div class="kyc-av" style="background:${rBg};color:${rC};">${initials}</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600;">${newId} — ${ad}</div>
+      <div style="font-size:11px;color:var(--text3);">Rol: ${rol} · Kaynak: Haber Tespiti · Yeni eklendi</div></div>
+      <div style="text-align:right"><div class="kyc-score" style="color:${rC}">—</div>
+      <div style="font-size:10px;color:var(--text3)">Tarama Bekleniyor</div></div>
+      <span class="badge ${badgeCls}" style="margin-left:12px">Yeni</span>`;
+    kycList.insertBefore(newRow, kycList.firstChild);
+  }
+  
+  showToast(ad + ' KYC listesine eklendi');
+}
+
+function kisiWatchlistEkle(ad, rol, btn) {
+  btn.textContent = 'Eklendi ✓';
+  btn.style.background = 'var(--green-l)';
+  btn.style.color = 'var(--green)';
+  btn.style.borderColor = 'rgba(0,229,160,.3)';
+  btn.disabled = true;
+  showToast(ad + ' Watchlist'e eklendi');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('kisiToast');
+  t.textContent = '✓ ' + msg;
+  t.style.opacity = '1';
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(20px)';
+  }, 2500);
+}
+
 loadData();
 </script>
-<style>@keyframes fadeRow{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}</style>
+<style>@keyframes fadeRow{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+.kisi-tespit-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;margin-bottom:6px;}
+.kisi-tespit-ad{font-size:12.5px;font-weight:500;color:var(--text);}
+.kisi-tespit-meta{font-size:10px;color:var(--text3);margin-top:1px;}
+.kisi-ekle-btn{font-size:10px;font-weight:600;padding:3px 9px;border-radius:5px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.kisi-ekle-btn:hover{opacity:.85;}
+
+/* SIB WIZARD */
+.sib-step-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;}
+.sib-dot{width:28px;height:28px;border-radius:50%;background:var(--surface2);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text3);transition:all .2s;}
+.sib-step-item.active .sib-dot{background:var(--blue);border-color:var(--blue);color:#fff;}
+.sib-step-item.done .sib-dot{background:var(--green);border-color:var(--green);color:#fff;}
+.sib-dot-label{font-size:10px;color:var(--text3);white-space:nowrap;}
+.sib-step-item.active .sib-dot-label{color:var(--blue);}
+.sib-step-item.done .sib-dot-label{color:var(--green);}
+.sib-step-line{flex:1;height:2px;background:var(--border2);margin:14px 4px 0;transition:background .2s;}
+.sib-step-line.done{background:var(--green);}
+.kisi-kart{background:var(--surface2);border:1px solid var(--border2);border-radius:9px;padding:14px;cursor:pointer;transition:all .15s;}
+.kisi-kart:hover{border-color:var(--blue);background:var(--surface3);}
+.kisi-kart.selected{border-color:var(--blue);background:var(--blue-l);}
+.neden-kart{background:var(--surface2);border:1px solid var(--border2);border-radius:9px;padding:14px;cursor:pointer;transition:all .15s;}
+.neden-kart:hover{border-color:var(--blue);background:var(--surface3);}
+.neden-kart.selected{border-color:var(--blue);background:var(--blue-l);}
+</style>
+<div id="kisiToast" style="position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--green);border-radius:10px;padding:10px 18px;font-size:13px;color:var(--green);font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:9999;opacity:0;transition:all .3s;pointer-events:none;"></div>
 </body>
 </html>
