@@ -288,7 +288,7 @@ td{border-bottom:1px solid var(--border);vertical-align:top;}
       </div>
       <div class="nav-item" onclick="showPage('denetim',this)">
         <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-        Denetim Simulasyonu
+        Kurumsal Uyum Analiz Raporu
         <span class="nav-badge" style="background:var(--amber)">!</span>
       </div>
     </div>
@@ -1008,7 +1008,7 @@ td{border-bottom:1px solid var(--border);vertical-align:top;}
       <div style="background:linear-gradient(135deg,rgba(45,123,255,.08),rgba(255,176,32,.06));border:1px solid var(--border2);border-radius:10px;padding:18px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;">
         <div style="font-size:32px;">🔍</div>
         <div style="flex:1;">
-          <div style="font-size:15px;font-weight:700;color:var(--text);">MASAK Denetim Hazirlik Simulasyonu</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);">Kurumsal Uyum Analiz Raporu</div>
           <div style="font-size:12px;color:var(--text2);margin-top:3px;">5549 Sayili Kanun kriterleri esas alinarak gercek verilerinize dayali AI analizi. 8 kategori icin durumunuzu girin.</div>
         </div>
       </div>
@@ -1234,12 +1234,27 @@ td{border-bottom:1px solid var(--border);vertical-align:top;}
 
         <div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:20px;">
           <button class="btn btn-outline" onclick="formuSifirla()">Sifirla</button>
-          <button class="btn btn-primary" onclick="gercekDenetimBaslat()" style="background:var(--amber);padding:10px 28px;font-size:13px;font-weight:700;">MASAK Denetim Analizi Baslat</button>
+          <button class="btn btn-primary" onclick="gercekDenetimBaslat()" style="background:var(--amber);padding:10px 28px;font-size:13px;font-weight:700;">Kurumsal Uyum Analizi Baslat</button>
         </div>
       </div>
 
       <div id="denetimSonucAlani" style="display:none;">
         <div class="card" style="margin-bottom:16px;">
+          <!-- Rapor başlığı - logo ile -->
+          <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:16px;">
+              <img src="data:image/jpeg;base64,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" style="height:36px;width:auto;filter:brightness(1.2);" alt="Truvali">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;">Truvali AML Uyum Danismanlik</div>
+                <div style="font-size:16px;font-weight:700;color:var(--text);margin-top:2px;">Kurumsal Uyum Analiz Raporu</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:11px;color:var(--text3);" id="raporTarihGoster">—</div>
+              <div style="font-size:10px;color:var(--text3);margin-top:2px;" id="raporSirketGoster">—</div>
+              <div style="font-size:9px;color:var(--text3);margin-top:4px;padding:2px 8px;background:var(--red-l);border-radius:4px;color:var(--red);font-weight:600;">GİZLİ</div>
+            </div>
+          </div>
           <div style="padding:24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
             <div style="text-align:center;flex-shrink:0;">
               <div style="font-size:72px;font-weight:800;font-family:'DM Mono',monospace;line-height:1;" id="sonucSkor">—</div>
@@ -1255,7 +1270,7 @@ td{border-bottom:1px solid var(--border);vertical-align:top;}
 
         <div class="card" style="margin-bottom:16px;">
           <div class="card-header">
-            <div><div class="card-title">MASAK Denetim Analizi</div><div class="card-sub">Girdiginiz verilere dayali AI degerlendirmesi</div></div>
+            <div><div class="card-title">Kurumsal Uyum Analizi</div><div class="card-sub">Girdiginiz verilere dayali AI degerlendirmesi</div></div>
             <div style="display:flex;gap:8px;">
               <button class="btn btn-outline" style="font-size:11px;" onclick="raporuIndir()">Raporu Indir</button>
               <button class="btn btn-outline" style="font-size:11px;" onclick="document.getElementById('denetimSonucAlani').style.display='none';document.getElementById('denetimForm').style.display='block';">Formu Duzenle</button>
@@ -1340,7 +1355,7 @@ function showPage(id,el){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   el.classList.add('active');
-  const T={mevzuat:'İlgili İçerikler',dashboard:'Dashboard',alertler:'Alert Yönetimi',kyc:'KYC / KYB',ruleengine:'Rule Engine',execlog:'Execution Logs',raporlar:'MASAK Raporları',arsiv:'Mevzuat Arsivi',veritabani:'Mevzuat Veritabani',denetim:'Denetim Simulasyonu — MASAK Hazirlik'};
+  const T={mevzuat:'İlgili İçerikler',dashboard:'Dashboard',alertler:'Alert Yönetimi',kyc:'KYC / KYB',ruleengine:'Rule Engine',execlog:'Execution Logs',raporlar:'MASAK Raporları',arsiv:'Mevzuat Arsivi',veritabani:'Mevzuat Veritabani',denetim:'Kurumsal Uyum Analiz Raporu — MASAK Hazirlik'};
   document.getElementById('pageTitle').textContent=T[id]||id;
   if(id==='dashboard'&&!dashInited){dashInited=true;setTimeout(initDashboard,100);}
   if(id==='arsiv'){setTimeout(initArsiv,100);}
@@ -2079,6 +2094,11 @@ function skorHesapla(v) {
 }
 
 function sonucGoster(v, s) {
+  // Rapor başlık bilgilerini doldur
+  var td = document.getElementById('raporTarihGoster');
+  var ts = document.getElementById('raporSirketGoster');
+  if(td) td.textContent = 'Rapor Tarihi: ' + (v.rapor_tarihi || new Date().toLocaleDateString('tr-TR'));
+  if(ts) ts.textContent = v.sirket_adi ? v.sirket_adi : 'Sirket Adi Belirtilmemis';
   var skor = s.toplam;
   var renk = skor>=80?'var(--green)':skor>=60?'var(--amber)':'var(--red)';
   var etiket = skor>=80?'Iyi — Kucuk duzeltmelerle hazirsiniz':skor>=60?'Orta — Onemli eksiklikler var':'Zayif — Acil aksiyon gerekiyor';
@@ -2264,111 +2284,183 @@ function raporuIndir() {
 function pdfIndir(tip) {
   var skorEl = document.getElementById('sonucSkor');
   var skor = skorEl ? skorEl.textContent : '--';
-  var sirket = (sonucVeriler.veri && sonucVeriler.veri.sirket_adi) ? sonucVeriler.veri.sirket_adi : 'Belirtilmemis';
-  var gorevli = (sonucVeriler.veri && sonucVeriler.veri.uyum_gorevlisi) ? sonucVeriler.veri.uyum_gorevlisi : 'Belirtilmemis';
-  var tarih = (sonucVeriler.veri && sonucVeriler.veri.rapor_tarihi) ? sonucVeriler.veri.rapor_tarihi : new Date().toLocaleDateString('tr-TR');
+  var s = sonucVeriler.skorlar || {};
+  var v = sonucVeriler.veri || {};
+  var sirket = v.sirket_adi || 'Belirtilmemis';
+  var gorevli = v.uyum_gorevlisi || 'Belirtilmemis';
+  var tarih = v.rapor_tarihi || new Date().toLocaleDateString('tr-TR');
   var aiMetin = document.getElementById('aiAnalizIcerik') ? document.getElementById('aiAnalizIcerik').textContent : '';
+  var sektorler = (v.sektorler && v.sektorler.length) ? v.sektorler.join(', ').toUpperCase() : 'BELIRTILMEMIS';
+  var durumMetin = parseInt(skor)>=80?'IYI DUZEY — Kucuk duzeltmelerle denetime hazir':parseInt(skor)>=60?'ORTA DUZEY — Onemli eksiklikler mevcut':'DUSUK DUZEY — Acil ve kapsamli aksiyon gereklidir';
+  var raporNo = 'TRV-' + tarih.replace(/\./g,'') + '-' + Math.floor(Math.random()*9000+1000);
 
   var satirlar = [];
 
   if(tip === 'sade') {
-    satirlar = satirlar.concat([
+    satirlar = [
       'TRUVALI AML UYUM DANISMANLIK',
-      'MASAK DENETiM HAZIRLIK RAPORU — SADE VERSiYON',
-      '='.repeat(55),
+      'KURUMSAL UYUM ANALIZ RAPORU — OZET',
+      '='.repeat(60),
+      'Rapor No      : ' + raporNo,
+      'Duzenleme Tarihi : ' + tarih,
+      'Sirket        : ' + sirket,
+      'Uyum Gorevlisi: ' + gorevli,
+      'Faaliyet Sektoru: ' + sektorler,
+      'Gizlilik      : GIZLI — Yalnizca Yetkili Kisiler',
+      '='.repeat(60),
       '',
-      'Sirket: '+sirket,
-      'Hazirlayan: '+gorevli,
-      'Tarih: '+tarih,
-      'Hazirlik Skoru: '+skor+'/100',
+      'GENEL UYUM SKORU: ' + skor + '/100',
+      durumMetin,
       '',
-      'BULGULAR',
-      '-'.repeat(55),
+      'KATEGORI SKORLARI',
+      '-'.repeat(60),
+      'KYC / Musteri Tanima       : ' + (s.kyc||0) + '/25',
+      'SIB / Supheli Islem Bildirimi: ' + (s.sib||0) + '/25',
+      'Risk Yonetimi              : ' + (s.risk||0) + '/10',
+      'Islem Izleme               : ' + (s.izleme||0) + '/10',
+      'Kayit ve Belge Saklama     : ' + (s.kayit||0) + '/10',
+      'Personel Egitimi           : ' + (s.egitim||0) + '/10',
+      'Uyum Programi              : ' + (s.uyum||0) + '/5',
+      'Yaptirim Tarama            : ' + (s.sanction||0) + '/5',
+      '',
+      'DEGERLENDIRME',
+      '-'.repeat(60),
       aiMetin,
       '',
-      'Bu rapor Truvali AML Platformu tarafindan olusturulmustur.',
-      'www.truvali.com',
-    ]);
+      '='.repeat(60),
+      'Bu rapor Truvali AML Uyum Platformu tarafindan otomatik olarak',
+      'uretilmistir. Nihai uyum sorumlulugu kurulusun uyum birimine aittir.',
+      'Truvali AML Uyum Danismanlik | www.truvali.com',
+      '='.repeat(60),
+    ];
   } else {
-    // Profesyonel
-    var v = sonucVeriler.veri || {};
-    var s = sonucVeriler.skorlar || {};
-    var durumRenk = parseInt(skor)>=80?'IYI':parseInt(skor)>=60?'ORTA':'ZAYIF';
-    satirlar = satirlar.concat([
+    // Profesyonel versiyon
+    satirlar = [
       ' ',
-      '████████████████████████████████████████████████████████',
-      '█                                                      █',
-      '█         TRUVALi AML UYUM DANISMANLIK                █',
-      '█                                                      █',
-      '█      MASAK DENETiM HAZIRLIK DEGERLENDiRME RAPORU    █',
-      '█                                                      █',
-      '████████████████████████████████████████████████████████',
+      ' ',
+      '  T R U V A L I',
+      '  AML UYUM DANISMANLIK',
+      ' ',
+      '  KURUMSAL UYUM ANALIZ RAPORU',
+      '  (Anti-Money Laundering Compliance Assessment Report)',
+      ' ',
+      '  ' + '='.repeat(52),
+      '  GIZLI — YALNIZCA YETKILI KISILER ICIN',
+      '  ' + '='.repeat(52),
+      ' ',
+      ' ',
+      'RAPOR BILGILERI',
+      '='.repeat(60),
+      'Rapor Numarasi      : ' + raporNo,
+      'Duzenleme Tarihi    : ' + tarih,
+      'Gecerlilik Suresi   : Rapor tarihinden itibaren 90 gun',
+      'Raporun Amaci       : 5549 Sayili Kanun kapsaminda uyum hazirlik degerlendirmesi',
+      'Yasal Dayanak       : 5549 SK, MASAK Yonetmeligi, FATF 40 Tavsiyesi',
       '',
-      'GiZLi — YALNIZCA iLGiLi KISILER icin',
+      'DEGERLENDIRILEN KURULUSUN BILGILERI',
+      '='.repeat(60),
+      'Kuruluş Adi         : ' + sirket,
+      'Uyum Gorevlisi      : ' + gorevli,
+      'Faaliyet Sektoru    : ' + sektorler,
+      'Degerlendirme Tarihi: ' + tarih,
+      'Hazirlayan          : Truvali AML Uyum Platformu (Otomatik Analiz)',
+      'Gizlilik Derecesi   : GIZLI',
       '',
-      'RAPOR BiLGiLERi',
-      '='.repeat(55),
-      'Sirket Adi        : '+sirket,
-      'Uyum Gorevlisi    : '+gorevli,
-      'Rapor Tarihi      : '+tarih,
-      'Rapor Numarasi    : TRV-'+Date.now().toString().slice(-8),
-      'Hazirlayan        : Truvali AML Uyum Platformu',
-      'Yasal Dayanak     : 5549 Sayili Kanun + MASAK Yonetmeligi',
+      '='.repeat(60),
+      'GENEL UYUM DEGERLENDIRME SKORU',
+      '='.repeat(60),
       '',
-      'GENEL DEGERLENDiRME',
-      '='.repeat(55),
-      'HAZIRLIK SKORU: '+skor+'/100  —  '+durumRenk,
+      '  SKOR: ' + skor + ' / 100',
+      '  DURUM: ' + durumMetin,
       '',
-      'KYC/Musteri Tanima        : '+( s.kyc||0)+'/25',
-      'SIB/Bildirim              : '+(s.sib||0)+'/25',
-      'Risk Yonetimi             : '+(s.risk||0)+'/10',
-      'Islem izleme              : '+(s.izleme||0)+'/10',
-      'Kayit Saklama             : '+(s.kayit||0)+'/10',
-      'Personel Egitimi          : '+(s.egitim||0)+'/10',
-      'Uyum Programi             : '+(s.uyum||0)+'/5',
-      'Yaptirim Tarama           : '+(s.sanction||0)+'/5',
+      '  NOT: Bu skor, kurulusun beyan ettigi bilgilere dayanmaktadir.',
+      '  Gercek denetimde yerinde inceleme ve belge dogrulamasi yapilir.',
       '',
-      'DETAYLI ANALiZ',
-      '='.repeat(55),
+      'KATEGORI BAZLI UYUM DEGERLENDIRMESI',
+      '='.repeat(60),
+      '',
+      '1. KYC / MUSTERI TANIMA                          : ' + (s.kyc||0) + '/25 PUAN',
+      '   Musteri kimlik tespiti, PEP/EDD/UBO sureclerini kapsar.',
+      '   Yasal Dayanak: 5549 SK Madde 3, MASAK Yonetmeligi Madde 5-11',
+      '',
+      '2. SUPHELI ISLEM BILDIRIMI (SIB)                 : ' + (s.sib||0) + '/25 PUAN',
+      '   10 is gunu bildirimi, gerekce dokumantasyonu, bekleyen SIB.',
+      '   Yasal Dayanak: 5549 SK Madde 4, MASAK Yonetmeligi Madde 17-19',
+      '',
+      '3. RISK YONETIMI                                 : ' + (s.risk||0) + '/10 PUAN',
+      '   Risk siniflandirma politikasi, musteri risk skorlamasi.',
+      '   Yasal Dayanak: FATF Tavsiye 1, MASAK Risk Bazli Yaklasim Rehberi',
+      '',
+      '4. ISLEM IZLEME                                  : ' + (s.izleme||0) + '/10 PUAN',
+      '   Otomatik izleme sistemi, prosedur dokumantasyonu, alert yonetimi.',
+      '   Yasal Dayanak: 5549 SK Madde 4, MASAK Yonetmeligi Madde 13-14',
+      '',
+      '5. KAYIT VE BELGE SAKLAMA                        : ' + (s.kayit||0) + '/10 PUAN',
+      '   KYC 5 yil, islem kaydi 8 yil saklama zorunlulugu.',
+      '   Yasal Dayanak: 5549 SK Madde 8, MASAK Yonetmeligi Madde 22',
+      '',
+      '6. PERSONEL EGITIMI                              : ' + (s.egitim||0) + '/10 PUAN',
+      '   Yillik AML egitimi, katilim kayitlari, yeni personel egitimi.',
+      '   Yasal Dayanak: 5549 SK Madde 6, MASAK Yonetmeligi Madde 26',
+      '',
+      '7. UYUM PROGRAMI                                 : ' + (s.uyum||0) + '/5 PUAN',
+      '   Yazili politika, YK onayi, uyum gorevlisi atamasi.',
+      '   Yasal Dayanak: 5549 SK Madde 5, MASAK Yonetmeligi Madde 24-25',
+      '',
+      '8. YAPTIRIM VE SANCTION TARAMA                   : ' + (s.sanction||0) + '/5 PUAN',
+      '   OFAC, BM, AB, MASAK listeleri tarama sistemi ve sikligi.',
+      '   Yasal Dayanak: 5549 SK Madde 3/2, MASAK Teblig 2019',
+      '',
+      '='.repeat(60),
+      'DETAYLI DEGERLENDIRME VE BULGULAR',
+      '='.repeat(60),
+      '',
       aiMetin,
       '',
-      'YASAL REFERANSLAR',
-      '='.repeat(55),
-      '• 5549 Sayili Suç Gelirlerinin Aklanmasinin Onlenmesi Hakkinda Kanun',
-      '• Suç Gelirlerinin Aklanmasinin Onlenmesi Hakkinda Yonetmelik',
-      '• MASAK Risk Bazli Yaklasim Rehberi',
-      '• FATF 40 Tavsiyesi',
-      '• 6493 Sayili Odeme Hizmetleri Kanunu (E-Para)',
-      '• 7518 Sayili Kripto Varlik Duzenlemesi (Kripto)',
+      '='.repeat(60),
+      'ONEMLI UYARILAR VE SINIRLILIKLAR',
+      '='.repeat(60),
       '',
-      'iMZA VE ONAY',
-      '='.repeat(55),
-      'Bu rapor asagida bilgileri yer alan yetkili tarafindan',
-      'degerlendirilmis ve onaylanmistir.',
+      '1. Bu rapor, kurulusun beyan ettigi bilgilere dayanilarak otomatik',
+      '   olarak uretilmistir. Belge dogrulamasi yapilmamistir.',
       '',
-      'Uyum Gorevlisi: '+gorevli,
-      'Imza: ___________________________',
-      'Tarih: ___________________________',
+      '2. Gercek bir MASAK denetimi; yerinde inceleme, belge kontrolu ve',
+      '   denetci takdirini icermektedir. Bu rapor denetim sonucunu',
+      '   garantilememektedir.',
       '',
-      'Ust Yonetim Onayi: ___________________________',
-      'Imza: ___________________________',
-      'Tarih: ___________________________',
+      '3. Mevzuat degisikliklerine bagli olarak degerlendirme kriterleri',
+      '   guncellenebilir. En guncel bilgi icin MASAK resmi sitesini',
+      '   takip ediniz: masak.hmb.gov.tr',
       '',
-      '='.repeat(55),
-      'Bu rapor Truvali AML Uyum Platformu tarafindan otomatik',
-      'olusturulmustur. Nihai denetim hazirlik sorumluluğu',
-      'kurulusun uyum birimine aittir.',
-      'www.truvali.com | +90 (212) 000 00 00',
-      '='.repeat(55),
-    ]);
+      '='.repeat(60),
+      'IMZA VE ONAY',
+      '='.repeat(60),
+      '',
+      'Bu raporu degerlendiren ve onaylayan yetkili:',
+      '',
+      'Uyum Gorevlisi   : ' + gorevli,
+      'Imza             : ________________________________',
+      'Tarih            : ________________________________',
+      '',
+      'Ust Yonetim Onayi: ________________________________',
+      'Imza             : ________________________________',
+      'Tarih            : ________________________________',
+      '',
+      '='.repeat(60),
+      'Truvali AML Uyum Danismanlik',
+      'www.truvali.com  |  info@truvali.com',
+      'Bu rapor ' + tarih + ' tarihinde Truvali Kurumsal Uyum Analiz',
+      'Platformu tarafindan otomatik olarak uretilmistir.',
+      '='.repeat(60),
+    ];
   }
 
   var icerik = satirlar.join('\n');
   var blob = new Blob([icerik], {type:'text/plain;charset=utf-8'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  var dosyaAdi = tip==='sade'?'Truvali-Denetim-Raporu-Sade':'Truvali-Denetim-Raporu-Profesyonel';
-  a.download = dosyaAdi+'-'+tarih.replace(/\./g,'')+'.txt';
+  var ad = tip==='sade'?'Truvali-Uyum-Analiz-Ozet':'Truvali-Kurumsal-Uyum-Analiz-Raporu';
+  a.download = ad + '-' + tarih.replace(/\./g,'') + '.txt';
   a.click();
 }
 
